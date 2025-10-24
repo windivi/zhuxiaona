@@ -1,35 +1,71 @@
 <script setup lang="ts">
-import viteLogo from './assets/vite.svg';
-import vueLogo from './assets/vue.svg';
+import { onMounted, ref } from 'vue';
+import Activity from './components/activity.vue'
+import AutoLogin from './components/AutoLogin.vue'
+import MActivity from './components/m-activity.vue';
 
-import HelloWorld from './components/HelloWorld.vue'
+const showAutoLogin = ref(false)
 
-window.electronAPI.sendMessage('Hello from App.vue!');
+
+onMounted(() => {
+})
+
+const toggleAutoLogin = () => {
+  showAutoLogin.value = !showAutoLogin.value
+}
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img :src="viteLogo" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img :src="vueLogo" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <a-tabs class="tab">
+    <a-tab-pane key="normal" tab="常用转发">
+      <Activity />
+    </a-tab-pane>
+    <a-tab-pane key="month" tab="月度转发">
+      <MActivity></MActivity>
+    </a-tab-pane>
+    <a-tab-pane key="auto-login" tab="自动登录">
+      <AutoLogin />
+    </a-tab-pane>
+  </a-tabs>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.size-full {
+  width: 100%;
+  height: 100%;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.tab {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 20px 20px 20px;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+:deep(.ant-tabs-content-holder) {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  display: flex;
+
+
+  .ant-tabs-content {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+  }
+
+  .ant-tabs-tabpane {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+  }
+}
+
+:deep(.ant-pagination-options) {
+  .ant-select {
+    min-width: 100px;
+  }
 }
 </style>

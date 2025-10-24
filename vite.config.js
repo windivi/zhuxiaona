@@ -1,6 +1,7 @@
 const Path = require('path');
 const vuePlugin = require('@vitejs/plugin-vue')
-
+import Components from 'unplugin-vue-components/vite';
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 const { defineConfig } = require('vite');
 
 /**
@@ -17,7 +18,15 @@ const config = defineConfig({
         outDir: Path.join(__dirname, 'build', 'renderer'),
         emptyOutDir: true,
     },
-    plugins: [vuePlugin()],
+    plugins: [
+        vuePlugin(),
+        Components({
+            resolvers: [
+                AntDesignVueResolver({
+                    importStyle: false, // css in js
+                }),
+            ],
+        }),],
 });
 
 module.exports = config;

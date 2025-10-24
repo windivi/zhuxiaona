@@ -1,0 +1,124 @@
+{
+	"info": {
+		"_postman_id": "af1dd451-a48c-47b5-b1ed-f98ae82d5fcb",
+		"name": "zxn",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5971930"
+	},
+	"item": [
+		{
+			"name": "获取活动列表",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "XSRF-TOKEN=eyJpdiI6ImJIOU9NSllQUFpTcnJnN25NZHFhcGc9PSIsInZhbHVlIjoiMGRTeFN3Uk1uQmN5VlJqNndNSzBQSXRUeFpEWG8zODducVo4SFlEKzIvaVFsQW4yY0JxbzdUYjZ5LzJ4dTFqY2h1aXJFT3plSXcyeDF6MW9yMkR2YXpXSjVuOERLR1lITUVwUXVpMDNWaWhTTnJpNGo1RzFhOFZPTU54N2dJbG0iLCJtYWMiOiJkMzc3OTAxYzk2ZTM3OTljN2M1N2FhYmM1ZmZmMDJhOGU0OTVkYTEwZGQ4ZGYzMjFiNThkNDkyZmYzMzIyMjljIiwidGFnIjoiIn0%3D; _session=eyJpdiI6IkplajByNDg1VDN6dGNIejlMRklGbHc9PSIsInZhbHVlIjoiNnpjVXR1MkJ0M05ad3ZKdUNXSkFvdkJEbGtobWVGNG1MQUNDT05qQ2hTRmtLOWw5ZDgwVlN3dnJsaW43N1pBcjJkeDZEaVVQZEVXV3RJdkZmMlgvU1BsdnRyQmMzbjQ4b3E1WkkwYWY2SHZUSVVUWEI5aVZSODFMNmVqYk53TXgiLCJtYWMiOiJlZjE4ZjA2NTZjMDYwYzM2ZTQzMWVmM2EzNGZjZDI5MTRjYmFlZTBmMTgzYTQ3OTkxZWE4MDRiODBiNzVlOTk4IiwidGFnIjoiIn0%3D",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://sxzy.chasinggroup.com/admin/marketing/display/audit?activity_id=13&item_id=&route_id=&user%5Bname%5D=&uid=&_pjax=%23pjax-container&per_page=10000",
+					"protocol": "https",
+					"host": [
+						"sxzy",
+						"chasinggroup",
+						"com"
+					],
+					"path": [
+						"admin",
+						"marketing",
+						"display",
+						"audit"
+					],
+					"query": [
+						{
+							"key": "activity_id",
+							"value": "13"
+						},
+						{
+							"key": "item_id",
+							"value": ""
+						},
+						{
+							"key": "route_id",
+							"value": ""
+						},
+						{
+							"key": "user%5Bname%5D",
+							"value": ""
+						},
+						{
+							"key": "uid",
+							"value": ""
+						},
+						{
+							"key": "_pjax",
+							"value": "%23pjax-container"
+						},
+						{
+							"key": "per_page",
+							"value": "15"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "审批",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "_token",
+							"value": "HsHUv0YXNKGgBvN8VO0JT8kEDZWszxSC4YYhaA8s",
+							"type": "text"
+						},
+						{
+							"key": "script_id",
+							"value": "1",
+							"description": "理由",
+							"type": "text"
+						},
+						{
+							"key": "upload_id",
+							"value": "11196",
+							"type": "text"
+						},
+						{
+							"key": "created_by",
+							"value": "贺小娜",
+							"type": "text"
+						},
+						{
+							"key": "audit_status",
+							"value": "2",
+							"description": "1：通过 2: 不通过",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://sxzy.chasinggroup.com/admin/marketing/display/auditset",
+					"protocol": "https",
+					"host": [
+						"sxzy",
+						"chasinggroup",
+						"com"
+					],
+					"path": [
+						"admin",
+						"marketing",
+						"display",
+						"auditset"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
