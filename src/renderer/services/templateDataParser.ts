@@ -99,8 +99,8 @@ export function parseReviewItemsFromHtml(html: string): {
             auditor: getText(7),
             auditTime: getText(8),
             auditActionHtml: getHtml(9),
-            images: [],
-            media: [],
+            image: '',
+            media: '',
         };
 
         // 从操作列提取模态框 ID
@@ -120,8 +120,8 @@ export function parseReviewItemsFromHtml(html: string): {
                 // 提取图片 - 修复选择器
                 modal.find('img.user_upload_img').each((_, img) => {
                     const src = $(img).attr('src');
-                    if (src && !record.images?.includes(src)) {
-                        record.images?.push(src);
+                    if (src && !record.image) {
+                        record.image = src;
                     }
                 });
 
@@ -137,8 +137,8 @@ export function parseReviewItemsFromHtml(html: string): {
                 // 提取视频
                 modal.find('video source, video').each((_, video) => {
                     const src = $(video).attr('src');
-                    if (src && !record.media?.includes(src)) {
-                        record.media?.push(src);
+                    if (src && !record.media) {
+                        record.media = src;
                     }
                 });
             }

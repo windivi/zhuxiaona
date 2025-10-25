@@ -1,71 +1,63 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { theme } from 'ant-design-vue';
 import Activity from './components/activity.vue'
 import AutoLogin from './components/AutoLogin.vue'
 import MActivity from './components/m-activity.vue';
-
-const showAutoLogin = ref(false)
-
-
-onMounted(() => {
-})
-
-const toggleAutoLogin = () => {
-  showAutoLogin.value = !showAutoLogin.value
-}
 </script>
 
 <template>
-  <a-tabs class="tab">
-    <a-tab-pane key="normal" tab="常用转发">
-      <Activity />
-    </a-tab-pane>
-    <a-tab-pane key="month" tab="月度转发">
-      <MActivity></MActivity>
-    </a-tab-pane>
-    <a-tab-pane key="auto-login" tab="自动登录">
-      <AutoLogin />
-    </a-tab-pane>
-  </a-tabs>
+	<a-config-provider :theme="{ algorithm: theme.darkAlgorithm }">
+		<a-tabs class="tab">
+			<a-tab-pane key="normal" tab="常用转发">
+				<Activity />
+			</a-tab-pane>
+			<a-tab-pane key="month" tab="月度转发">
+				<MActivity></MActivity>
+			</a-tab-pane>
+			<a-tab-pane key="auto-login" tab="自动登录">
+				<AutoLogin />
+			</a-tab-pane>
+		</a-tabs>
+	</a-config-provider>
 </template>
 
 <style scoped>
 .size-full {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 
 .tab {
-  width: 100%;
-  min-height: 100vh;
-  padding: 0 20px 20px 20px;
+	width: 100%;
+	min-height: 100vh;
+	padding: 0 20px 20px 20px;
 }
 
 :deep(.ant-tabs-content-holder) {
-  flex: 1;
-  height: 100%;
-  width: 100%;
-  display: flex;
+	flex: 1;
+	height: 100%;
+	width: 100%;
+	display: flex;
 
 
-  .ant-tabs-content {
-    flex: 1;
-    height: 100%;
-    width: 100%;
-    display: flex;
-  }
+	.ant-tabs-content {
+		flex: 1;
+		height: 100%;
+		width: 100%;
+		display: flex;
+	}
 
-  .ant-tabs-tabpane {
-    flex: 1;
-    height: 100%;
-    width: 100%;
-    display: flex;
-  }
+	.ant-tabs-tabpane {
+		flex: 1;
+		height: 100%;
+		width: 100%;
+		display: flex;
+	}
 }
 
 :deep(.ant-pagination-options) {
-  .ant-select {
-    min-width: 100px;
-  }
+	.ant-select {
+		min-width: 100px;
+	}
 }
 </style>
