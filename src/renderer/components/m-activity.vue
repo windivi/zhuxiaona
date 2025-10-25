@@ -206,10 +206,10 @@ function handleArrow(direction: 'up' | 'down' | 'left' | 'right') {
 }
 
 :deep(.row-success) {
-	background: #e6ffed !important;
+	background: #1b7333 !important;
 }
 
 :deep(.row-fail) {
-	background: #fff1f0 !important;
+	background: #8d332d !important;
 }
 </style>
