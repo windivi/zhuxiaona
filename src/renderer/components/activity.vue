@@ -5,7 +5,7 @@
 			<a-select v-model:value="formState.activityId" @change="getList" placeholder="筛选活动" style="width:180px;">
 				<a-select-option value="">全部活动</a-select-option>
 				<a-select-option v-for="act in activityList" :key="act.id" :value="act.id">{{ act.title
-					}}</a-select-option>
+				}}</a-select-option>
 			</a-select>
 			<a-select style="width: 120px" v-model:value="formState.auditResult" @change="getList" placeholder="筛选审核结果">
 				<a-select-option value="">全部</a-select-option>
@@ -14,7 +14,6 @@
 				<a-select-option value="1">未审核</a-select-option>
 			</a-select>
 			<a-button type="primary" @click="getList">查询</a-button>
-			<a-input style="width: 200px;align-self: flex-end;" placeholder="默认不通过原因ID" v-model="scriptId"></a-input>
 		</div>
 		<a-table :loading="loading" style="flex: 1; overflow: auto;" :dataSource="tableData" :pagination="false"
 			:rowClassName="rowClassName">
@@ -33,7 +32,9 @@
 			<a-table-column key="auditResult" title="审核结果" data-index="auditResult" />
 			<a-table-column key="image" title="图片">
 				<template #default="{ record, index }">
-					<img class="image" :src="record.image" @click="startReview(index)"></img>
+					<img class="image"
+						:src="(record.images && record.images[0]) ? record.images[0].url : (record.image || '')"
+						@click="startReview(index)"></img>
 				</template>
 			</a-table-column>
 		</a-table>
@@ -43,8 +44,9 @@
 				:pageSize="formState.per_page" :total="total" @change="handlePageChange" show-size-changer
 				show-quick-jumper responsive />
 		</div>
-		<SimpleImgViewer v-if="showViewImage" ref="viewerRef" :start="viewImageIndex" v-model="showViewImage"
-			:datas="viewImageRecords" @enter="handleEnter" @space="handleSpace"></SimpleImgViewer>
+		<SimpleImgViewer v-if="showViewImage" ref="viewerRef" v-model="showViewImage" :data="viewImageRecord"
+			:options="scriptOptions" @enter="handleEnter" @space="handleSpace" @up="handleUp" @down="handleDown">
+		</SimpleImgViewer>
 	</div>
 </template>
 
@@ -54,11 +56,12 @@ function rowClassName(record: ReviewItem) {
 	if (record._success === 1) return 'row-fail';
 	return '';
 }
-import { ref, reactive, } from 'vue'
-import parseReviewListFromHtml, { ActivityItem, parseActivityListFromHtml, ReviewItem } from '../services/postmanParser'
+import { ref, reactive, computed, onMounted, } from 'vue'
+import { extractTokenFromLoginHtml, parseActivityListFromHtml, parseReviewListFromHtml } from '../services/activity-parse'
 import axios from 'axios'
 import SimpleImgViewer from './simpleImg-viewer.vue'
 import { message } from 'ant-design-vue'
+import { ActivityItem, ParsedImage, ReviewItem, ScriptOptions } from '../services';
 
 const formState = reactive<Record<string, any>>({
 	page: 1,
@@ -66,10 +69,13 @@ const formState = reactive<Record<string, any>>({
 	auditResult: '',
 	activityId: '',
 })
-const scriptId = ref(undefined)
 const showViewImage = ref(false)
+const scriptOptions = ref<ScriptOptions[]>([])
 const viewImageIndex = ref(0)
-const viewImageRecords = ref<ReviewItem[]>([])
+const viewImageRecord = computed(() => {
+	return tableData.value[viewImageIndex.value] || {}
+})
+const token = ref<string>()
 const activityList = ref<ActivityItem[]>()
 const viewerRef = ref<typeof SimpleImgViewer>()
 const tableData = ref<ReviewItem[]>([])
@@ -94,9 +100,11 @@ const getList = async () => {
 
 		if (res && res.data) {
 			const { list, total: resTotal } = parseReviewListFromHtml(res.data)
+			token.value = extractTokenFromLoginHtml(res.data)
 			tableData.value = list
 			total.value = resTotal
-			const { activities, details, platforms } = parseActivityListFromHtml(res.data)
+			const { activities, details, platforms, scriptOptions: _scriptOptions } = parseActivityListFromHtml(res.data)
+			scriptOptions.value = _scriptOptions
 			activityList.value = activities.map((item) => ({ ...item, _success: 0 }))
 		} else {
 			tableData.value = []
@@ -113,17 +121,13 @@ const getList = async () => {
 
 const startReview = (index: number = 0) => {
 	viewImageIndex.value = index
-	showImgs(tableData.value)
-}
-
-function showImgs(records: ReviewItem[]) {
-	viewImageRecords.value = records
 	showViewImage.value = true
 }
 
-async function handleEnter(imgUrl: string, record: ReviewItem) {
+async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, scriptId: string) {
 	const params = new FormData()
-	params.append('script_id', scriptId.value || '')
+	params.append('token', token.value || '')
+	params.append('script_id', scriptId || '')
 	params.append('upload_id', record.id)
 	params.append('created_by', '贺小娜')
 	params.append('audit_status', '2')
@@ -133,7 +137,7 @@ async function handleEnter(imgUrl: string, record: ReviewItem) {
 		if (res && res.data.status) {
 			message.destroy()
 			message.success('审批不通过')
-			viewerRef.value?.next()
+			handleDown()
 			record._success = 2
 		} else {
 			message.destroy()
@@ -146,18 +150,21 @@ async function handleEnter(imgUrl: string, record: ReviewItem) {
 	} finally {
 	}
 }
-async function handleSpace(imgUrl: string, record: ReviewItem) {
+async function handleSpace(parsedImage: ParsedImage, record: ReviewItem) {
 	const params = new FormData()
+	params.append('token', token.value || '')
+	params.append('script_id', '')
 	params.append('upload_id', record.id)
 	params.append('created_by', '贺小娜')
 	params.append('audit_status', '3')
 	message.loading('审批中')
 	try {
 		const res = await axios.post(apis.set, params)
+		console.log(res);
 		if (res && res.data.status) {
 			message.destroy()
 			message.success('审批通过')
-			viewerRef.value?.next()
+			handleDown()
 			record._success = 2
 		} else {
 			message.destroy()
@@ -174,18 +181,23 @@ function handlePageChange(page: number, size: number) {
 	formState.per_page = size
 	getList()
 }
-function handleArrow(direction: 'up' | 'down' | 'left' | 'right') {
-	// 这里写方向键逻辑
-	switch (direction) {
-		case 'up':
-		case 'left':
-			break;
-		case 'down':
-		case 'right':
-			break;
+function handleUp() {
+	if (viewImageIndex.value) {
+		viewImageIndex.value -= 1
+	} else {
+		message.info('不要介样子按辣，它已经到顶了诶')
 	}
 }
-
+function handleDown() {
+	if (viewImageIndex.value < tableData.value.length - 1) {
+		viewImageIndex.value += 1
+	} else {
+		message.info('不要介样子按辣，它已经到底了诶')
+	}
+}
+onMounted(() => {
+	getList()
+})
 </script>
 
 
@@ -206,10 +218,10 @@ function handleArrow(direction: 'up' | 'down' | 'left' | 'right') {
 }
 
 :deep(.row-success) {
-	background: #e6ffed !important;
+	background: #1b7333 !important;
 }
 
 :deep(.row-fail) {
-	background: #fff1f0 !important;
+	background: #8d332d !important;
 }
 </style>

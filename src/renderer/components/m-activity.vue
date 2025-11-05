@@ -8,13 +8,12 @@
 			</a-select>
 			<a-select style="width: 120px" v-model:value="formState.auditResult" @change="getList" placeholder="筛选审核结果">
 				<a-select-option value="">全部</a-select-option>
-				<a-select-option value="3">审核通过</a-select-option>
+				<a-select-option value="1">审核通过</a-select-option>
 				<a-select-option value="2">审核未通过</a-select-option>
-				<a-select-option value="1">未审核</a-select-option>
+				<a-select-option value="0">未审核</a-select-option>
 			</a-select>
 			<a-input style="width: 200px;" v-model:value="formState.phone" placeholder="手机号"></a-input>
 			<a-button type="primary" @click="getList">查询</a-button>
-			<a-input style="width: 200px;" placeholder="默认不通过原因ID" v-model="scriptId"></a-input>
 		</div>
 		<a-table :loading="loading" style="flex: 1; overflow: auto;" :dataSource="tableData" :pagination="false"
 			:rowClassName="rowClassName">
@@ -29,7 +28,9 @@
 			<a-table-column key="auditResult" title="审核结果" data-index="auditResult" />
 			<a-table-column key="image" title="图片">
 				<template #default="{ record, index }">
-					<img class="image" :src="record.image" @click="startReview(index)"></img>
+					<img class="image"
+						:src="(record.images && record.images[0]) ? record.images[0].url : (record.image || '')"
+						@click="startReview(index)"></img>
 				</template>
 			</a-table-column>
 		</a-table>
@@ -39,8 +40,9 @@
 				show-quick-jumper :pageSize="formState.per_page" :total="total" @change="handlePageChange"
 				show-size-changer responsive />
 		</div>
-		<SimpleImgViewer v-if="showViewImage" ref="viewerRef" :start="viewImageIndex" v-model="showViewImage"
-			:datas="viewImageRecords" @enter="handleEnter" @space="handleSpace"></SimpleImgViewer>
+		<SimpleImgViewer v-if="showViewImage" ref="viewerRef" v-model="showViewImage" :data="viewImageRecord"
+			:options="scriptOptions" @enter="handleEnter" @space="handleSpace" @up="handleUp" @down="handleDown">
+		</SimpleImgViewer>
 	</div>
 </template>
 
@@ -50,12 +52,12 @@ function rowClassName(record: ReviewItem) {
 	if (record._success === 1) return 'row-fail';
 	return '';
 }
-import { ref, reactive, } from 'vue'
+import { ref, reactive, computed, onMounted, } from 'vue'
 import axios from 'axios'
 import SimpleImgViewer from './simpleImg-viewer.vue'
 import { message } from 'ant-design-vue'
-import parseTemplateData from '../services/templateDataParser';
-import type { ActivityItem, ReviewItem } from '../services/postmanParser';
+import parseTemplateData from '../services/m-activity-parse';
+import { ReviewItem, ActivityItem, ParsedImage, ScriptOptions } from '../services';
 
 const formState = reactive<Record<string, any>>({
 	page: 1,
@@ -63,13 +65,16 @@ const formState = reactive<Record<string, any>>({
 	auditResult: '',
 	activityId: '',
 })
-const scriptId = ref(undefined)
 const showViewImage = ref(false)
 const viewImageIndex = ref(0)
-const viewImageRecords = ref<Partial<ReviewItem>[]>([])
+const viewImageRecord = computed(() => {
+	return tableData.value[viewImageIndex.value] || {}
+})
+const token = ref<string>()
+const scriptOptions = ref<ScriptOptions[]>([])
 const activityList = ref<ActivityItem[]>([])
 const viewerRef = ref<typeof SimpleImgViewer>()
-const tableData = ref<Partial<ReviewItem>[]>([])
+const tableData = ref<ReviewItem[]>([])
 const total = ref<number>(0)
 const loading = ref(false)
 const apis = {
@@ -90,9 +95,11 @@ const getList = async () => {
 		const res = await axios.get(apis.list + '?' + searchParam)
 
 		if (res && res.data) {
-			const { token, user, filterOptions, auditData } = parseTemplateData(res.data)
-			const { activities, items, auditStatuses } = filterOptions
+			const { token: _token, user, filterOptions, auditData } = parseTemplateData(res.data)
+			token.value = _token
+			const { activities, items, auditStatuses, scriptOptions: _scriptOptions } = filterOptions
 			tableData.value = auditData.records
+			scriptOptions.value = _scriptOptions
 			total.value = auditData.total
 			activityList.value = activities.map((item) => ({ ...item, _success: 0 }))
 			console.log(tableData.value);
@@ -111,27 +118,23 @@ const getList = async () => {
 
 const startReview = (index: number = 0) => {
 	viewImageIndex.value = index
-	showImgs(tableData.value)
-}
-
-function showImgs(records: Partial<ReviewItem>[]) {
-	viewImageRecords.value = records
 	showViewImage.value = true
 }
 
-async function handleEnter(imgUrl: string, record: ReviewItem) {
+async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, imageIndex: number | string) {
 	const params = new FormData()
-	params.append('ids[0][script_id]', scriptId.value || '0')
-	params.append('ids[0][id]', record.id)
+	params.append('_token', token.value || '')
+	params.append(`ids[${imageIndex}][script_id]`, parsedImage.scriptId || '0')
+	params.append(`ids[${imageIndex}][id]`, parsedImage.uploadId || '')
+	params.append(`ids[${imageIndex}][state]`, '2')
 	params.append('created_by', '贺小娜')
-	params.append('ids[0][state]', '2')
 	message.loading('审批中')
 	try {
 		const res = await axios.post(apis.set, params)
 		if (res && res.data.status) {
 			message.destroy()
 			message.success('审批不通过')
-			viewerRef.value?.next()
+			handleDown()
 			record._success = 2
 		} else {
 			message.destroy()
@@ -144,19 +147,21 @@ async function handleEnter(imgUrl: string, record: ReviewItem) {
 	} finally {
 	}
 }
-async function handleSpace(imgUrl: string, record: ReviewItem) {
+async function handleSpace(parsedImage: ParsedImage, record: ReviewItem, imageIndex: number | string) {
 	const params = new FormData()
-	params.append('ids[0][script_id]', '0')
-	params.append('ids[0][id]', record.id)
+	params.append('_token', token.value || '')
+	params.append(`ids[${imageIndex}][script_id]`, '')
+	params.append(`ids[${imageIndex}][id]`, parsedImage.uploadId || '')
+	params.append(`ids[${imageIndex}][state]`, '1')
 	params.append('created_by', '贺小娜')
-	params.append('ids[0][state]', '1')
+	message.destroy()
 	message.loading('审批中')
 	try {
 		const res = await axios.post(apis.set, params)
 		if (res && res.data.status) {
 			message.destroy()
 			message.success('审批通过')
-			viewerRef.value?.next()
+			handleDown()
 			record._success = 2
 		} else {
 			message.destroy()
@@ -173,18 +178,25 @@ function handlePageChange(page: number, size: number) {
 	formState.per_page = size
 	getList()
 }
-function handleArrow(direction: 'up' | 'down' | 'left' | 'right') {
-	// 这里写方向键逻辑
-	switch (direction) {
-		case 'up':
-		case 'left':
-			break;
-		case 'down':
-		case 'right':
-			break;
+function handleUp() {
+	if (viewImageIndex.value) {
+		viewImageIndex.value -= 1
+	} else {
+		message.destroy()
+		message.info('不要介样子按辣，它已经到顶了诶')
 	}
 }
-
+function handleDown() {
+	if (viewImageIndex.value < tableData.value.length - 1) {
+		viewImageIndex.value += 1
+	} else {
+		message.destroy()
+		message.info('不要介样子按辣，它已经到底了诶')
+	}
+}
+onMounted(() => {
+	getList()
+})
 </script>
 
 

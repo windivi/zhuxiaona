@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { theme } from 'ant-design-vue';
 import Activity from './components/activity.vue'
-import AutoLogin from './components/AutoLogin.vue'
+import AutoLogin from './components/auto-login.vue'
 import MActivity from './components/m-activity.vue';
 </script>
 

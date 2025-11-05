@@ -1,15 +1,20 @@
 <template>
 	<div v-if="visible" class="img-viewer-overlay">
 		<div class="img-viewer-content">
-			<img :src="images?.[current]" class="img-viewer-img" />
-			<div class="img-viewer-toolbar">
-				<span>{{ current + 1 }} / {{ images?.length }}</span>
-			</div>
+			<img :src="currentImage?.url" class="img-viewer-img" />
 			<div class="img-viewer-info" v-if="currentData">
-				<span>ID: {{ currentData.id }}</span>
-				<span>活动: {{ currentData.activityTitle }}</span>
-				<span>明细: {{ currentData.itemTitle }}</span>
-				<span>UID: {{ currentData.uid }}</span>
+				<!-- <span>ID: {{ data.id }}</span> -->
+				<!-- <span>活动名称{{ data.activityTitle }}</span> -->
+				<span class="fs-16">第 {{ current + 1 }}/{{ data.images.length }} 张</span>
+				<span class="fs-16">{{ currentImage?.itemTitle }}</span>
+				<a-tag class="large-tag" :color="getImageStatusColor">{{ currentImage.auditStatusName }}</a-tag>
+			</div>
+			<div class="img-viewer-toolbar">
+				<a-form-item label="不通过原因">
+					<a-select style="width: 220px;" placeholder="不通过原因" :dropdownMatchSelectWidth="false"
+						v-model:value="currentImage.scriptId"
+						:options="options.map(o => ({ label: o.title, value: o.id }))" />
+				</a-form-item>
 			</div>
 		</div>
 	</div>
@@ -18,26 +23,33 @@
 <script setup lang="ts">
 
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
-import { ReviewItem } from '../services/postmanParser';
+import { ReviewItem, ScriptOptions } from '../services';
 
-const props = defineProps<{ start?: number, modelValue?: boolean, datas: any[] }>()
-const emit = defineEmits(['update:modelValue', 'enter', 'space'])
+const props = defineProps<{ modelValue?: boolean, data: ReviewItem, options: ScriptOptions[] }>()
+const emit = defineEmits(['update:modelValue', 'enter', 'space', 'up', 'down'])
 
-const current = ref(props.start ?? 0)
+const current = ref(0)
 const visible = ref(props.modelValue ?? true)
 const currentData = computed(() => {
-	return props.datas[current.value]
+	return props.data
+})
+const currentImage = computed(() => {
+	return images.value[current.value]
+})
+const getImageStatusColor = computed(() => {
+	if (!currentImage.value) return 'default'
+	if (['未审核', '未通过', '不通过'].includes(currentImage.value.auditStatusName)) return 'blue'
+	if (currentImage.value.auditStatusName === '通过') return 'green'
+	return 'blue'
 })
 const images = computed(() => {
-	return props.datas.map(item => item.image)
+	// 支持两种数据结构：旧的 item.image (string) 或新的 item.images: ParsedImage[]
+	return props.data.images
 })
 watch(() => props.modelValue, v => visible.value = v)
-watch(() => props.start, v => {
-	if (typeof v === 'number') {
-		current.value = v
-	}
+watch(currentData, (newData) => {
+	current.value = newData.images.length - 1
 }, { immediate: true })
-
 function close() {
 	visible.value = false
 	emit('update:modelValue', false)
@@ -56,36 +68,37 @@ function onKeydown(e: KeyboardEvent) {
 	if (!visible.value) return
 	switch (e.key) {
 		case 'ArrowLeft':
-		case 'ArrowUp':
 			prev();
 			break;
 		case 'ArrowRight':
+			next()
+			break;
+		case 'ArrowUp':
+			emit('up')
+			break;
 		case 'ArrowDown':
-			next();
+			emit('down')
 			break;
 		case 'Enter':
-			emit('enter', current.value, currentData.value)
+			// emit (imgUrl, record)
+			emit('enter', currentImage.value, currentData.value, current.value)
 			break;
 		case ' ':
-			emit('space', current.value, currentData.value)
+			emit('space', currentImage.value, currentData.value, current.value)
 			break;
 		case 'Escape':
 			close();
 			break;
 	}
 }
+
+
 onMounted(() => {
 	window.addEventListener('keydown', onKeydown)
 })
 onUnmounted(() => {
 	window.removeEventListener('keydown', onKeydown)
 })
-defineExpose(
-	{
-		next,
-		prev
-	}
-)
 </script>
 
 <style scoped>
@@ -123,6 +136,9 @@ defineExpose(
 }
 
 .img-viewer-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
 	margin-top: 8px;
 	color: #fff;
 	font-size: 16px;
@@ -134,6 +150,16 @@ defineExpose(
 	font-size: 14px;
 	display: flex;
 	gap: 16px;
-	flex-wrap: wrap;
+	align-items: center;
+}
+
+.large-tag {
+	font-size: 16px;
+	padding: 6px;
+}
+
+.fs-16 {
+	font-size: 18px;
+	font-weight: 600;
 }
 </style>
