@@ -193,4 +193,16 @@ getAuthInfo()
 	flex-direction: column;
 	gap: 16px;
 }
+
+.form-section {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.status-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
 </style>

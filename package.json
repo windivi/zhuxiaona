@@ -1,7 +1,7 @@
 {
   "name": "zhu-xiao-na",
-  "version": "1.0.0",
-  "description": "A minimal Electron + Vue application",
+  "version": "4.0.0",
+  "description": "A zhu-xiao-na peng peng tiao tiao yi qi lai qia ba",
   "main": "main/main.js",
   "scripts": {
     "dev": "node scripts/dev-server.js",
@@ -12,8 +12,8 @@
   },
   "repository": "https://github.com/deluze/electron-vue-template",
   "author": {
-    "name": "Deluze",
-    "url": "https://github.com/Deluze"
+    "name": "windivi",
+    "url": "https://github.com/windivi"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.1",

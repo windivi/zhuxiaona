@@ -17,9 +17,6 @@ const config = defineConfig({
     build: {
         outDir: Path.join(__dirname, 'build', 'renderer'),
         emptyOutDir: true,
-        // 为了解决「chunk 过大」的警告并优化输出，添加 manualChunks 拆分第三方库。
-        // 这里按常见大依赖分包：vue、ant-design-vue、lodash-es、@vueuse 以及其余 vendor。
-        // 同时将 chunkSizeWarningLimit 提高到 1024 KB（可按需调整或去掉以恢复默认警告）。
         chunkSizeWarningLimit: 1024,
         rollupOptions: {
             output: {

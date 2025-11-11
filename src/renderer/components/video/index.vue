@@ -55,7 +55,7 @@ async function initPlayer() {
 		return;
 	}
 
-	player = new EasyPlayerPro(container.value, videoPlayerSettings);
+	player = new EasyPlayerPro(container.value, videoPlayerSettings.value);
 
 	// 绑定基本事件
 	if (player.on) {
