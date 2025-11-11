@@ -49,7 +49,7 @@ export type ReviewItem = {
 	auditActionHtml: string; // raw inner HTML for action (may be a link)
 	auditResult: string;
 	images: ParsedImage[]; // parsed images/media (use parseParsedImagesFromHtml to fill)
-	medias: string[];
+	medias: ParsedMedia[];
 	modalId?: string;
 	auditToken?: string;
 	_success?: 0 | 1 | 2; // internal use only
@@ -59,6 +59,14 @@ export type ScriptOptions = {
 	title: string;
 }
 export type ParsedImage = {
+	url: string;
+	itemTitle: string;
+	scriptId?: string;
+	auditStatus: 0 | 1 | 2;
+	auditStatusName: string;
+	uploadId?: string;
+}
+export type ParsedMedia = {
 	url: string;
 	itemTitle: string;
 	scriptId?: string;

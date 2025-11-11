@@ -53,7 +53,9 @@ app.whenReady().then(async () => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ['script-src \'self\'']
+        // 允许 wasm/webassembly 的某些运行时需要的 eval 行为：增加 'unsafe-eval'
+        // 注意：在生产环境放开 'unsafe-eval' 会降低 CSP 的安全性，请评估风险或仅在受信任环境中使用。
+        'Content-Security-Policy': ["script-src 'self' 'unsafe-eval'"]
       }
     })
   })

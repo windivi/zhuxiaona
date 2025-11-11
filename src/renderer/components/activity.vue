@@ -2,7 +2,7 @@
 	<div class="layout">
 		<div style="display:flex;gap:16px;">
 
-			<a-select v-model:value="formState.activityId" @change="getList" placeholder="筛选活动" style="width:180px;">
+			<a-select v-model:value="formState.activityId" @change="getList" placeholder="筛选活动">
 				<a-select-option value="">全部活动</a-select-option>
 				<a-select-option v-for="act in activityList" :key="act.id" :value="act.id">{{ act.title
 				}}</a-select-option>
@@ -30,11 +30,10 @@
 			<a-table-column key="auditor" title="审核人" data-index="auditor" />
 			<a-table-column key="auditTime" title="审核时间" data-index="auditTime" />
 			<a-table-column key="auditResult" title="审核结果" data-index="auditResult" />
-			<a-table-column key="image" title="图片">
+			<a-table-column key="action" title="操作列">
 				<template #default="{ record, index }">
-					<img class="image"
-						:src="(record.images && record.images[0]) ? record.images[0].url : (record.image || '')"
-						@click="startReview(index)"></img>
+					<a-button v-if="record.images?.length" type="link" @click="startReviewImg(index)">图片</a-button>
+					<a-button v-if="record.medias?.length" type="link" @click="startReviewVideo(index)">视频</a-button>
 				</template>
 			</a-table-column>
 		</a-table>
@@ -44,9 +43,10 @@
 				:pageSize="formState.per_page" :total="total" @change="handlePageChange" show-size-changer
 				show-quick-jumper responsive />
 		</div>
-		<SimpleImgViewer v-if="showViewImage" ref="viewerRef" v-model="showViewImage" :data="viewImageRecord"
-			:options="scriptOptions" @enter="handleEnter" @space="handleSpace" @up="handleUp" @down="handleDown">
-		</SimpleImgViewer>
+		<SimpleImgViewer v-if="showViewImage" ref="viewerRef" v-model="showViewImage" :data="selectedRowRecord"
+			:options="scriptOptions" @enter="handleEnter" @space="handleSpace" @up="handleUp" @down="handleDown" />
+		<SimpleVideoViewer v-if="showViewVideo" ref="playerRef" v-model="showViewVideo" :data="selectedRowRecord"
+			:options="scriptOptions" @enter="handleEnter" @space="handleSpace" @up="handleUp" @down="handleDown" />
 	</div>
 </template>
 
@@ -59,7 +59,8 @@ function rowClassName(record: ReviewItem) {
 import { ref, reactive, computed, onMounted, } from 'vue'
 import { extractTokenFromLoginHtml, parseActivityListFromHtml, parseReviewListFromHtml } from '../services/activity-parse'
 import axios from 'axios'
-import SimpleImgViewer from './simpleImg-viewer.vue'
+import SimpleImgViewer from './simple-img-viewer.vue'
+import SimpleVideoViewer from './simple-video-viewer.vue'
 import { message } from 'ant-design-vue'
 import { ActivityItem, ParsedImage, ReviewItem, ScriptOptions } from '../services';
 
@@ -69,11 +70,13 @@ const formState = reactive<Record<string, any>>({
 	auditResult: '',
 	activityId: '',
 })
+const playerRef = ref<any>()
+const showViewVideo = ref(false)
 const showViewImage = ref(false)
 const scriptOptions = ref<ScriptOptions[]>([])
-const viewImageIndex = ref(0)
-const viewImageRecord = computed(() => {
-	return tableData.value[viewImageIndex.value] || {}
+const selectedRowIndex = ref(0)
+const selectedRowRecord = computed(() => {
+	return tableData.value[selectedRowIndex.value] || {}
 })
 const token = ref<string>()
 const activityList = ref<ActivityItem[]>()
@@ -119,9 +122,14 @@ const getList = async () => {
 	}
 }
 
-const startReview = (index: number = 0) => {
-	viewImageIndex.value = index
+const startReviewImg = (index: number = 0) => {
+	selectedRowIndex.value = index
 	showViewImage.value = true
+}
+
+const startReviewVideo = (index: number = 0) => {
+	selectedRowIndex.value = index
+	showViewVideo.value = true
 }
 
 async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, scriptId: string) {
@@ -182,15 +190,15 @@ function handlePageChange(page: number, size: number) {
 	getList()
 }
 function handleUp() {
-	if (viewImageIndex.value) {
-		viewImageIndex.value -= 1
+	if (selectedRowIndex.value) {
+		selectedRowIndex.value -= 1
 	} else {
 		message.info('不要介样子按辣，它已经到顶了诶')
 	}
 }
 function handleDown() {
-	if (viewImageIndex.value < tableData.value.length - 1) {
-		viewImageIndex.value += 1
+	if (selectedRowIndex.value < tableData.value.length - 1) {
+		selectedRowIndex.value += 1
 	} else {
 		message.info('不要介样子按辣，它已经到底了诶')
 	}

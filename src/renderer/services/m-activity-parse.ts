@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { ActivityItem, ActivityDetailItem, AuditStatus, ReviewItem, ScriptOptions, ParsedImage } from '.';
+import { ActivityItem, ActivityDetailItem, AuditStatus, ReviewItem, ScriptOptions, ParsedImage, ParsedMedia } from '.';
 // 引用 postmanParser.ts 的类型
 
 // 辅助：从 select 元素中以统一策略读取 value 和显示名称
@@ -109,8 +109,7 @@ export function parseReviewItemsFromHtml(html: string): {
 	const $ = cheerio.load(html || '');
 	const records: ReviewItem[] = [];
 
-	// 预解析页面中所有图片/媒体并映射为 ParsedImage[]，用于给记录填充 images
-	const parsedImages = parseParsedImagesFromHtml(html);
+	// 不再预解析 images；所有解析工作在此函数内完成，避免二次遍历
 
 	// 解析表格数据
 	$('#grid-table tbody tr').each((_, tr) => {
@@ -149,31 +148,47 @@ export function parseReviewItemsFromHtml(html: string): {
 					record.auditToken = tokenMatch[1];
 				}
 
-				// 提取图片 - 使用预解析的 parsedImages 来填充 record.images
+				// 从 modal 内解析 itemTitle（优先 td[width="180"]）
+				const modalItemTitle = modal.find('td[width="180"]').first().text().replace(/\s+/g, ' ').trim() || record.itemTitle || '';
+
+				const rowAuditText = record.auditResult || '';
+				const rowAuditStatus = auditNameToStatus(rowAuditText);
+
+				const seen = new Set<string>();
+
+				// 图片：为每张图片单独解析对应的 scriptId 与 uploadId
 				modal.find('img.user_upload_img').each((_, img) => {
 					const src = $(img).attr('src');
-					if (!src) return;
-					// 查找预解析结果
-					const found = parsedImages.find(p => p.url === src);
-					if (found) {
-						if (!record.images) record.images = [];
-						if (!record.images.find(r => r.url === found.url)) {
-							const rowAuditText = record.auditResult || '';
-							const rowAuditStatus = auditNameToStatus(rowAuditText);
-							const cloned: ParsedImage = Object.assign({}, found, { auditStatus: rowAuditStatus, auditStatusName: rowAuditText });
-							record.images.push(cloned);
+					if (!src || seen.has(src)) return;
+					seen.add(src);
+
+					const imgId = $(img).attr('id') || $(img).attr('data-id') || '';
+					let scriptId: string | undefined = undefined;
+
+					if (imgId) {
+						let sSelect = modal.find(`select[data-id="${imgId}"][class*="script_id"]`).first();
+						if (!sSelect || sSelect.length === 0) {
+							sSelect = modal.find(`select[class*="script_id"][class*="${imgId}"]`).first();
 						}
-					} else {
-						if (!record.images) record.images = [];
-						if (!record.images.find(r => r.url === src)) {
-							const rowAuditText = record.auditResult || '';
-							const rowAuditStatus = auditNameToStatus(rowAuditText);
-							record.images.push({ url: src, itemTitle: '', auditStatus: rowAuditStatus, auditStatusName: rowAuditText });
+						if (sSelect && sSelect.length > 0) {
+							const sInfo = getSelectValueAndName(sSelect);
+							scriptId = sInfo.value;
 						}
 					}
+
+					if (!scriptId) {
+						const sSelect = modal.find("select[class*='script_id']").first();
+						if (sSelect && sSelect.length > 0) {
+							const sInfo = getSelectValueAndName(sSelect);
+							scriptId = sInfo.value;
+						}
+					}
+
+					if (!record.images) record.images = [];
+					record.images.push({ url: src, itemTitle: modalItemTitle, auditStatus: rowAuditStatus, auditStatusName: rowAuditText, scriptId: scriptId, uploadId: imgId || undefined });
 				});
 
-				// 从图片 id 属性提取记录 id
+				// 从图片 id 属性提取记录 id（继续保留该行为以兼容现有使用）
 				const firstImg = modal.find('img.user_upload_img').first();
 				if (firstImg.length > 0) {
 					const imgId = firstImg.attr('id');
@@ -182,12 +197,37 @@ export function parseReviewItemsFromHtml(html: string): {
 					}
 				}
 
-				// 提取视频/媒体 src（推入 media 数组）
+				// 媒体（video/audio/source）：解析为 ParsedMedia 对象
 				modal.find('video source, video, audio, source').each((_, video) => {
 					const src = $(video).attr('src');
-					if (!src) return;
+					if (!src || seen.has(src)) return;
+					seen.add(src);
+
+					const vId = $(video).attr('id') || $(video).attr('data-id') || '';
+					let vScriptId: string | undefined = undefined;
+
+					if (vId) {
+						let sSelect = modal.find(`select[data-id="${vId}"][class*="script_id"]`).first();
+						if (!sSelect || sSelect.length === 0) {
+							sSelect = modal.find(`select[class*="script_id"][class*="${vId}"]`).first();
+						}
+						if (sSelect && sSelect.length > 0) {
+							const sInfo = getSelectValueAndName(sSelect);
+							vScriptId = sInfo.value;
+						}
+					}
+
+					if (!vScriptId) {
+						const sSelect = modal.find("select[class*='script_id']").first();
+						if (sSelect && sSelect.length > 0) {
+							const sInfo = getSelectValueAndName(sSelect);
+							vScriptId = sInfo.value;
+						}
+					}
+
 					if (!record.medias) record.medias = [];
-					if (!record.medias.includes(src)) record.medias.push(src);
+					const parsedMedia: ParsedMedia = { url: src, itemTitle: modalItemTitle, scriptId: vScriptId, auditStatus: rowAuditStatus, auditStatusName: rowAuditText, uploadId: vId || undefined };
+					record.medias.push(parsedMedia);
 				});
 			}
 		}
