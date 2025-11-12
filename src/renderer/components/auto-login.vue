@@ -1,11 +1,11 @@
 <template>
 	<a-card class="auto-login-panel" bordered>
 		<template #title>
-			<span>自动登录控制面板</span>
+			<span>自动登录</span>
 		</template>
 
 		<a-form layout="vertical" class="form-section">
-			<a-form-item label="用户名">
+			<!-- <a-form-item label="用户名">
 				<a-input v-model:value="credentials.username" :disabled="isLoading" placeholder="请输入用户名" />
 			</a-form-item>
 
@@ -16,7 +16,7 @@
 			<a-form-item label="动态码">
 				<a-input v-model:value="credentials.dynamicCode" :disabled="isLoading" :maxlength="6"
 					placeholder="请输入6位动态码" />
-			</a-form-item>
+			</a-form-item> -->
 
 			<a-form-item>
 				<a-space>
@@ -24,9 +24,9 @@
 						{{ isLoading ? '登录中...' : '开始自动登录' }}
 					</a-button>
 
-					<a-button @click="getAuthInfo" :disabled="isLoading">获取认证信息</a-button>
+					<!-- <a-button @click="getAuthInfo" :disabled="isLoading">获取认证信息</a-button> -->
 
-					<a-button danger @click="closeBrowser" :disabled="isLoading">关闭浏览器</a-button>
+					<!-- <a-button danger @click="closeBrowser" :disabled="isLoading">关闭浏览器</a-button> -->
 				</a-space>
 			</a-form-item>
 		</a-form>
@@ -34,14 +34,14 @@
 		<a-divider />
 
 		<div class="status-section">
-			<a-typography-title :level="5">状态信息</a-typography-title>
+			<!-- <a-typography-title :level="5">状态信息</a-typography-title> -->
 
-			<div class="status-item">
+			<!-- <div class="status-item">
 				<strong>登录状态:</strong>
 				<a-tag :color="loginTagColor">{{ loginStatus.text }}</a-tag>
-			</div>
+			</div> -->
 
-			<div v-if="authInfo.cookies" class="auth-info">
+			<!-- <div v-if="authInfo.cookies" class="auth-info">
 				<a-descriptions :column="1" bordered>
 					<a-descriptions-item label="Cookies">
 						<div class="cookie-display">{{ authInfo.cookies }}</div>
@@ -50,7 +50,7 @@
 						<div class="token-display">{{ authInfo.csrfToken || '未获取到' }}</div>
 					</a-descriptions-item>
 				</a-descriptions>
-			</div>
+			</div> -->
 
 			<div v-if="lastMessage" class="message">
 				<a-alert show-icon type="info" :message="lastMessage" />
@@ -60,10 +60,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { useStorage } from '@vueuse/core'
+import { ref, computed, nextTick } from 'vue'
 
 // 响应式数据
-const credentials = ref({
+const credentials = useStorage('account-info', {
 	username: '13272009478',
 	password: '13272009478@Hxn',
 	dynamicCode: '666666'
@@ -140,6 +141,7 @@ const startAutoLogin = async () => {
 		console.error('自动登录失败:', error)
 	} finally {
 		isLoading.value = false
+		closeBrowser()
 	}
 }
 

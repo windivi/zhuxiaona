@@ -1,15 +1,15 @@
 <template>
-	<div v-if="visible" class="img-viewer-overlay">
-		<div class="img-viewer-content">
-			<EzPlayer :src="currentMedia?.url" class="img-viewer-img" />
-			<div class="img-viewer-info" v-if="currentData">
+	<div v-if="visible" class="media-viewer-overlay">
+		<div class="media-viewer-content">
+			<EzPlayer :src="currentMedia?.url" transcode class="media-viewer-media" />
+			<div class="media-viewer-info" v-if="currentData">
 				<!-- <span>ID: {{ data.id }}</span> -->
 				<!-- <span>活动名称{{ data.activityTitle }}</span> -->
 				<span class="fs-16">第 {{ current + 1 }}/{{ data.medias.length }} 张</span>
 				<span class="fs-16">{{ currentMedia?.itemTitle }}</span>
 				<a-tag class="large-tag" :color="getMediaStatusColor">{{ currentMedia.auditStatusName }}</a-tag>
 			</div>
-			<div class="img-viewer-toolbar">
+			<div class="media-viewer-toolbar">
 				<a-form-item label="不通过原因">
 					<a-select style="width: 220px;" placeholder="不通过原因" :dropdownMatchSelectWidth="false"
 						v-model:value="currentMedia.scriptId"
@@ -80,7 +80,7 @@ function onKeydown(e: KeyboardEvent) {
 			emit('down')
 			break;
 		case 'Enter':
-			// emit (imgUrl, record)
+			// emit (mediaUrl, record)
 			emit('enter', currentMedia.value, currentData.value, current.value)
 			break;
 		case ' ':
@@ -102,7 +102,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.img-viewer-overlay {
+.media-viewer-overlay {
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -115,7 +115,7 @@ onUnmounted(() => {
 	justify-content: center;
 }
 
-.img-viewer-content {
+.media-viewer-content {
 	position: relative;
 	background: #222;
 	padding: 16px;
@@ -128,14 +128,14 @@ onUnmounted(() => {
 	align-items: center;
 }
 
-.img-viewer-img {
+.media-viewer-media {
 	max-width: 80vw;
 	max-height: 80vh;
 	border-radius: 4px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
 }
 
-.img-viewer-toolbar {
+.media-viewer-toolbar {
 	display: flex;
 	align-items: center;
 	gap: 12px;
@@ -144,7 +144,7 @@ onUnmounted(() => {
 	font-size: 16px;
 }
 
-.img-viewer-info {
+.media-viewer-info {
 	margin-top: 12px;
 	color: #eee;
 	font-size: 14px;

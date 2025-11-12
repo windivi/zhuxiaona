@@ -12,13 +12,10 @@ declare module 'vue' {
     AButton: typeof import('ant-design-vue/es')['Button']
     ACard: typeof import('ant-design-vue/es')['Card']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
-    ADescriptions: typeof import('ant-design-vue/es')['Descriptions']
-    ADescriptionsItem: typeof import('ant-design-vue/es')['DescriptionsItem']
     ADivider: typeof import('ant-design-vue/es')['Divider']
     AForm: typeof import('ant-design-vue/es')['Form']
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
     AInput: typeof import('ant-design-vue/es')['Input']
-    AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
     APagination: typeof import('ant-design-vue/es')['Pagination']
     ASelect: typeof import('ant-design-vue/es')['Select']
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
@@ -28,6 +25,5 @@ declare module 'vue' {
     ATabPane: typeof import('ant-design-vue/es')['TabPane']
     ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATag: typeof import('ant-design-vue/es')['Tag']
-    ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
   }
 }

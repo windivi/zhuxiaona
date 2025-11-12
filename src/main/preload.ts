@@ -16,4 +16,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   
   // 关闭浏览器自动化
   closeBrowserAutomation: () => ipcRenderer.invoke('close-browser-automation'),
+  // 请求转码地址: 主进程会返回本地转码代理地址
+  getTranscodeUrl: (inputUrl: string) => ipcRenderer.invoke('get-transcode-url', inputUrl),
 })

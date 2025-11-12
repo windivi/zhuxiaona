@@ -1,7 +1,7 @@
 <template>
 	<div v-if="visible" class="img-viewer-overlay">
 		<div class="img-viewer-content">
-			<img :src="currentImage?.url" class="img-viewer-img" />
+			<img :src="currentImage?.url" class="img-viewer-tag" />
 			<div class="img-viewer-info" v-if="currentData">
 				<!-- <span>ID: {{ data.id }}</span> -->
 				<!-- <span>活动名称{{ data.activityTitle }}</span> -->
@@ -128,7 +128,7 @@ onUnmounted(() => {
 	align-items: center;
 }
 
-.img-viewer-img {
+.img-viewer-tag {
 	max-width: 80vw;
 	max-height: 80vh;
 	border-radius: 4px;

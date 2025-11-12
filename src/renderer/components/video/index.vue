@@ -8,21 +8,12 @@
 import { useStorage } from '@vueuse/core';
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 
-/**
- * 简单的 EasyPlayerPro Wrapper（Vue3 + TypeScript）
- * Props:
- *  - src: 要播放的地址（ws:// / http(s) / flv 等）
- *  - 组件假设页面已全局引入 EasyPlayer-pro 脚本（例如在 `index.html` 中通过 <script> 引入），不再动态加载脚本。
- *  - isLive, hasAudio, MSE, WCS, autoplay, bufferTime: 透传到 EasyPlayerPro 的构造选项
- *  - enableH265: 语义选项，若为 true 会尝试启用 WCS（或 MSE）以便 H.265 解码（需 EasyPlayer 支持）
- * Emits: ready, play, pause, error, destroy
- */
-
 const videoPlayerSettings = useStorage('video-player-settings', {
 	isLive: false,
 	hasAudio: true,
 	MSE: true,
-	WCS: true,
+	// 禁用 WCS（websocket-based streaming）以避免播放器把 HTTP(fMP4) 流当成 websocket 协议处理
+	WCS: false,
 	autoplay: true,
 	bufferTime: 0.2,
 	isMute: true,
@@ -34,6 +25,8 @@ const videoPlayerSettings = useStorage('video-player-settings', {
 
 const props = defineProps<{
 	src: string | null;
+	// 如果为 true，则在播放前请求主进程将该地址转码为 H.264 的本地代理地址
+	transcode?: boolean;
 }>()
 const emit = defineEmits<{
 	(e: 'ready'): void;
@@ -85,15 +78,73 @@ function destroyPlayer() {
 	}
 }
 
-function play(url?: string) {
+async function play(url?: string) {
 	if (!player) return;
-	const u = url ?? props.src;
+	let u = url ?? props.src;
 	if (!u) return;
-	// EasyPlayerPro.play 返回 Promise（示例中如此），兼容处理
+
+	// 决定是否需要转码：优先根据 props.transcode（true=强制转码，false=禁用转码），
+	// 否则通过主进程探测（ffprobe）判断是否为 MOV 或 HEVC(h265)
 	try {
-		const p = player.play(u);
+		let doTranscode = false;
+		if (props.transcode === true) {
+			doTranscode = true;
+		} else if (props.transcode === false) {
+			doTranscode = false;
+		} else if ((window as any).electronAPI && typeof (window as any).electronAPI.shouldTranscode === 'function') {
+			try {
+				const probe = await (window as any).electronAPI.shouldTranscode(u);
+				if (probe && probe.success && probe.shouldTranscode) {
+					doTranscode = true;
+				}
+			} catch (e) {
+				// 探测失败时回退到基于扩展名的简单判断
+				if (/\.mov($|\?)/i.test(String(u))) doTranscode = true;
+			}
+		} else {
+			// 无主进程探测接口时，使用扩展名回退策略
+			if (/\.mov($|\?)/i.test(String(u))) doTranscode = true;
+		}
+
+		if (doTranscode) {
+			if ((window as any).electronAPI && typeof (window as any).electronAPI.getTranscodeUrl === 'function') {
+				const r = await (window as any).electronAPI.getTranscodeUrl(u);
+				if (r && r.success && r.url) {
+					u = r.url;
+				} else {
+					emit('error', new Error('transcode failed: ' + (r && r.message ? r.message : 'unknown')));
+					return;
+				}
+			} else {
+				emit('error', new Error('transcode requested but getTranscodeUrl is not available'));
+				return;
+			}
+		}
+
+		// 如果是转码得到的 url（一般为 fMP4 via http），确保字符串包含 .mp4 以满足 EasyPlayer 内部判断；
+		// 非转码路径直接传原始 URL
+		let playUrl = String(u);
+		if (doTranscode) {
+			if (!/\.mp4/i.test(playUrl) && !/\.m3u8/i.test(playUrl)) {
+				try {
+					const tmp = new URL(playUrl);
+					if (!/\.mp4$/i.test(tmp.pathname) && !/\.m3u8$/i.test(tmp.pathname)) {
+						tmp.pathname = tmp.pathname + '.mp4';
+					}
+					playUrl = tmp.toString();
+				} catch (e) {
+					playUrl = playUrl + '.mp4';
+				}
+			}
+		}
+
+		try { console.debug('[video] doTranscode=', doTranscode, ' finalPlayUrl=', playUrl); } catch (e) { }
+
+		const p = player.play(playUrl);
 		if (p && typeof p.then === 'function') {
-			p.then(() => emit('play')).catch((err: any) => emit('error', err));
+			p.then(() => emit('play')).then(() => {
+				console.log('player', player);
+			}).catch((err: any) => emit('error', err));
 		} else {
 			emit('play');
 		}
