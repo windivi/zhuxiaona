@@ -54,12 +54,13 @@ function rowClassName(record: ReviewItem) {
 	return '';
 }
 import { ref, reactive, computed, onMounted, } from 'vue'
-import axios from 'axios'
 import SimpleImgViewer from './simple-img-viewer.vue'
 import SimpleVideoViewer from './simple-video-viewer.vue'
 import { message } from 'ant-design-vue'
 import parseTemplateData from '../services/m-activity-parse';
 import { ReviewItem, ActivityItem, ParsedImage, ScriptOptions } from '../services';
+import { useAuthenticatedRequest } from '../hooks/useAuthenticatedRequest';
+const { get, post } = useAuthenticatedRequest()
 
 const formState = reactive<Record<string, any>>({
 	page: 1,
@@ -95,10 +96,10 @@ const getList = async () => {
 	})
 	loading.value = true
 	try {
-		const res = await axios.get(apis.list + '?' + searchParam)
+		const res = await get(apis.list + '?' + searchParam)
 
-		if (res && res.data) {
-			const { token: _token, user, filterOptions, auditData } = parseTemplateData(res.data)
+		if (res) {
+			const { token: _token, user, filterOptions, auditData } = parseTemplateData(res)
 			token.value = _token
 			const { activities, items, auditStatuses, scriptOptions: _scriptOptions } = filterOptions
 			tableData.value = auditData.records
@@ -138,8 +139,8 @@ async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, imageIn
 	params.append('created_by', '贺小娜')
 	message.loading('审批中')
 	try {
-		const res = await axios.post(apis.set, params)
-		if (res && res.data.status) {
+		const res = await post(apis.set, params)
+		if (res?.status) {
 			message.destroy()
 			message.success('审批不通过')
 			handleDown()
@@ -165,8 +166,8 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem, imageIn
 	message.destroy()
 	message.loading('审批中')
 	try {
-		const res = await axios.post(apis.set, params)
-		if (res && res.data.status) {
+		const res = await post(apis.set, params)
+		if (res?.status) {
 			message.destroy()
 			message.success('审批通过')
 			handleDown()

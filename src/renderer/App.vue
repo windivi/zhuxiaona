@@ -14,9 +14,6 @@ import MActivity from './components/m-activity.vue';
 			<a-tab-pane key="month" tab="月度转发">
 				<MActivity></MActivity>
 			</a-tab-pane>
-			<a-tab-pane key="auto-login" tab="自动登录">
-				<AutoLogin />
-			</a-tab-pane>
 		</a-tabs>
 	</a-config-provider>
 </template>

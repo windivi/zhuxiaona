@@ -58,12 +58,12 @@ function rowClassName(record: ReviewItem) {
 }
 import { ref, reactive, computed, onMounted, } from 'vue'
 import { extractTokenFromLoginHtml, parseActivityListFromHtml, parseReviewListFromHtml } from '../services/activity-parse'
-import axios from 'axios'
 import SimpleImgViewer from './simple-img-viewer.vue'
 import SimpleVideoViewer from './simple-video-viewer.vue'
 import { message } from 'ant-design-vue'
 import { ActivityItem, ParsedImage, ReviewItem, ScriptOptions } from '../services';
-
+import { useAuthenticatedRequest } from '../hooks/useAuthenticatedRequest';
+const { get, post } = useAuthenticatedRequest()
 const formState = reactive<Record<string, any>>({
 	page: 1,
 	per_page: 10,
@@ -98,15 +98,15 @@ const getList = async () => {
 	})
 	loading.value = true
 	try {
-		const res = await axios.get(apis.list + '?' + searchParam)
+		const res = await get(apis.list + '?' + searchParam)
 
 
-		if (res && res.data) {
-			const { list, total: resTotal } = parseReviewListFromHtml(res.data)
-			token.value = extractTokenFromLoginHtml(res.data)
+		if (res) {
+			const { list, total: resTotal } = parseReviewListFromHtml(res)
+			token.value = extractTokenFromLoginHtml(res)
 			tableData.value = list
 			total.value = resTotal
-			const { activities, details, platforms, scriptOptions: _scriptOptions } = parseActivityListFromHtml(res.data)
+			const { activities, details, platforms, scriptOptions: _scriptOptions } = parseActivityListFromHtml(res)
 			scriptOptions.value = _scriptOptions
 			activityList.value = activities.map((item) => ({ ...item, _success: 0 }))
 		} else {
@@ -141,8 +141,8 @@ async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, scriptI
 	params.append('audit_status', '2')
 	message.loading('审批中')
 	try {
-		const res = await axios.post(apis.set, params)
-		if (res && res.data.status) {
+		const res = await post(apis.set, params)
+		if (res?.status) {
 			message.destroy()
 			message.success('审批不通过')
 			handleDown()
@@ -167,9 +167,8 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem) {
 	params.append('audit_status', '3')
 	message.loading('审批中')
 	try {
-		const res = await axios.post(apis.set, params)
-		console.log(res);
-		if (res && res.data.status) {
+		const res = await post(apis.set, params)
+		if (res?.status) {
 			message.destroy()
 			message.success('审批通过')
 			handleDown()

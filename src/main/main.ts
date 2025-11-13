@@ -248,6 +248,7 @@ app.whenReady().then(async () => {
 	session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
 		if (cookieValue) {
 			details.requestHeaders['cookie'] = cookieValue
+			console.log('[WebRequest] 添加 Cookie 到请求:', details.url.substring(0, 60))
 		}
 		if (csrfToken) {
 			details.requestHeaders['x-csrf-token'] = csrfToken
@@ -255,12 +256,38 @@ app.whenReady().then(async () => {
 		callback({ requestHeaders: details.requestHeaders })
 	})
 	session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+		// 提取 Set-Cookie 并保存到全局变量
+		if (details.responseHeaders) {
+			const setCookieHeaders = details.responseHeaders['set-cookie']
+			if (setCookieHeaders && Array.isArray(setCookieHeaders)) {
+				// 合并所有 cookie
+				const cookies = setCookieHeaders
+					.map(cookie => cookie.split(';')[0]) // 只取 name=value 部分，去掉 path、domain 等
+					.join('; ')
+				if (cookies) {
+					cookieValue = cookies
+					console.log('[WebRequest] 从响应头获取 Cookie:', cookieValue.substring(0, 60))
+				}
+			}
+		}
+
 		callback({
 			responseHeaders: {
 				...details.responseHeaders,
-				// 允许 wasm/webassembly 的某些运行时需要的 eval 行为：增加 'unsafe-eval'
-				// 注意：在生产环境放开 'unsafe-eval' 会降低 CSP 的安全性，请评估风险或仅在受信任环境中使用。
-				'Content-Security-Policy': ["script-src 'self' 'unsafe-eval'"]
+				// CSP 策略允许必要的资源加载
+				'Content-Security-Policy': [
+					"default-src 'self'; " +
+					"script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; " +
+					"style-src 'self' 'unsafe-inline' https:; " +
+					"img-src 'self' data: https:; " +
+					"font-src 'self' data: https:; " +
+					"media-src 'self' blob: https: http:; " +
+					"connect-src 'self' https: http: ws: wss:; " +
+					"frame-src 'self' https:; " +
+					"object-src 'none'; " +
+					"base-uri 'self'; " +
+					"form-action 'self'"
+				]
 			}
 		})
 	})

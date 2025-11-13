@@ -1,7 +1,7 @@
 <template>
 	<div v-if="visible" class="media-viewer-overlay">
 		<div class="media-viewer-content">
-			<EzPlayer :src="currentMedia?.url" transcode class="media-viewer-media" />
+			<EzPlayer :src="currentMedia?.url" class="media-viewer-media" />
 			<div class="media-viewer-info" v-if="currentData">
 				<!-- <span>ID: {{ data.id }}</span> -->
 				<!-- <span>活动名称{{ data.activityTitle }}</span> -->
