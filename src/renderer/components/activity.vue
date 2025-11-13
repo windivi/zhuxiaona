@@ -63,8 +63,9 @@ import SimpleVideoViewer from './simple-video-viewer.vue'
 import { message } from 'ant-design-vue'
 import { ActivityItem, ParsedImage, ReviewItem, ScriptOptions } from '../services';
 import { useAuthenticatedRequest } from '../hooks/useAuthenticatedRequest';
+import { useStorage } from '@vueuse/core';
 const { get, post } = useAuthenticatedRequest()
-const formState = reactive<Record<string, any>>({
+const formState = useStorage<Record<string, any>>('activity-review-form-state', {
 	page: 1,
 	per_page: 10,
 	auditResult: '',
@@ -90,10 +91,10 @@ const apis = {
 }
 const getList = async () => {
 	const searchParam = new URLSearchParams({
-		page: formState.page,
-		per_page: formState.per_page,
-		audit_status: formState.auditResult,
-		activity_id: formState.activityId,
+		page: formState.value.page,
+		per_page: formState.value.per_page,
+		audit_status: formState.value.auditResult,
+		activity_id: formState.value.activityId,
 		_pjax: '#pjax-container'
 	})
 	loading.value = true
@@ -109,6 +110,7 @@ const getList = async () => {
 			const { activities, details, platforms, scriptOptions: _scriptOptions } = parseActivityListFromHtml(res)
 			scriptOptions.value = _scriptOptions
 			activityList.value = activities.map((item) => ({ ...item, _success: 0 }))
+			
 		} else {
 			tableData.value = []
 			activityList.value = []
@@ -184,8 +186,8 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem) {
 	}
 }
 function handlePageChange(page: number, size: number) {
-	formState.page = page
-	formState.per_page = size
+	formState.value.page = page
+	formState.value.per_page = size
 	getList()
 }
 function handleUp() {

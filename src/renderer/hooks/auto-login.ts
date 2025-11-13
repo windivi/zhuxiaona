@@ -29,7 +29,6 @@ class AuthManager {
      * 自动登录并同步到主进程
      */
     async autoLoginWithSync(credentials: any): Promise<boolean> {
-        // 防止并发登录请求
         if (this.isLoggingIn && this.loginPromise) {
             return this.loginPromise
         }
@@ -45,15 +44,6 @@ class AuthManager {
                         cookies: result.cookies || '',
                         csrfToken: result.csrfToken || ''
                     }
-
-                    // 同步到主进程（主进程会自动持久化）
-                    try {
-                        await window.electronAPI.setAuthInfo(authData)
-                        console.log('[Auth] 认证信息已同步到主进程')
-                    } catch (error) {
-                        console.warn('[Auth] 主进程同步失败:', error)
-                    }
-
                     this.retryCount = 0
                     return true
                 } else {

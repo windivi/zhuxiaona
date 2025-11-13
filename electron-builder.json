@@ -17,7 +17,14 @@
         "shortcutName": "Electron App"
     },
     "win": {
-        "target": "nsis"
+        "target": [
+            {
+                "target": "zip",
+                "arch": [
+                    "x64"
+                ]
+            }
+        ]
     },
     "linux": {
         "target": ["snap"]

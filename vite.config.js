@@ -18,6 +18,16 @@ const config = defineConfig({
         outDir: Path.join(__dirname, 'build', 'renderer'),
         emptyOutDir: true,
         chunkSizeWarningLimit: 1024,
+        // minify: 'terser',
+        // terserOptions: {
+        //     compress: {
+        //         drop_console: true,
+        //         drop_debugger: true
+        //     },
+        //     format: {
+        //         comments: false
+        //     }
+        // },
         rollupOptions: {
             output: {
                 manualChunks(id) {

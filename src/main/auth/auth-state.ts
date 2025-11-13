@@ -1,4 +1,4 @@
-import { authStorage } from '../auth-storage';
+import { authStorage } from './auth-storage';
 
 let cookieValue = '';
 let csrfToken = '';

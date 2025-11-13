@@ -12,7 +12,9 @@ export function createWindow(logCollector: any) {
       contextIsolation: true,
       webSecurity: false,
       allowRunningInsecureContent: true,
-      preload: join(__dirname, 'preload.js'),
+  // preload.js 位于 build/main 目录（src/main/preload.ts -> build/main/preload.js），
+  // __dirname 在编译后为 build/main/ui，因此向上一级查找 preload.js
+  preload: join(__dirname, '..', 'preload.js'),
     },
   });
 

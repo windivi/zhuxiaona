@@ -84,12 +84,4 @@ export async function login(credentials: {
     return await authManager.login(credentials)
 }
 
-/**
- * 退出登录
- */
-export async function logout(): Promise<boolean> {
-    const authManager = getAuthManager()
-    return await authManager.logout()
-}
-
 export { getAuthManager }

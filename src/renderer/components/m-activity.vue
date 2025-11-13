@@ -60,13 +60,15 @@ import { message } from 'ant-design-vue'
 import parseTemplateData from '../services/m-activity-parse';
 import { ReviewItem, ActivityItem, ParsedImage, ScriptOptions } from '../services';
 import { useAuthenticatedRequest } from '../hooks/useAuthenticatedRequest';
+import { useStorage } from '@vueuse/core';
 const { get, post } = useAuthenticatedRequest()
 
-const formState = reactive<Record<string, any>>({
+const formState = useStorage<Record<string, any>>('m-activity-review-form-state', {
 	page: 1,
 	per_page: 10,
 	auditResult: '',
 	activityId: '',
+	phone: '',
 })
 const showViewImage = ref(false)
 const showViewVideo = ref(false)
@@ -87,11 +89,11 @@ const apis = {
 }
 const getList = async () => {
 	const searchParam = new URLSearchParams({
-		page: formState.page,
-		per_page: formState.per_page,
-		audit_status: formState.auditResult,
-		activity_id: formState.activityId,
-		'user[phone]': formState.phone || '',
+		page: formState.value.page,
+		per_page: formState.value.per_page,
+		audit_status: formState.value.auditResult,
+		activity_id: formState.value.activityId,
+		'user[phone]': formState.value.phone || '',
 		_pjax: '#pjax-container'
 	})
 	loading.value = true
@@ -183,8 +185,8 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem, imageIn
 	}
 }
 function handlePageChange(page: number, size: number) {
-	formState.page = page
-	formState.per_page = size
+	formState.value.page = page
+	formState.value.per_page = size
 	getList()
 }
 function handleUp() {

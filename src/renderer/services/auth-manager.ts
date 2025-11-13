@@ -92,14 +92,6 @@ export class AuthManager {
                     csrfToken: result.csrfToken || ''
                 }
 
-                // 同步到主进程（主进程会自动持久化）
-                try {
-                    await window.electronAPI.setAuthInfo(authData)
-                    console.log('[AuthManager] 认证信息已同步到主进程')
-                } catch (syncError) {
-                    console.warn('[AuthManager] 主进程同步失败:', syncError)
-                }
-
                 this.resetRetries()
                 return true
             } else {
@@ -147,21 +139,6 @@ export class AuthManager {
         } catch (error) {
             console.error('[AuthManager] 获取认证信息失败:', error)
             return { cookies: '', csrfToken: '' }
-        }
-    }
-
-    /**
-     * 退出登录
-     */
-    async logout(): Promise<boolean> {
-        try {
-            // 清除主进程中的认证信息
-            await window.electronAPI.setAuthInfo({ cookies: '', csrfToken: '' })
-            console.log('[AuthManager] 已退出登录')
-            return true
-        } catch (error) {
-            console.error('[AuthManager] 退出登录失败:', error)
-            return false
         }
     }
 

@@ -31,7 +31,7 @@ class AuthInterceptor {
      * 设置拦截器
      */
     private setupInterceptors() {
-        // 请求拦截器 - 添加认证信息
+        // 请求拦截器 - 添加认证信息和禁用自动重定向
         this.instance.interceptors.request.use(
             (config: any) => {
                 return this.onRequest(config)
@@ -39,9 +39,9 @@ class AuthInterceptor {
             error => Promise.reject(error)
         )
 
-        // 响应拦截器 - 处理 401 错误
+        // 响应拦截器 - 处理 401 和 302 错误
         this.instance.interceptors.response.use(
-            response => response,
+            response => this.onResponse(response),
             error => this.onResponseError(error)
         )
     }
@@ -53,6 +53,9 @@ class AuthInterceptor {
         // 注意：在 Electron 渲染进程中，axios 无法直接设置 cookie 头
         // 因为浏览器 API 出于安全考虑禁止了这一行为
         // 认证信息由 Electron 主进程的 webRequest 拦截器统一处理
+        
+        // 禁用自动重定向，让我们手动处理 302
+        config.maxRedirects = 0
         
         // 仅作为备份，如果 IPC 获取到 CSRF token，添加到请求头
         if (this.getAuthInfo) {
@@ -70,12 +73,61 @@ class AuthInterceptor {
     }
 
     /**
-     * 响应错误处理
+     * 响应成功处理（检查 302 重定向）
+     */
+    private async onResponse(response: any) {
+        // 检查 302 重定向（禁用自动重定向后，302 会作为成功响应返回）
+        if (response.status === 302) {
+            console.log('[Auth] 检测到 302 重定向，尝试自动登录...')
+            
+            if (this.isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    this.failedRequests.push({
+                        config: response.config,
+                        resolve,
+                        reject
+                    })
+                })
+            }
+
+            this.isRefreshing = true
+
+            try {
+                if (this.autoLoginHandler) {
+                    const success = await this.autoLoginHandler()
+
+                    if (success) {
+                        this.retryFailedRequests()
+                        
+                        // 用新的认证信息重试当前请求
+                        return this.instance(response.config)
+                    } else {
+                        console.error('[Auth] 自动登录失败，无法恢复认证 (302)')
+                        this.failedRequests = []
+                        return Promise.reject(new Error('登录失败'))
+                    }
+                } else {
+                    console.warn('[Auth] autoLoginHandler 未设置')
+                    return response
+                }
+            } catch (err) {
+                console.error('[Auth] 处理 302 错误时发生异常:', err)
+                this.failedRequests = []
+                return Promise.reject(err)
+            } finally {
+                this.isRefreshing = false
+            }
+        }
+
+        return response
+    }
+    /**
+     * 响应错误处理（只处理 401）
      */
     private async onResponseError(error: AxiosError) {
         const config = error.config
 
-        // 只处理 401 错误
+        // 只处理 401 错误（302 已在 onResponse 中处理）
         if (error.response?.status === 401 && config) {
             // 如果正在刷新，将当前请求加入队列
             if (this.isRefreshing) {
@@ -102,7 +154,7 @@ class AuthInterceptor {
                         // 用新的认证信息重试当前请求
                         return this.instance(config)
                     } else {
-                        console.error('[Auth] 自动登录失败，无法恢复认证')
+                        console.error('[Auth] 自动登录失败，无法恢复认证 (401)')
                         this.failedRequests = []
                         return Promise.reject(error)
                     }

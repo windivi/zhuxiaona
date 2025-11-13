@@ -89,7 +89,6 @@ export {
 	checkAuthStatus,
 	getAuthInfo,
 	login,
-	logout,
 	getAuthManager as getAuthManagerFromInit
 } from './auth-init'
 

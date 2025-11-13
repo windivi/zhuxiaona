@@ -6,7 +6,7 @@
 				<!-- <span>ID: {{ data.id }}</span> -->
 				<!-- <span>活动名称{{ data.activityTitle }}</span> -->
 				<span class="fs-16">第 {{ current + 1 }}/{{ data.medias.length }} 张</span>
-				<span class="fs-16">{{ currentMedia?.itemTitle }}</span>
+				<span class="fs-16">{{ currentMedia?.itemTitle || currentMedia?.uploadId }}</span>
 				<a-tag class="large-tag" :color="getMediaStatusColor">{{ currentMedia.auditStatusName }}</a-tag>
 			</div>
 			<div class="media-viewer-toolbar">
@@ -130,9 +130,11 @@ onUnmounted(() => {
 
 .media-viewer-media {
 	max-width: 80vw;
-	max-height: 80vh;
+	max-height: 70vh;
 	border-radius: 4px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+	width: 100%;
+	height: 100%;
 }
 
 .media-viewer-toolbar {

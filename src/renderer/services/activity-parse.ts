@@ -159,7 +159,7 @@ export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; tot
 				const src = $(img).attr('src');
 				if (src && !seen.has(src)) {
 					seen.add(src);
-					const parsed: ParsedImage = { url: src, itemTitle: itemTitle || '', scriptId: scriptId || undefined, auditStatus, auditStatusName };
+					const parsed: ParsedImage = { url: src, itemTitle: itemTitle || '', scriptId: scriptId || undefined, auditStatus, auditStatusName, uploadId, };
 					item.images.push(parsed);
 				}
 			});
@@ -167,7 +167,7 @@ export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; tot
 				const src = $(mtag).attr('src');
 				if (src && !seen.has(src)) {
 					seen.add(src);
-					const parsed: ParsedMedia = { url: src, itemTitle: itemTitle || '', scriptId: scriptId || undefined, auditStatus, auditStatusName };
+					const parsed: ParsedMedia = { url: src, itemTitle: itemTitle || '', scriptId: scriptId || undefined, auditStatus, auditStatusName, uploadId, };
 					item.medias.push(parsed);
 				}
 			});

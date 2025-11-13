@@ -5,8 +5,9 @@ const Vite = require('vite');
 const compileTs = require('./private/tsc');
 
 // 设置 electron-builder 的阿里云镜像
-process.env.ELECTRON_MIRROR = process.env.ELECTRON_MIRROR || 'https://registry.npmmirror.com/-/raw/electron/';
-process.env.ELECTRON_BUILDER_BINARIES_MIRROR = process.env.ELECTRON_BUILDER_BINARIES_MIRROR || 'https://registry.npmmirror.com/-/raw/electron-builder-binaries/';
+// Prefer the npmmirror mirrors path which exposes releases under v{version}/
+process.env.ELECTRON_MIRROR = process.env.ELECTRON_MIRROR || 'https://npmmirror.com/mirrors/electron/';
+process.env.ELECTRON_BUILDER_BINARIES_MIRROR = process.env.ELECTRON_BUILDER_BINARIES_MIRROR || 'https://npmmirror.com/mirrors/electron-builder-binaries/';
 
 console.log(Chalk.cyan('Electron Mirror:', process.env.ELECTRON_MIRROR));
 console.log(Chalk.cyan('Electron Builder Binaries Mirror:', process.env.ELECTRON_BUILDER_BINARIES_MIRROR));

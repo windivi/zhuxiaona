@@ -15,7 +15,7 @@ async function bootstrap() {
     }
 
     // 设置 HTTP 客户端的凭证信息
-    httpClient.setCredentials(credentials)
+    // httpClient.setCredentials(credentials)
 
     // 初始化认证系统（包括 IPC 通信和 axios 拦截器）
     const authInitialized = await initializeAuthSystem(credentials)

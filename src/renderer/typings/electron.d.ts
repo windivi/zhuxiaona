@@ -18,9 +18,6 @@ export default interface ElectronApi {
     csrfToken: string;
   }>
 
-  // 设置认证信息
-  setAuthInfo: (authInfo: { cookies?: string; csrfToken?: string }) => Promise<{ success: boolean }>
-
   // 关闭浏览器自动化
   closeBrowserAutomation: () => Promise<{ success: boolean; message: string }>
 
