@@ -1,6 +1,8 @@
 import { app, BrowserWindow, ipcMain, session } from 'electron';
 import { join } from 'path';
 import { browserAutomation } from './browserAutomation';
+import { authStorage } from './auth-storage';
+import { logCollector } from './log-collector';
 
 // 转码服务相关
 import * as http from 'http';
@@ -196,8 +198,11 @@ function startTranscodeServer() {
 	});
 }
 
-let cookieValue = '';
-let csrfToken = '';
+// 从磁盘加载认证信息
+const authInfo = authStorage.getAuth();
+let cookieValue = authInfo.cookies || '';
+let csrfToken = authInfo.csrfToken || '';
+
 async function createWindow() {
 	const mainWindow = new BrowserWindow({
 		width: 800,
@@ -212,6 +217,10 @@ async function createWindow() {
 			preload: join(__dirname, 'preload.js'),
 		},
 	});
+	
+	// 设置主窗口引用，使日志可以实时发送到前端
+	logCollector.setMainWindow(mainWindow);
+	
 	mainWindow.setTitle('朱小娜专用版');
 	mainWindow.setMenuBarVisibility(false);
 
@@ -256,7 +265,7 @@ app.whenReady().then(async () => {
 		callback({ requestHeaders: details.requestHeaders })
 	})
 	session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-		// 提取 Set-Cookie 并保存到全局变量
+		// 提取 Set-Cookie 并保存到全局变量和磁盘
 		if (details.responseHeaders) {
 			const setCookieHeaders = details.responseHeaders['set-cookie']
 			if (setCookieHeaders && Array.isArray(setCookieHeaders)) {
@@ -266,6 +275,7 @@ app.whenReady().then(async () => {
 					.join('; ')
 				if (cookies) {
 					cookieValue = cookies
+					authStorage.setCookies(cookies) // 持久化保存
 					console.log('[WebRequest] 从响应头获取 Cookie:', cookieValue.substring(0, 60))
 				}
 			}
@@ -447,10 +457,16 @@ ipcMain.handle('get-auth-info', () => {
 
 // 手动设置 cookie 和 csrf-token
 ipcMain.handle('set-auth-info', (event, { cookies, csrfToken: token }) => {
-	if (cookies) cookieValue = cookies;
-	if (token) csrfToken = token;
+	if (cookies) {
+		cookieValue = cookies;
+		authStorage.setCookies(cookies);
+	}
+	if (token) {
+		csrfToken = token;
+		authStorage.setCsrfToken(token);
+	}
 
-	console.log('手动设置认证信息成功');
+	console.log('[IPC] 手动设置认证信息成功');
 	return { success: true };
 });
 

@@ -81,7 +81,7 @@ export type ParsedMedia = {
 
 // 导出认证管理器
 export { getAuthManager, AuthManager } from './auth-manager'
-export type { AuthInfo, AuthStatus } from './auth-manager'
+export type { AuthInfo } from './auth-manager'
 
 // 导出认证初始化函数
 export {

@@ -93,7 +93,7 @@ class HttpClient {
             try {
                 // 添加认证信息
                 const authManager = getAuthManager()
-                const authInfo = authManager.getAuthInfo()
+                const authInfo = await authManager.getAuthInfo()
 
                 const requestConfig = {
                     ...config,

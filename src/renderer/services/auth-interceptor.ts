@@ -52,15 +52,18 @@ class AuthInterceptor {
     private onRequest(config: any) {
         // 注意：在 Electron 渲染进程中，axios 无法直接设置 cookie 头
         // 因为浏览器 API 出于安全考虑禁止了这一行为
-        // 认证信息由 Electron 主进程的 webRequest 拦截器统一添加
-        // 这里仅保留 custom header 的处理
+        // 认证信息由 Electron 主进程的 webRequest 拦截器统一处理
         
-        const authData = JSON.parse(localStorage.getItem('auth-info') || '{}')
-        
-        // 只添加自定义的 csrf-token 头，cookie 由主进程处理
-        if (authData.csrfToken) {
-            config.headers = config.headers || {}
-            config.headers['x-csrf-token'] = authData.csrfToken
+        // 仅作为备份，如果 IPC 获取到 CSRF token，添加到请求头
+        if (this.getAuthInfo) {
+            this.getAuthInfo().then(authData => {
+                if (authData.csrfToken) {
+                    config.headers = config.headers || {}
+                    config.headers['x-csrf-token'] = authData.csrfToken
+                }
+            }).catch(err => {
+                console.warn('[AuthInterceptor] 获取认证信息失败:', err)
+            })
         }
 
         return config

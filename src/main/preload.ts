@@ -22,4 +22,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   
   // 智能检测视频是否需要转码
   shouldTranscode: (inputUrl: string) => ipcRenderer.invoke('should-transcode', inputUrl),
+  
+  // 日志相关API
+  getLogs: () => ipcRenderer.invoke('get-logs'),
+  clearLogs: () => ipcRenderer.invoke('clear-logs'),
+  onLogMessage: (callback: (log: any) => void) => {
+    ipcRenderer.on('log-message', (event, log) => callback(log))
+  }
 })

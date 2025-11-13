@@ -1,108 +1,11 @@
 /**
- * 认证管理工具类 - 统一处理认证相关的业务逻辑
- * 
- * 功能：
- * 1. 本地存储管理（localStorage）
- * 2. 后端同步（IPC 通信）
- * 3. 认证信息的验证和刷新
- * 4. 自动重试机制
+ * 认证管理工具类 - 简化版本
+ * 认证数据由主进程持久化管理，前端仅负责读取和业务逻辑
  */
 
 export interface AuthInfo {
     cookies: string
     csrfToken: string
-}
-
-export interface AuthStatus {
-    isAuthenticated: boolean
-    lastUpdated: number
-    source: 'local' | 'backend' | 'login' | 'unknown'
-}
-
-class AuthStore {
-    private static STORAGE_KEY = 'auth-info'
-    private static STATUS_KEY = 'auth-status'
-
-    /**
-     * 获取本地存储的认证信息
-     */
-    static getLocal(): AuthInfo {
-        try {
-            const data = localStorage.getItem(this.STORAGE_KEY)
-            return data ? JSON.parse(data) : { cookies: '', csrfToken: '' }
-        } catch (error) {
-            console.error('[AuthStore] 读取本地认证信息失败:', error)
-            return { cookies: '', csrfToken: '' }
-        }
-    }
-
-    /**
-     * 保存认证信息到本地
-     */
-    static saveLocal(authInfo: AuthInfo) {
-        try {
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(authInfo))
-            this.updateStatus({ isAuthenticated: true, source: 'local' })
-        } catch (error) {
-            console.error('[AuthStore] 保存本地认证信息失败:', error)
-        }
-    }
-
-    /**
-     * 清除本地认证信息
-     */
-    static clearLocal() {
-        localStorage.removeItem(this.STORAGE_KEY)
-        this.updateStatus({ isAuthenticated: false, source: 'unknown' })
-    }
-
-    /**
-     * 更新认证状态
-     */
-    static updateStatus(status: Partial<AuthStatus>) {
-        try {
-            const current = this.getStatus()
-            const updated = {
-                ...current,
-                ...status,
-                lastUpdated: Date.now()
-            }
-            localStorage.setItem(this.STATUS_KEY, JSON.stringify(updated))
-        } catch (error) {
-            console.error('[AuthStore] 更新认证状态失败:', error)
-        }
-    }
-
-    /**
-     * 获取认证状态
-     */
-    static getStatus(): AuthStatus {
-        try {
-            const data = localStorage.getItem(this.STATUS_KEY)
-            return data ? JSON.parse(data) : {
-                isAuthenticated: false,
-                lastUpdated: 0,
-                source: 'unknown'
-            }
-        } catch (error) {
-            return {
-                isAuthenticated: false,
-                lastUpdated: 0,
-                source: 'unknown'
-            }
-        }
-    }
-
-    /**
-     * 检查认证信息是否有效（5分钟内视为有效）
-     */
-    static isValid(): boolean {
-        const status = this.getStatus()
-        if (!status.isAuthenticated) return false
-
-        const expiryTime = 5 * 60 * 1000 // 5 minutes
-        return (Date.now() - status.lastUpdated) < expiryTime
-    }
 }
 
 /**
@@ -124,35 +27,23 @@ export class AuthManager {
     }): Promise<AuthInfo | null> {
         console.log('[AuthManager] 初始化认证流程...')
 
-        // 1. 检查本地存储
-        const localAuth = AuthStore.getLocal()
-        if (localAuth.cookies && localAuth.csrfToken) {
-            if (AuthStore.isValid()) {
-                console.log('[AuthManager] 本地认证信息有效')
-                return localAuth
-            }
-        }
-
-        // 2. 尝试从后端获取
+        // 尝试从主进程获取（主进程会从磁盘加载）
         try {
             const backendAuth = await window.electronAPI.getAuthInfo()
             if (backendAuth.cookies && backendAuth.csrfToken) {
-                console.log('[AuthManager] 从后端恢复认证信息')
-                AuthStore.saveLocal(backendAuth)
-                AuthStore.updateStatus({ isAuthenticated: true, source: 'backend' })
+                console.log('[AuthManager] 从主进程恢复认证信息')
                 return backendAuth
             }
         } catch (error) {
-            console.log('[AuthManager] 后端无认证信息:', error)
+            console.log('[AuthManager] 主进程无认证信息:', error)
         }
 
-        // 3. 都没有，发起自动登录
+        // 都没有，发起自动登录
         console.log('[AuthManager] 开始自动登录...')
         const success = await this.login(credentials)
         
         if (success) {
-            const auth = AuthStore.getLocal()
-            AuthStore.updateStatus({ isAuthenticated: true, source: 'login' })
+            const auth = await window.electronAPI.getAuthInfo()
             return auth
         }
 
@@ -160,7 +51,7 @@ export class AuthManager {
     }
 
     /**
-     * 执行自动登录
+     * 执行登录
      */
     async login(credentials: {
         username: string
@@ -201,15 +92,12 @@ export class AuthManager {
                     csrfToken: result.csrfToken || ''
                 }
 
-                // 本地存储
-                AuthStore.saveLocal(authData)
-
-                // 后端同步
+                // 同步到主进程（主进程会自动持久化）
                 try {
                     await window.electronAPI.setAuthInfo(authData)
-                    console.log('[AuthManager] 认证信息已同步到后端')
+                    console.log('[AuthManager] 认证信息已同步到主进程')
                 } catch (syncError) {
-                    console.warn('[AuthManager] 后端同步失败:', syncError)
+                    console.warn('[AuthManager] 主进程同步失败:', syncError)
                 }
 
                 this.resetRetries()
@@ -234,7 +122,6 @@ export class AuthManager {
     }): Promise<boolean> {
         if (this.retryCount >= this.maxRetries) {
             console.error('[AuthManager] 达到最大重试次数，放弃登录')
-            AuthStore.clearLocal()
             return false
         }
 
@@ -252,39 +139,15 @@ export class AuthManager {
     }
 
     /**
-     * 手动设置认证信息
-     */
-    async setAuthInfo(authInfo: AuthInfo): Promise<boolean> {
-        try {
-            // 本地保存
-            AuthStore.saveLocal(authInfo)
-
-            // 后端同步
-            const result = await window.electronAPI.setAuthInfo(authInfo)
-            
-            if (result.success) {
-                AuthStore.updateStatus({ isAuthenticated: true, source: 'local' })
-                return true
-            }
-            return false
-        } catch (error) {
-            console.error('[AuthManager] 设置认证信息失败:', error)
-            return false
-        }
-    }
-
-    /**
      * 获取当前认证信息
      */
-    getAuthInfo(): AuthInfo {
-        return AuthStore.getLocal()
-    }
-
-    /**
-     * 获取认证状态
-     */
-    getStatus(): AuthStatus {
-        return AuthStore.getStatus()
+    async getAuthInfo(): Promise<AuthInfo> {
+        try {
+            return await window.electronAPI.getAuthInfo()
+        } catch (error) {
+            console.error('[AuthManager] 获取认证信息失败:', error)
+            return { cookies: '', csrfToken: '' }
+        }
     }
 
     /**
@@ -292,13 +155,9 @@ export class AuthManager {
      */
     async logout(): Promise<boolean> {
         try {
-            AuthStore.clearLocal()
-            // 尝试通知后端清除认证
-            try {
-                await window.electronAPI.setAuthInfo({ cookies: '', csrfToken: '' })
-            } catch (error) {
-                console.warn('[AuthManager] 后端注销失败:', error)
-            }
+            // 清除主进程中的认证信息
+            await window.electronAPI.setAuthInfo({ cookies: '', csrfToken: '' })
+            console.log('[AuthManager] 已退出登录')
             return true
         } catch (error) {
             console.error('[AuthManager] 退出登录失败:', error)
@@ -310,16 +169,9 @@ export class AuthManager {
      * 验证认证信息是否仍然有效
      */
     async validate(): Promise<boolean> {
-        const authInfo = AuthStore.getLocal()
-        
-        if (!authInfo.cookies || !authInfo.csrfToken) {
-            return false
-        }
-
-        // 从后端再次验证
         try {
-            const backendAuth = await window.electronAPI.getAuthInfo()
-            return !!backendAuth.cookies && !!backendAuth.csrfToken
+            const authInfo = await window.electronAPI.getAuthInfo()
+            return !!authInfo.cookies && !!authInfo.csrfToken
         } catch (error) {
             console.error('[AuthManager] 验证认证信息失败:', error)
             return false
