@@ -3,7 +3,9 @@
     "directories": {
         "output": "dist"
     },
-
+    "electronDownload": {
+        "mirror": "https://registry.npmmirror.com/-/raw/electron/"
+    },
     "nsis": {
         "oneClick": false,
         "perMachine": false,
@@ -13,7 +15,7 @@
     "win": {
         "target": "nsis"
     },
-    "linux":  {
+    "linux": {
         "target": ["snap"]
     },
     "files": [
@@ -32,8 +34,8 @@
             "to": "static",
             "filter": ["**/*"]
         },
-	"!build",
-	"!dist",
-	"!scripts"
+        "!build",
+        "!dist",
+        "!scripts"
     ]
 }
