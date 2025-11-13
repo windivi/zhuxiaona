@@ -1,10 +1,14 @@
 {
     "appId": "com.electron.app",
     "directories": {
-        "output": "dist"
+        "output": "dist",
+        "buildResources": "static"
     },
     "electronDownload": {
         "mirror": "https://registry.npmmirror.com/-/raw/electron/"
+    },
+    "extraMetadata": {
+        "main": "main/main.js"
     },
     "nsis": {
         "oneClick": false,
@@ -19,23 +23,18 @@
         "target": ["snap"]
     },
     "files": [
+        "package.json",
         {
             "from": "build/main",
-            "to": "main",
-            "filter": ["**/*"]
+            "to": "main"
         },
         {
             "from": "build/renderer",
-            "to": "renderer",
-            "filter": ["**/*"]
+            "to": "renderer"
         },
         {
             "from": "src/main/static",
-            "to": "static",
-            "filter": ["**/*"]
-        },
-        "!build",
-        "!dist",
-        "!scripts"
+            "to": "static"
+        }
     ]
 }
