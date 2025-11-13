@@ -8,6 +8,48 @@ import { spawn } from 'child_process';
 import { URL } from 'url';
 
 let _transcodeServerPort = 0;
+let _hwAccelType: string | null = null; // 硬件加速类型
+
+// 检测可用的硬件加速(仅在Windows上检测)
+async function detectHardwareAccel(): Promise<string | null> {
+	if (process.platform !== 'win32') return null;
+
+	return new Promise((resolve) => {
+		// 测试DXVA2(Intel/AMD/NVIDIA都支持)
+		const test = spawn('ffmpeg', [
+			'-hide_banner',
+			'-loglevel', 'error',
+			'-hwaccels'
+		], { windowsHide: true });
+
+		let output = '';
+		test.stdout.on('data', (chunk: Buffer) => {
+			output += chunk.toString();
+		});
+
+		test.on('close', () => {
+			// DXVA2 是 Windows 上最通用的硬件加速
+			if (output.includes('dxva2')) {
+				console.log('[HW Accel] DXVA2 available');
+				resolve('dxva2');
+			} else if (output.includes('d3d11va')) {
+				console.log('[HW Accel] D3D11VA available');
+				resolve('d3d11va');
+			} else {
+				console.log('[HW Accel] No hardware acceleration detected');
+				resolve(null);
+			}
+		});
+
+		test.on('error', () => resolve(null));
+
+		// 超时保护
+		setTimeout(() => {
+			try { test.kill(); } catch (e) { }
+			resolve(null);
+		}, 3000);
+	});
+}
 
 function startTranscodeServer() {
 	return new Promise<number>((resolve, reject) => {
@@ -41,25 +83,50 @@ function startTranscodeServer() {
 					return;
 				}
 
-				// 启动 ffmpeg 实时转码到 fragmented MP4，输出到 stdout
+				// 启动 ffmpeg 实时转码到 fragmented MP4,输出到 stdout
 				// 需要系统安装 ffmpeg 并可在 PATH 中找到
+				// 针对 i5-9400F + GT710 优化的转码参数
 				const args = [
 					'-hide_banner',
 					'-loglevel', 'error',
-					'-fflags', 'nobuffer',
-					'-analyzeduration', '0',
-					'-probesize', '32',
+				];
+
+				// 如果检测到硬件加速,尝试使用(GT710支持H.264硬解)
+				if (_hwAccelType) {
+					args.push('-hwaccel', _hwAccelType);
+					args.push('-hwaccel_output_format', _hwAccelType);
+				}
+
+				args.push(
+					// 输入优化
+					'-fflags', '+nobuffer+fastseek',
+					'-analyzeduration', '1000000',  // 1秒分析时间,提高格式兼容性
+					'-probesize', '5000000',        // 5MB探测大小
 					'-i', input,
+					// 视频编码: H.264 baseline,适配低端设备
 					'-c:v', 'libx264',
-					'-preset', 'veryfast',
-					'-tune', 'zerolatency', '-b:v', '1500k',
-					'-vf', 'scale=trunc(min(iw,(720*iw/ih))/2)*2:trunc(min(ih,720)/2)*2',
+					'-preset', 'ultrafast',         // 最快编码速度
+					'-tune', 'zerolatency',
+					'-profile:v', 'baseline',       // baseline profile 兼容性最好
+					'-level', '3.0',                // level 3.0 适配大部分设备
+					'-b:v', '1200k',                // 降低码率减轻CPU压力
+					'-maxrate', '1500k',
+					'-bufsize', '3000k',
+					'-g', '30',                     // GOP 30帧,降低解码复杂度
+					'-keyint_min', '30',
+					// 分辨率限制到720p
+					'-vf', 'scale=trunc(min(iw\\,1280)/2)*2:trunc(min(ih\\,720)/2)*2',
+					'-r', '25',                     // 限制帧率到25fps
+					// 音频编码
 					'-c:a', 'aac',
 					'-b:a', '96k',
+					'-ar', '44100',
+					'-ac', '2',
+					// 输出格式
 					'-f', 'mp4',
-					'-movflags', 'frag_keyframe+empty_moov+default_base_moof',
+					'-movflags', 'frag_keyframe+empty_moov+default_base_moof+faststart',
 					'pipe:1'
-				];
+				);
 
 				let ffmpeg: any = null;
 				try {
@@ -79,12 +146,18 @@ function startTranscodeServer() {
 				// pipe ffmpeg stdout to response
 				ffmpeg.stdout.pipe(res);
 
+				let errorLog = '';
 				ffmpeg.stderr.on('data', (chunk: Buffer) => {
-					// 仅在开发或调试时可打印日志
-					// console.error('ffmpeg stderr:', chunk.toString());
+					errorLog += chunk.toString();
+					// 可选:解析进度信息
+					const progressMatch = chunk.toString().match(/time=(\d+:\d+:\d+\.\d+)/);
+					if (progressMatch) {
+						// console.log('[transcode] progress:', progressMatch[1]);
+					}
 				});
 
 				ffmpeg.on('error', (err: any) => {
+					console.error('[transcode] ffmpeg error:', err);
 					try { res.end(); } catch (e) { }
 				});
 
@@ -96,6 +169,10 @@ function startTranscodeServer() {
 				});
 
 				ffmpeg.on('close', (code: number, signal: string) => {
+					if (code !== 0 && code !== null) {
+						console.error(`[transcode] ffmpeg exited with code ${code}`);
+						console.error('[transcode] stderr:', errorLog);
+					}
 					try { res.end(); } catch (e) { }
 				});
 
@@ -157,6 +234,9 @@ async function createWindow() {
 app.whenReady().then(async () => {
 	createWindow();
 
+	// 检测硬件加速
+	_hwAccelType = await detectHardwareAccel();
+
 	// 启动本地转码服务
 	try {
 		const port = await startTranscodeServer();
@@ -200,11 +280,82 @@ ipcMain.handle('get-transcode-url', (event, inputUrl: string) => {
 		return { success: false, message: 'transcode server not ready' };
 	}
 	const encoded = encodeURIComponent(inputUrl || '');
-	// 返回两个可选路径：带 .mp4 的路径可以满足部分播放器对字符串检查的要求
+	// 返回两个可选路径:带 .mp4 的路径可以满足部分播放器对字符串检查的要求
 	return {
 		success: true,
 		url: `http://127.0.0.1:${_transcodeServerPort}/transcode.mp4?url=${encoded}`
 	};
+});
+
+// IPC: 智能检测视频是否需要转码
+ipcMain.handle('should-transcode', async (event, inputUrl: string) => {
+	return new Promise((resolve) => {
+		const ffprobe = spawn('ffprobe', [
+			'-v', 'error',
+			'-select_streams', 'v:0',
+			'-show_entries', 'stream=codec_name,width,height',
+			'-of', 'json',
+			inputUrl
+		], { windowsHide: true });
+
+		let output = '';
+		ffprobe.stdout.on('data', (chunk: Buffer) => {
+			output += chunk.toString();
+		});
+
+		ffprobe.on('close', (code) => {
+			if (code !== 0) {
+				// ffprobe 失败,建议转码
+				resolve({ success: true, shouldTranscode: true, reason: 'probe_failed' });
+				return;
+			}
+
+			try {
+				const data = JSON.parse(output);
+				const stream = data.streams?.[0];
+				if (!stream) {
+					resolve({ success: true, shouldTranscode: true, reason: 'no_stream' });
+					return;
+				}
+
+				const codec = String(stream.codec_name || '').toLowerCase();
+				const width = parseInt(stream.width) || 0;
+				const height = parseInt(stream.height) || 0;
+
+				// 需要转码的情况:
+				// 1. HEVC/H.265 编码(GT710不支持)
+				// 2. VP8/VP9/AV1 等 WebM 编码
+				// 3. ProRes/DNxHD 等专业编解码器
+				// 4. 分辨率超过 1920x1080
+				const needTranscode = 
+					codec.includes('hevc') || codec.includes('h265') ||
+					codec.includes('vp8') || codec.includes('vp9') || codec.includes('av1') ||
+					codec.includes('prores') || codec.includes('dnxhd') ||
+					width > 1920 || height > 1080;
+
+				resolve({
+					success: true,
+					shouldTranscode: needTranscode,
+					reason: needTranscode ? `codec=${codec}, res=${width}x${height}` : 'compatible',
+					codec,
+					width,
+					height
+				});
+			} catch (e) {
+				resolve({ success: true, shouldTranscode: true, reason: 'parse_error' });
+			}
+		});
+
+		ffprobe.on('error', () => {
+			resolve({ success: true, shouldTranscode: true, reason: 'ffprobe_not_found' });
+		});
+
+		// 超时保护(3秒)
+		setTimeout(() => {
+			try { ffprobe.kill(); } catch (e) { }
+			resolve({ success: true, shouldTranscode: true, reason: 'timeout' });
+		}, 3000);
+	});
 });
 
 app.on('window-all-closed', function () {

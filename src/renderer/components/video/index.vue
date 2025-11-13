@@ -12,15 +12,19 @@ const videoPlayerSettings = useStorage('video-player-settings', {
 	isLive: false,
 	hasAudio: true,
 	MSE: true,
-	// 禁用 WCS（websocket-based streaming）以避免播放器把 HTTP(fMP4) 流当成 websocket 协议处理
+	// 禁用 WCS(websocket-based streaming)以避免播放器把 HTTP(fMP4) 流当成 websocket 协议处理
 	WCS: false,
 	autoplay: true,
-	bufferTime: 0.2,
+	bufferTime: 0.3,        // 增加缓冲时间到300ms,减少卡顿
 	isMute: true,
 	WASM: true,
 	WASMSIMD: true,
-	gpuDecoder: true,
-	webGPU: true,
+	// 针对GT710优化:禁用GPU解码,依赖CPU+WASM
+	gpuDecoder: false,      // GT710性能有限,不启用
+	webGPU: false,          // 禁用WebGPU
+	forceNoOffscreen: true, // 强制软解
+	useMSE: true,
+	useOffscreen: false,    // 不使用离屏渲染
 });
 
 const props = defineProps<{
@@ -83,8 +87,8 @@ async function play(url?: string) {
 	let u = url ?? props.src;
 	if (!u) return;
 
-	// 决定是否需要转码：优先根据 props.transcode（true=强制转码，false=禁用转码），
-	// 否则通过主进程探测（ffprobe）判断是否为 MOV 或 HEVC(h265)
+	// 决定是否需要转码:优先根据 props.transcode(true=强制转码,false=禁用转码),
+	// 否则通过主进程探测(ffprobe)判断是否为 MOV 或 HEVC(h265)
 	try {
 		let doTranscode = false;
 		if (props.transcode === true) {
@@ -96,6 +100,9 @@ async function play(url?: string) {
 				const probe = await (window as any).electronAPI.shouldTranscode(u);
 				if (probe && probe.success && probe.shouldTranscode) {
 					doTranscode = true;
+					console.log('[video] Auto-detect: needs transcode -', probe.reason);
+				} else {
+					console.log('[video] Auto-detect: no transcode needed -', probe.reason);
 				}
 			} catch (e) {
 				// 探测失败时回退到基于扩展名的简单判断
