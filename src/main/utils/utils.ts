@@ -1,14 +1,10 @@
 /**
  * Safely stringify arbitrary values for logging.
- * - handles circular references
- * - handles Buffer, Error, functions
- * - limits depth and total length
  */
 export function deepStringify(value: any, opts?: { maxDepth?: number; maxLength?: number }) {
   const maxDepth = opts?.maxDepth ?? 5
   const maxLength = opts?.maxLength ?? 20000
   const seen = new WeakSet()
-
   function _stringify(v: any, depth: number): string {
     if (v === null) return 'null'
     if (v === undefined) return 'undefined'
@@ -17,16 +13,11 @@ export function deepStringify(value: any, opts?: { maxDepth?: number; maxLength?
     if (typeof v === 'function') return `[Function: ${v.name || 'anonymous'}]`
     if (typeof v === 'symbol') return v.toString()
     if (v instanceof Error) return v.stack || v.message
-    // Buffer (Node)
     if (typeof Buffer !== 'undefined' && (Buffer as any).isBuffer && (Buffer as any).isBuffer(v)) {
-      try {
-        return v.toString('utf8')
-      } catch (e) {
-        return '[Buffer]'
-      }
+      try { return v.toString('utf8') } catch (e) { return '[Buffer]' }
     }
     if (Array.isArray(v)) {
-      if (seen.has(v)) return '[Circular]' 
+      if (seen.has(v)) return '[Circular]'
       if (depth <= 0) return '[Array]'
       seen.add(v)
       const items = v.slice(0, 50).map((it) => _stringify(it, depth - 1))
@@ -41,26 +32,15 @@ export function deepStringify(value: any, opts?: { maxDepth?: number; maxLength?
         const keys = Object.keys(v).slice(0, 200)
         const parts = keys.map((k) => {
           let val
-          try {
-            val = _stringify((v as any)[k], depth - 1)
-          } catch (e) {
-            val = '[Throws]'
-          }
+          try { val = _stringify((v as any)[k], depth - 1) } catch (e) { val = '[Throws]' }
           return `${k}:${val}`
         })
         if (Object.keys(v).length > keys.length) parts.push('...')
         return `{${parts.join(',')}}`
-      } catch (e) {
-        return '[Object]' 
-      }
+      } catch (e) { return '[Object]' }
     }
-    try {
-      return String(v)
-    } catch (e) {
-      return '[Unknown]'
-    }
+    try { return String(v) } catch (e) { return '[Unknown]' }
   }
-
   let out = _stringify(value, maxDepth)
   if (out.length > maxLength) out = out.slice(0, maxLength) + '...'
   return out
