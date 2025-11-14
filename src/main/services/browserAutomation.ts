@@ -115,7 +115,7 @@ export class BrowserAutomation {
 
       try { await this.page.goto('https://sxzy.chasinggroup.com/admin', { waitUntil: 'networkidle2', timeout: 15000 }); } catch (error) { console.log('访问管理后台可能超时，继续获取cookie...'); }
 
-      try { await Promise.race([ listApiCalled, new Promise(resolve => setTimeout(resolve, 5000)) ]); } catch (error) { console.log('等待API调用超时，继续获取cookie...'); }
+      try { await Promise.race([listApiCalled, new Promise(resolve => setTimeout(resolve, 5000))]); } catch (error) { console.log('等待API调用超时，继续获取cookie...'); }
 
       const cookies = await this.page.cookies();
       const cookieString = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
@@ -165,7 +165,7 @@ export class BrowserAutomation {
       console.error('自动登录过程中发生错误:', error);
       return { success: false, cookies: '', csrfToken: '', error: error instanceof Error ? error.message : '未知错误' };
     } finally {
-      if (this.page) { await this.page.close(); this.page = null; }
+      await browserAutomation.closeBrowser()
     }
   }
 

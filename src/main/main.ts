@@ -5,7 +5,7 @@ import { browserAutomation } from './services/browserAutomation';
 import { logCollector } from './log/log-collector';
 import { createWindow } from './ui/window';
 import { registerIpcHandlers } from './ipc/ipc-handlers';
-import { getCookies, getCsrfToken, setCookies, setCsrfToken } from './auth/auth-state';
+import { getCookies, getCsrfToken, setCookies, setCsrfToken, clearAuth } from './auth/auth-state';
 import { setupPotPlayerContextMenu } from './services/potplayerContextMenu';
 
 async function doCreateWindow() {
@@ -48,18 +48,38 @@ app.whenReady().then(async () => {
 	}
 
 	// 注册 IPC handlers（通过闭包传入需要的依赖）
-	registerIpcHandlers({
-		browserAutomation,
-	});
+	registerIpcHandlers({});
 
-	// 标志位：防止自动登录重复执行
+	// 标志位：防止自动登录重复执行和重载锁定
 	let isAutoLoginInProgress = false;
+	let loginAttemptCount = 0;
+	const MAX_LOGIN_ATTEMPTS = 3;
+	let lastLoginAttemptTime = 0;
+	const LOGIN_COOLDOWN = 5000; // 5秒冷却时间
 
 	// 拦截 login 请求，执行自动登录
 	session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
+
 		if (details.url.includes('login') && !isAutoLoginInProgress) {
+			const now = Date.now();
+			
+			// 检查冷却时间和尝试次数
+			if (now - lastLoginAttemptTime < LOGIN_COOLDOWN) {
+				console.log('[Main] 登录冷却中，跳过本次自动登录');
+				callback({});
+				return;
+			}
+
+			if (loginAttemptCount >= MAX_LOGIN_ATTEMPTS) {
+				console.error('[Main] 已达到最大登录尝试次数，停止自动登录');
+				callback({});
+				return;
+			}
+
 			isAutoLoginInProgress = true;
-			console.log('[Main] 检测到 login 请求，执行自动登录...');
+			loginAttemptCount++;
+			lastLoginAttemptTime = now;
+			console.log(`[Main] 检测到 login 请求，执行自动登录... (尝试 ${loginAttemptCount}/${MAX_LOGIN_ATTEMPTS})`);
 
 			// 异步执行自动登录
 			browserAutomation
@@ -69,17 +89,45 @@ app.whenReady().then(async () => {
 						console.log('[Main] 自动登录成功，保存 cookies');
 						setCookies(result.cookies);
 						setCsrfToken(result.csrfToken);
+						loginAttemptCount = 0; // 重置计数器
+
+						// 登录成功后重载窗口
+						setTimeout(() => {
+							if (mainWindow && !mainWindow.isDestroyed()) {
+								console.log('[Main] 登录成功，重载窗口...');
+								mainWindow.webContents.reload();
+								isAutoLoginInProgress = false;
+							}
+						}, 500);
 					} else {
 						console.error('[Main] 自动登录失败:', result.error);
+
+						// 登录失败：清空 cookies 和 token，然后重载
+						clearAuth();
+						setTimeout(() => {
+							if (mainWindow && !mainWindow.isDestroyed()) {
+								console.log('[Main] 登录失败，清空认证信息并重载窗口...');
+								mainWindow.webContents.reload();
+								isAutoLoginInProgress = false;
+							}
+						}, 500);
 					}
 				})
 				.catch((error: any) => {
 					console.error('[Main] 自动登录异常:', error);
+
+					// 异常情况：清空 cookies 和 token，然后重载
+					clearAuth();
+					setTimeout(() => {
+						if (mainWindow && !mainWindow.isDestroyed()) {
+							console.log('[Main] 登录异常，清空认证信息并重载窗口...');
+							mainWindow.webContents.reload();
+							isAutoLoginInProgress = false;
+						}
+					}, 500);
 				})
 				.finally(() => {
-					isAutoLoginInProgress = false;
-					// 继续发送原始请求
-					callback({});
+					// 不在这里重置，在上面的 setTimeout 中重置
 				});
 
 			return;
@@ -88,15 +136,21 @@ app.whenReady().then(async () => {
 		callback({});
 	});
 
+	// 业务逻辑：在发送每个请求前，从 authStorage 查出 csrfToken 和 cookies 并注入请求头
 	session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
 		const cookieValue = getCookies();
 		const csrfToken = getCsrfToken();
+		
+		// 从 authStorage 查出认证信息并注入请求头
 		if (cookieValue) {
 			details.requestHeaders['cookie'] = cookieValue;
+			console.log(`[Main] 已注入 cookies，长度: ${cookieValue.length}`);
 		}
 		if (csrfToken) {
 			details.requestHeaders['x-csrf-token'] = csrfToken;
+			console.log(`[Main] 已注入 x-csrf-token`);
 		}
+		
 		callback({ requestHeaders: details.requestHeaders });
 	});
 

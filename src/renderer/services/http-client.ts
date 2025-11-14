@@ -6,7 +6,7 @@
  * 2. 请求失败自动重试（可配置）
  * 3. 统一的错误处理
  * 
- * 注意：认证和 Cookie 由 Electron 主进程的 webRequest 拦截器处理
+ * 注意：认证和 Cookie 由 Electron 主进程的 webRequest 拦截器自动处理
  */
 
 import axios, { AxiosRequestConfig, AxiosError } from 'axios'

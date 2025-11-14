@@ -28,3 +28,11 @@ export function setCsrfToken(val: string) {
 export function getAuthInfo() {
   return { cookies: cookieValue, csrfToken };
 }
+
+export function clearAuth() {
+  cookieValue = '';
+  csrfToken = '';
+  try { authStorage.setCookies(''); } catch (e) { }
+  try { authStorage.setCsrfToken(''); } catch (e) { }
+  console.log('[Auth] 认证信息已清空');
+}
