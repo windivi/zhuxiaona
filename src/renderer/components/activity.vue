@@ -62,9 +62,8 @@ import SimpleImgViewer from './simple-img-viewer.vue'
 import SimpleVideoViewer from './simple-video-viewer.vue'
 import { message } from 'ant-design-vue'
 import { ActivityItem, ParsedImage, ReviewItem, ScriptOptions } from '../services';
-import { useAuthenticatedRequest } from '../hooks/useAuthenticatedRequest';
+import httpClient from '../services/http-client';
 import { useStorage } from '@vueuse/core';
-const { get, post } = useAuthenticatedRequest()
 const formState = useStorage<Record<string, any>>('activity-review-form-state', {
 	page: 1,
 	per_page: 10,
@@ -99,7 +98,7 @@ const getList = async () => {
 	})
 	loading.value = true
 	try {
-		const res = await get(apis.list + '?' + searchParam)
+		const res = await httpClient.get(apis.list + '?' + searchParam)
 
 
 		if (res) {
@@ -143,7 +142,7 @@ async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, scriptI
 	params.append('audit_status', '2')
 	message.loading('审批中')
 	try {
-		const res = await post(apis.set, params)
+		const res = await httpClient.post(apis.set, params)
 		if (res?.status) {
 			message.destroy()
 			message.success('审批不通过')
@@ -169,7 +168,7 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem) {
 	params.append('audit_status', '3')
 	message.loading('审批中')
 	try {
-		const res = await post(apis.set, params)
+		const res = await httpClient.post(apis.set, params)
 		if (res?.status) {
 			message.destroy()
 			message.success('审批通过')

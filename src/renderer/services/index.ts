@@ -76,24 +76,8 @@ export type ParsedMedia = {
 }
 
 // ============================================
-// 认证系统导出
+// HTTP 客户端导出
 // ============================================
-
-// 导出认证管理器
-export { getAuthManager, AuthManager } from './auth-manager'
-export type { AuthInfo } from './auth-manager'
-
-// 导出认证初始化函数
-export {
-	initializeAuthSystem,
-	checkAuthStatus,
-	getAuthInfo,
-	login,
-	getAuthManager as getAuthManagerFromInit
-} from './auth-init'
 
 // 导出 HTTP 客户端
 export { default as httpClient, HttpClient } from './http-client'
-
-// 导出认证拦截器
-export { setupAuthInterceptor, getAuthInterceptor } from './auth-interceptor'

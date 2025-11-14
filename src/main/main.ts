@@ -1,26 +1,32 @@
-import { app, session, BrowserWindow } from 'electron';
+import { app, session, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { browserAutomation } from './services/browserAutomation';
 import { logCollector } from './log/log-collector';
 import { createWindow } from './ui/window';
 import { registerIpcHandlers } from './ipc/ipc-handlers';
-import { getCookies, getCsrfToken, setCookies } from './auth/auth-state';
+import { getCookies, getCsrfToken, setCookies, setCsrfToken } from './auth/auth-state';
+import { setupPotPlayerContextMenu } from './services/potplayerContextMenu';
 
 async function doCreateWindow() {
 	const mainWindow = createWindow(logCollector);
+
+	// 设置 PotPlayer 右键菜单
+	setupPotPlayerContextMenu(mainWindow);
+
 	return mainWindow;
 }
 
+let mainWindow: BrowserWindow | null = null;
+
 app.whenReady().then(async () => {
-	await doCreateWindow();
+	mainWindow = await doCreateWindow();
 
 	// 自动加载位于项目 `extensions/` 下的 unpacked extensions（如果存在）
 	try {
 		const repoRoot = path.resolve(__dirname, '..', '..');
 		const extensionsDir = path.join(repoRoot, 'extensions');
 		const extensionIds = [
-			'cfdpeaefecdlkdlgdpjjllmhlnckcodp',
 			'aleakchihdccplidncghkekgioiakgal',
 		];
 
@@ -46,10 +52,45 @@ app.whenReady().then(async () => {
 		browserAutomation,
 	});
 
+	// 标志位：防止自动登录重复执行
+	let isAutoLoginInProgress = false;
+
+	// 拦截 login 请求，执行自动登录
+	session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
+		if (details.url.includes('login') && !isAutoLoginInProgress) {
+			isAutoLoginInProgress = true;
+			console.log('[Main] 检测到 login 请求，执行自动登录...');
+
+			// 异步执行自动登录
+			browserAutomation
+				.autoLogin({ username: '13272009478', password: '13272009478@Hxn', dynamicCode: '666666' })
+				.then((result: any) => {
+					if (result.success) {
+						console.log('[Main] 自动登录成功，保存 cookies');
+						setCookies(result.cookies);
+						setCsrfToken(result.csrfToken);
+					} else {
+						console.error('[Main] 自动登录失败:', result.error);
+					}
+				})
+				.catch((error: any) => {
+					console.error('[Main] 自动登录异常:', error);
+				})
+				.finally(() => {
+					isAutoLoginInProgress = false;
+					// 继续发送原始请求
+					callback({});
+				});
+
+			return;
+		}
+
+		callback({});
+	});
+
 	session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
 		const cookieValue = getCookies();
 		const csrfToken = getCsrfToken();
-
 		if (cookieValue) {
 			details.requestHeaders['cookie'] = cookieValue;
 		}
