@@ -144,11 +144,9 @@ app.whenReady().then(async () => {
 		// 从 authStorage 查出认证信息并注入请求头
 		if (cookieValue) {
 			details.requestHeaders['cookie'] = cookieValue;
-			console.log(`[Main] 已注入 cookies，长度: ${cookieValue.length}`);
 		}
 		if (csrfToken) {
 			details.requestHeaders['x-csrf-token'] = csrfToken;
-			console.log(`[Main] 已注入 x-csrf-token`);
 		}
 		
 		callback({ requestHeaders: details.requestHeaders });

@@ -48,6 +48,7 @@ async function play(url?: string) {
 		currentPlayUrl.value = targetUrl;
 		await new Promise(resolve => setTimeout(resolve, 100));
 		videoElement.value.load();
+		await videoElement.value.play();
 	} catch (err) {
 		console.error('[video] 播放错误:', err);
 		emit('error', err);
