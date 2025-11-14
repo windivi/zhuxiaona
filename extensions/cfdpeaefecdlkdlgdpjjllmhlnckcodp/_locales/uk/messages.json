@@ -1,0 +1,198 @@
+{
+   "CtrlMdclickLink": {
+      "description": "Extension preferences",
+      "message": "CTRL + Середній клік мишки по YouTube посиланням"
+   },
+   "DarkStyle": {
+      "description": "Extension preferences",
+      "message": "Темний колір кнопок"
+   },
+   "LinkAddN": {
+      "description": "Extension preferences",
+      "message": "«Додати посилання в плеєр»"
+   },
+   "LinkOpenN": {
+      "description": "Extension preferences",
+      "message": "«Відкрити посилання в плеєрі»"
+   },
+   "SecStyle": {
+      "description": "Extension preferences",
+      "message": "Розміщувати кнопки поруч з кнопкою 'Підписатися'"
+   },
+   "ShiftMdclickLink": {
+      "description": "Extension preferences",
+      "message": "SHIFT + Середній клік мишки по YouTube посиланням"
+   },
+   "YTButtons": {
+      "description": "Extension preferences",
+      "message": "Кнопки під YouTube плеєром"
+   },
+   "addVideo": {
+      "description": "Extension preferences",
+      "message": "Додати відео за посиланням в плейлист"
+   },
+   "anyLink": {
+      "description": "Extension preferences",
+      "message": "для будь-яких посилань"
+   },
+   "buttonAdd": {
+      "description": "Add to PotPlayer (Button on YouTube site)",
+      "message": "Додат. В PotPlayer"
+   },
+   "buttonPlay": {
+      "description": "Play with PotPlayer (Button on YouTube site)",
+      "message": "Грати. В PotPlayer"
+   },
+   "chinese": {
+      "description": "",
+      "message": "none"
+   },
+   "contMenu": {
+      "description": "Extension preferences",
+      "message": "Контекстне меню"
+   },
+   "dashcam": {
+      "description": "Extension preferences",
+      "message": "droid_dashcam_ru.png"
+   },
+   "defAction": {
+      "description": "Extension preferences",
+      "message": "Виконувати дію браузера за замовчуванням"
+   },
+   "disabled": {
+      "description": "Extension preferences",
+      "message": "Відключено"
+   },
+   "donation": {
+      "description": "Extension preferences",
+      "message": "Підтримка"
+   },
+   "english": {
+      "description": "",
+      "message": "none"
+   },
+   "extDesc": {
+      "description": "Extension description",
+      "message": "Відтворити або додати YouTube відео (плейлист), Twitch, прямі відео посилання в PotPlayer із контекстного меню, кнопок на сайті або середнім кліком мишки"
+   },
+   "extName": {
+      "description": "Extension name",
+      "message": "PotPlayer YouTube Shortcut, Відкриття посилань"
+   },
+   "kpop": {
+      "description": "Extension preferences",
+      "message": "kpop_banner_black_text_rus.png"
+   },
+   "leftClick": {
+      "description": "Extension preferences",
+      "message": "Лівий клік"
+   },
+   "linkAdd": {
+      "description": "Add link to PotPlayer (Context Menu for a link)",
+      "message": "Додати посилання в PotPlayer"
+   },
+   "linkOpen": {
+      "description": "Open link in PotPlayer (Context Menu for a link)",
+      "message": "Відкрити посилання в PotPlayer"
+   },
+   "linkYouTube": {
+      "description": "Extension preferences",
+      "message": "для YouTube посилань"
+   },
+   "lplayer": {
+      "description": "Extension preferences",
+      "message": "lplayer_banner_ru.png"
+   },
+   "mdclickLink": {
+      "description": "Extension preferences",
+      "message": "Середній клік мишки по YouTube посиланням"
+   },
+   "mdclickPage": {
+      "description": "Extension preferences",
+      "message": "Відтворення відео середнім кліком мишки на сторінках youtube.com/watch*, twitch.tv/*"
+   },
+   "mouseClick": {
+      "description": "Extension preferences",
+      "message": "клік мишки по YouTube посиланням"
+   },
+   "mouseLeft": {
+      "description": "Extension preferences",
+      "message": "Лівий"
+   },
+   "mouseMiddle": {
+      "description": "Extension preferences",
+      "message": "Середній"
+   },
+   "mouseRight": {
+      "description": "Extension preferences",
+      "message": "Правий"
+   },
+   "pageUrlPlay": {
+      "description": "Play current video with PotPlayer (Context Menu for a page)",
+      "message": "Відтворити поточне відео"
+   },
+   "pageYoutube": {
+      "description": "Extension preferences",
+      "message": "Додати поточне відео в плейлист"
+   },
+   "pageYoutubeAdd": {
+      "description": "Extension preferences",
+      "message": "Додати поточне YouTube відео в плеєр"
+   },
+   "pauseAndPlay": {
+      "description": "Extension preferences",
+      "message": "Призупинити YouTube плеєр при запуску PotPlayer"
+   },
+   "pauseVideo": {
+      "description": "Extension preferences",
+      "message": "Пауза відео в YouTube плеєрі при відкритті сторінки"
+   },
+   "playVideo": {
+      "description": "Extension preferences",
+      "message": "Відтворити відео за посиланням"
+   },
+   "playlistUrlPlay": {
+      "description": "Play current playlist with PotPlayer (Context Menu for a page)",
+      "message": "Відтворити цей плейлист"
+   },
+   "protocolIssueLatestVersion": {
+      "description": "Не працює?",
+      "message": "\u003Cp>\u003Cb>Не працює?\u003C/b> Встановіть останню версію PotPlayer:\u003C/br>\u003Ca href='https://t1.daumcdn.net/potplayer/PotPlayer/Version/Latest/PotPlayerSetup64.exe'>Завантажити PotPlayer\u003C/a>.\u003C/br>Також переконайтеся, що ваш веббраузер оновлений до останньої версії.\u003C/p>\u003C/br>"
+   },
+   "qualityNone": {
+      "description": "Extension preferences",
+      "message": "За замовчуванням"
+   },
+   "qualityOption": {
+      "description": "Extension preferences",
+      "message": "Бажана якість"
+   },
+   "rightClick": {
+      "description": "Extension preferences",
+      "message": "Правий клік"
+   },
+   "russian": {
+      "description": "",
+      "message": "inline-block"
+   },
+   "supportDonation": {
+      "description": "Extension development support",
+      "message": "\u003Cp class='option'>\u003Cb>Extension Development Support (Donation):\u003C/b>\u003C/p>\u003Cbr>\u003Cbr>\u003Ca href='https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN' style='padding-right:20px;'>\u003Cimg src='paypal.png'/>\u003C/a>\u003Ca href='https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN'>\u003Cimg src='paypal_donation_btn.gif'/>\u003C/a>\u003Cbr>\u003Cbr>\u003Cp class='option'>Or PayPal donate link - \u003Ca href='https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN'>https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN\u003C/a>\u003C/p>"
+   },
+   "timeSync": {
+      "description": "Extension preferences",
+      "message": "Синхронізація поточної позиції YouTube відео на сайті з PotPlayer"
+   },
+   "translator": {
+      "description": "Extension preferences",
+      "message": ""
+   },
+   "twitch_requirements": {
+      "description": "Twitch PotPlayer requirements",
+      "message": "\u003Cp class='option'>\u003Cb>Twitch PotPlayer requirements\u003C/b>: \u003Ca href='https://github.com/23rd/TwitchPotPlayer'>https://github.com/23rd/TwitchPotPlayer\u003C/a>\u003C/p>"
+   },
+   "videoClick": {
+      "description": "Extension preferences",
+      "message": "Відтворити при кліці на YouTube плеєрі"
+   }
+}

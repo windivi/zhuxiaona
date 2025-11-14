@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PotPlayer YouTube Shortcut</title>
+<style>
+html {
+    height: 100%
+}
+
+body {
+    background: #f7f9ff;
+    background: linear-gradient(to bottom, rgba(247, 249, 255, 1) 0, rgba(188, 213, 255, 1) 100%)
+}
+
+h1:before,
+p.option {
+    display: inline-block
+}
+
+p.option {
+    margin: 0 0 0 0
+}
+
+.check {
+    vertical-align: top
+}
+
+h1 {
+    margin: 0;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border: none;
+    font: normal normal bold 21px/1 Arial, Helvetica, sans-serif;
+    color: #F2F2F2;
+    text-align: center;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    text-shadow: 0 0 3px rgba(74, 134, 232, 1), 1px 1px 1px rgba(74, 134, 232, 1)
+}
+
+h1:before {
+    content: "\0000a0";
+    height: 23px;
+    width: 23px;
+    margin: 0 10px 0 0;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAIH0lEQVRYhbWYa4xdVRXHf2vvc869587z3pmx084URsAiYhsQ5VHFBPWDBB8FMYISMPjBWKMYw+MDwgdjqRCiECIBAkKCoZgAUTAijypiIEUUsAKt0BZBWqdM53nnvs5jLz+ccztt6dwpJO6be+7N3muv9d/rrPXfa2+ZemGQysf2ie8RAkXAAgZB+H81RQEHOFUaSUoDUAHk6BE7uPnevqsGKvLFYiDDRgiNwV9SqRwGr+qS05wjcUqjFev41LR79Os/mP/plpficfF9urY/Xtk4Omy+p5kqQXP8nUA4h2qKw2WSAgaDiEWMQTuDEgQknzn+Tnr3cZ+d/r6H0lUpyzl64FqFheehC3eONI6IU1A8BG9hDIehhe8JxisgIh3XlNvQStmcLdDlAX4YyHJdzPoB85IkIoojxJQJ+s/E7z8XUzwB8frQZBpXf5l45iFa1WeReJYgKGI9vyMgVSgGMhz4FDwEay1hkqKLB60hiVtErXmCyjpKIzcghWPIYtBkIv7R2OJq/IGLKDa20th9Ba3ZJwnoxesASCTzwllnBF1mSYdgSOImcVQnXHEFXcc8gAQrQeNsWepyQy5TpTGm+BG6jvsD4QfWE7eqJEm0AHqRVukTv7MEQupS4qhGMHAhxRUbQSMQC+Lnv20VJvsvfg4qpbjyFvzyOuJWjdS5jpZSt6BpcTBxFSmuJhy9Lu+y+1fpXAOX1nPjbiGtxe5P+3Dkeigcj0vm6GROpKPvBOcSnAYEvZ9BvBHQFmBRTQGoTz7J5BvXkcazuVeE7HUpYEFbmMKxBL1rSVODurTj0jtCdWkTJwME5XV5XzuNM5cnzbeZen0DE9u+wfzkY7i0dojKTN7vOwdnBnBps6N3OnpGXYSxPdiuUzgoc/KmeHT3QEmfZfa1C9i381qa8y+jmuzXAeCFJyGm+4D+9wwmMyfig5RAD+fijH27unqplLuJxm9iz4tfoj799EEy4g0g4qHO0Sl5vUVH2nCknQWHV2IMpGlCvTqB330sQfgpRMJ8SsbA2onSjwyMgnho2kSjt5DgKPZzSRueGBoNmJlLSIPPUxq+hJ7BszE2zOajgEGjN1BtIcbSiY0Xf02qGFNA3TRxdXPedyhXpKi/An/ZtQx9+A76lp2HGA9IaXMNQFL9EyTTIIWOu3qHmFHEFrA6QzT9SN6VKRcsAGH/WkZOeoDyUevxggHQBBEP8vE2+NbMoxjmMLbA+/MMYEQwxieuPk08vQlMAdxCeha611DsOwNVh2Ly1M93atcAUyCavJN4fku+i3eytmQ2ObygCyvz1Hf/mLT2PJhivi8lKCmqCSIGEZOzcDaGCUlrz9LcsxFfavh+iTY/vU8wWaUVFHrR+N/U3riUZO6JfF8Sso/LmFmjPLazfSuZ/S3zuy5Bkz34hb4lgcARpHbGNUKx2EOr+S9quy7CH7iQoH8dXtcpYHpoE6Kms6S1LbSmHyGauh8rc/jFMiJLl6JHCGYBUKFYIYmqxBO/IJp9FOOPYf1BsAGaNnHxJNraAcmbeF5IUKggmnau9Y4EjHOQpAtqPI8sm2wPhUBJkrfQ+mu4domoYATwSnjhUBbj7wFIRzCFIoR9NpNIIJ10pJ4QlhzRtGJsH6mUEQHfCqkDVYfvKXGSIk4xVkgSxTmyuthAnGTojQF7SMS+C4yQZe5zL8b8/JdN6k1lsCz86Lsh+6bhN49HbLy8hPUdpl+RBiTTDtsjeBZaU45i2WAxRLOO0qDBlIRowiExdA/ZzEhLieoZ0HZ7dzblXLB9Z8Lf/pnwzXMLdIdw671N3v6v46nnItJUuWdTgzWnTXH5NXPE6vj1gy2u+1mNwqDhplvr3HZ3DTHKlddUWX3qFH/9e4xTuOyqKut/OMOmB+vEsWIM+3nw8Kmdl7Zjo4bzLwn59GkFXtnhaEXKimWGF7clvDOZcNPVJfbsddz3cMyxK4VXd0Ts3BbzxF9iKv2WG+5s0N9juP7KkNs31fnH9pgtLyUYAyeu8rFWDtodDgtGFUqhsOutlNPPnOLGO2pcer5PT7fQaMDwoGF8Qrnxrjpbtyfsm1ZOXxsgWG7f1OTkE4WhMux40/Grh1vccm+T3/0xod6AsAiXfrXEmo/6SH6Ka5/mDu8ZgWZLGRu13H9LH7dt6OFr54bEMQxWhD8/n7B7r3Lnhl4+vtqnFTlY7rF8meHW+7JD3NpTfCanHRevK3Dz1d1c8IWAUgipU0qhZKWQLtQAshiYLMqFRgvGPuFxwoc8CA31pjI5o6xeZZicSbnsJ1W27UzYtiMheT3inLN8BvpgeMijULFc9e0iL7wSs+47c6z6oOWYlZZ9U0oc867iZq6qifgeo9Wtg6+pEB443mzBfN0xVDGkKVgLjaZSb0ClX5iccdQbUAgyfhkZtbz8aszNd9e4+LwSZ34yoDWvTEwqczVleEjoCoWJKUe5z+B7+bFLUWuQ8sn7xjwgbUS6NyzI2IFISyH0dltaURbxzkFXKPR2C3GiLB8yiAhJCl6X8MwzTdZfW+PLnws4dY1HVFNQGBk2jFpIYiVNYXTYEsW6cKoRaMY6HsUkniqN3eNu86ox+y2nC7cQaYqmOQO3JybpAiu3ojztgHROWXO8z2P39FMKpX1JkcsdzMHNVh6y+S2ECLJnXDer0rBOSX7/VLz1rDOCUimUimcl8Cy+NYg50q8ggW+kt1vE93Le7CAv2ZmvVm/q+K7/uIe+sr66YWLK7c2P3fjWUjZCDxDkFwBLlhcHtbYDjuy+y+W3V5FTqmnKDBD9D7CQoisDdqIhAAAAAElFTkSuQmCC) left center no-repeat;
+    background-size: 100% 100%
+}
+
+div.up {
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D8E6FC), color-stop(1, #82DAFA));
+    background-image: -o-linear-gradient(bottom, #D8E6FC 0, #82DAFA 100%);
+    background-image: -moz-linear-gradient(bottom, #D8E6FC 0, #82DAFA 100%);
+    background-image: -webkit-linear-gradient(bottom, #D8E6FC 0, #82DAFA 100%);
+    background-image: -ms-linear-gradient(bottom, #D8E6FC 0, #82DAFA 100%);
+    background-image: linear-gradient(to bottom, #D8E6FC 0, #82DAFA 100%);
+    border-radius: 7px 7px 0 0;
+    -webkit-border-radius: 7 7 0 0;
+    -moz-border-radius: 7 7 0 0
+}
+
+div.heading {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: table
+}
+
+div.outline {
+    background: #82DAFA;
+    padding: 0 2px 2px;
+    border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5 5;
+    -moz-border-radius: 0 0 5 5
+}
+
+div.content {
+    background: #F7FAFC;
+    padding: 7px;
+    border-radius: 0 0 4px 4px;
+    -webkit-border-radius: 0 0 4 4;
+    -moz-border-radius: 0 0 4 4
+}
+
+div.content2 {
+    background: #F7FAFC;
+    padding: 14px;
+    border-radius: 4px 4px 4px 4px;
+    -webkit-border-radius: 4 4 4 4;
+    -moz-border-radius: 4 4 4 4;
+}
+
+div.outline2 {
+    background: #82DAFA;
+    padding: 2px 2px 2px 2px;
+    border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5 5 5 5;
+    -moz-border-radius: 5 5 5 5;
+}
+
+.checkElements label {
+    display: block;
+    float: left;
+    padding-right: 5px;
+    white-space: nowrap
+}
+
+.checkElements input,
+.checkElements label span {
+    vertical-align: middle
+}
+
+.bitc:hover {
+    opacity: .9;
+    cursor: pointer
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    opacity: .7;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible
+}
+
+.tooltip .tooltiptext2 {
+    visibility: hidden;
+    width: 120px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1
+}
+
+.tooltip:hover .tooltiptext2 {
+    visibility: visible
+}
+
+.matbtn {
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 2px;
+    font-size: 12px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .4);
+    background: #2196F3;
+    position: relative;
+    overflow: hidden
+}
+
+.matbtn:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, .5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 1
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 1
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40)
+    }
+}
+
+.matbtn:focus:not(:active)::after {
+    animation: ripple 1s ease-out
+}
+</style>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="pay-now-button.js"></script>
+</head>
+<body>
+<br>
+<div style="margin-left:auto;margin-right:auto;display:table;">
+<div class="up">
+<div class="heading">
+<h1 class="se">PotPlayer YouTube Shortcut</h1></div></div>
+<div class="outline">
+<div class="content">
+__MSG_protocolIssueLatestVersion__
+<div style="display:inline-block;">
+<select id="mousecombination1">
+    <option value="1">__MSG_mouseMiddle__</option>
+    <option value="0">__MSG_mouseLeft__</option>
+    <option value="2">__MSG_mouseRight__</option>
+</select>
+<p class="option">__MSG_mouseClick__:</p>
+<select id="mdclicklink">
+<option value="def">__MSG_defAction__</option>
+<option value="play">__MSG_playVideo__</option>
+<option value="add">__MSG_addVideo__</option>
+</select>
+<br><br>
+<p class="option">CTRL + </p>
+<select id="mousecombination2">
+    <option value="1">__MSG_mouseMiddle__</option>
+    <option value="0">__MSG_mouseLeft__</option>
+    <option value="2">__MSG_mouseRight__</option>
+</select>
+<p class="option">__MSG_mouseClick__:</p>
+<select id="ctrlmdclicklink">
+<option value="def">__MSG_defAction__</option>
+<option value="play">__MSG_playVideo__</option>
+<option value="add">__MSG_addVideo__</option>
+</select>
+<br><br>
+<p class="option">SHIFT + </p>
+<select id="mousecombination3">
+    <option value="1">__MSG_mouseMiddle__</option>
+    <option value="0">__MSG_mouseLeft__</option>
+    <option value="2">__MSG_mouseRight__</option>
+</select>
+<p class="option">__MSG_mouseClick__:</p>
+<select id="shiftmdclicklink">
+    <option value="def">__MSG_defAction__</option>
+    <option value="play">__MSG_playVideo__</option>
+    <option value="add">__MSG_addVideo__</option>
+</select></div>
+<br><br>
+<div style="display:inline-block;">
+<label>
+<input type="checkbox" id="ytbuttons" class="check">__MSG_YTButtons__
+</label>
+<br>
+<label>
+<input type="checkbox" id="darkStyle" class="check">__MSG_DarkStyle__
+</label>
+<br><br>
+<label>
+<input type="checkbox" id="vpause" class="check">__MSG_pauseVideo__
+</label>
+<br>
+<label>
+<input type="checkbox" id="pauseAndPlay" class="check">__MSG_pauseAndPlay__
+</label>
+<br><br>
+<label>
+<input type="checkbox" id="timeSync" class="check">__MSG_timeSync__
+</label>
+<br><br>
+<label>
+<input type="checkbox" id="mdclickpage" class="check">__MSG_mdclickPage__
+</label>
+<br>
+<br>
+<div id="checkElements" class="checkElements">
+    <label><span>__MSG_videoClick__: </span></label>
+    <label><input type="radio" name="clickVideoMode" value="disabled"/><span>__MSG_disabled__</span></label>
+    <label><input type="radio" name="clickVideoMode" value="rightClick"/><span>__MSG_rightClick__</span></label>
+    <label><input type="radio" name="clickVideoMode" value="leftClick"/><span>__MSG_leftClick__</span></label>
+</div>
+<br><br>
+
+<p class="option">__MSG_qualityOption__:</span></p>
+<select id="quality">
+<option value="0">__MSG_qualityNone__</option>
+<!--<option value="38">[3072p] 4096 x 3072, mp4</option>-->
+<option value="266">2160p 4K - 3840x2160, mp4</option>
+<option value="313">2160p 4K - 3840x2160, webm</option>
+<option value="315">2160p 4K - 3840x2160, webm, 60 fps</option>
+<option value="337">2160p 4K - 3840x2160, HDR, webm, 60 fps</option>
+<option value="264">1440p - 2560x1440, mp4</option>
+<option value="271">1440p - 2560x1440, webm</option>
+<option value="308">1440p - 2560x1440, webm, 60 fps</option>
+<option value="336">1440p - 2560x1440, HDR, webm, 60 fps</option>
+<option value="37">1080p FHD - 1920x1080, mp4</option>
+<option value="248">1080p FHD - 1920x1080, webm</option>
+<option value="299">1080p FHD - 1920x1080, mp4, 60 fps</option>
+<option value="303">1080p FHD - 1920x1080, webm, 60 fps</option>
+<option value="335">1080p FHD - 1920x1080, HDR, webm, 60 fps</option>
+<option value="22">720p HD - 1280x720, mp4</option>
+<option value="246">720p HD  - 1280x720, webm</option>
+<option value="298">720p HD - 1280x720, mp4, 60 fps</option>
+<option value="302">720p HD - 1280x720, webm, 60 fps</option>
+<option value="334">720p HD - 1280x720, HDR, webm, 60 fps</option>
+<option value="35">480p - 854x480, flv</option>
+<option value="168">480p - 854x480, webm</option>
+<option value="18">360p - 640x360, mp4</option>
+<option value="245">360p - 640x360, webm</option>
+<option value="36">240p - 320x240, 3gp </option>
+<option value="141">audio - 256 Kbps, m4a, aac</option>
+<option value="172">audio - 256 Kbps, webm, aac</option>
+<option value="140">audio - 128 Kbps, m4a, aac</option>
+<option value="171">audio - 128 Kbps, webm, aac</option>
+<option value="139">audio - 48 Kbps, m4a, aac</option>
+</select>
+
+</div>
+<br>
+<br>
+
+
+
+<div style="display:table-cell;vertical-align:bottom;">
+<p style="margin:0 0 5px 0">__MSG_contMenu__:</p>
+<div class="checkElements" style="margin-left:4px">
+    <label><span>__MSG_linkOpenN__: </span></label>
+    <label><input type="checkbox" id="linkYoutubePlay"/><span>__MSG_linkYoutube__</span></label>
+    <label><input type="checkbox" id="anyLinkOpen"/><span>__MSG_anyLink__</span></label>
+</div>
+
+<div class="checkElements" style="margin-left:4px">
+    <label><span>__MSG_LinkAddN__: </span></label>
+    <label><input type="checkbox" id="linkYoutubeAdd"/><span>__MSG_linkYoutube__</span></label>
+    <label><input type="checkbox" id="anyLinkAdd"/><span>__MSG_anyLink__</span></label>
+</div>
+<!-- <div class="checkElements" style="margin-left:4px">
+    <label><span>__MSG_pageYoutubeAdd__: </span></label>
+    <label><input type="checkbox" id="pageYoutubeAdd"/></label>
+</div> -->
+</div>
+
+<br>
+
+__MSG_supportDonation__
+
+<br><br><br>
+<div style="margin:0 auto;text-align:center;" target="_blank">
+<a href="https://play.google.com/store/apps/details?id=com.helgeapps.backgroundvideorecorder">
+<img style="margin:0 auto;text-align:center;" src="bvr_banner.png"/>
+</a>
+<br>
+<a href="https://play.google.com/store/apps/details?id=com.helge.droiddashcam">
+<img style="margin:0 auto;text-align:center;" src="__MSG_dashcam__"/>
+</a>
+<br>
+<a href="https://play.google.com/store/apps/details?id=com.helge.voicerecorder">
+<img style="margin:0 auto;text-align:center;" src="vrb_banner.png"/>
+</a>
+<br>
+<a href="https://play.google.com/store/apps/details?id=com.helge.lplayer">
+<img style="margin:0 auto;text-align:center;" src="__MSG_lplayer__"/>
+</a>
+</div>
+
+<br>
+
+__MSG_twitch_requirements__
+
+<br>
+
+__MSG_translator__
+
+<br>
+
+</div></div></div>
+<script src="options.js"></script>
+</body>
+</html>

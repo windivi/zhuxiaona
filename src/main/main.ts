@@ -1,14 +1,11 @@
 import { app, session, BrowserWindow } from 'electron';
+import path from 'path';
+import fs from 'fs';
 import { browserAutomation } from './services/browserAutomation';
 import { logCollector } from './log/log-collector';
-import { detectHardwareAccel } from './services/hw-accel';
-import { startTranscodeServer } from './services/transcode-server';
 import { createWindow } from './ui/window';
 import { registerIpcHandlers } from './ipc/ipc-handlers';
 import { getCookies, getCsrfToken, setCookies } from './auth/auth-state';
-
-let _transcodeServerPort = 0;
-let _hwAccelType: string | null = null; // 硬件加速类型
 
 async function doCreateWindow() {
 	const mainWindow = createWindow(logCollector);
@@ -18,22 +15,35 @@ async function doCreateWindow() {
 app.whenReady().then(async () => {
 	await doCreateWindow();
 
-	// 检测硬件加速
-	_hwAccelType = await detectHardwareAccel();
-
-	// 启动本地转码服务
+	// 自动加载位于项目 `extensions/` 下的 unpacked extensions（如果存在）
 	try {
-		const port = await startTranscodeServer(_hwAccelType);
-		_transcodeServerPort = port;
-		console.log('transcode server started on port', port);
-	} catch (err) {
-		console.error('failed to start transcode server', err);
+		const repoRoot = path.resolve(__dirname, '..', '..');
+		const extensionsDir = path.join(repoRoot, 'extensions');
+		const extensionIds = [
+			'cfdpeaefecdlkdlgdpjjllmhlnckcodp',
+			'aleakchihdccplidncghkekgioiakgal',
+		];
+
+		for (const id of extensionIds) {
+			const extPath = path.join(extensionsDir, id);
+			if (fs.existsSync(extPath)) {
+				try {
+					const loaded = await session.defaultSession.loadExtension(extPath, { allowFileAccess: true });
+					console.log('Loaded extension', id, loaded && loaded.id ? loaded.id : 'unknown');
+				} catch (e) {
+					console.warn('Failed to load extension', id, e);
+				}
+			} else {
+				console.info('Extension directory not found, skip:', extPath);
+			}
+		}
+	} catch (e) {
+		console.error('Error while loading extensions:', e);
 	}
 
 	// 注册 IPC handlers（通过闭包传入需要的依赖）
 	registerIpcHandlers({
 		browserAutomation,
-		getTranscodePort: () => _transcodeServerPort
 	});
 
 	session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {

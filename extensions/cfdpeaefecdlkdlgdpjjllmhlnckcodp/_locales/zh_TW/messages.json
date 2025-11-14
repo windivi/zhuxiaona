@@ -1,0 +1,186 @@
+{
+   "CtrlMdclickLink": {
+      "description": "#2 - Extension preferences",
+      "message": "在 YouTube 影片連結按下 CTRL + 滑鼠中鍵"
+   },
+   "DarkStyle": {
+      "description": "#26 - Extension preferences",
+      "message": "使用黑色風格按鈕"
+   },
+   "LinkAddN": {
+      "description": "#20 - Extension preferences",
+      "message": "«新增連結到 PotPlayer»"
+   },
+   "SecStyle": {
+      "description": "#8 - Extension preferences",
+      "message": "將按鈕移至「訂閱」按鈕旁"
+   },
+   "ShiftMdclickLink": {
+      "description": "#3 - Extension preferences",
+      "message": "在 YouTube 影片連結按下 SHIFT + 滑鼠中鍵"
+   },
+   "YTButtons": {
+      "description": "#7 - Extension preferences",
+      "message": "顯示按鈕於 YouTube 標題下方"
+   },
+   "addVideo": {
+      "description": "#5 - Extension preferences",
+      "message": "將影片連結新增到播放清單"
+   },
+   "anyLink": {
+      "description": "#19 - Extension preferences",
+      "message": "任何連結"
+   },
+   "buttonAdd": {
+      "description": "#22 - Add to PotPlayer (button on YouTube site)",
+      "message": "新增到 PotPlayer"
+   },
+   "buttonPlay": {
+      "description": "#21 - Play with PotPlayer (button on YouTube site)",
+      "message": "用 PotPlayer 播放"
+   },
+   "contMenu": {
+      "description": "#16 - Extension preferences",
+      "message": "右鍵選單"
+   },
+   "dashcam": {
+      "description": "Extension preferences",
+      "message": "droid_dashcam.png"
+   },
+   "defAction": {
+      "description": "#6 - Extension preferences",
+      "message": "執行預設瀏覽器動作"
+   },
+   "disabled": {
+      "description": "#13 - Extension preferences",
+      "message": "停用"
+   },
+   "donation": {
+      "description": "#27 - Extension preferences",
+      "message": "贊助"
+   },
+   "extDesc": {
+      "description": "# - Extension description",
+      "message": "在網站上使用按鈕或右鍵選單快速播放或新增 YouTube/Twitch 影片 (播放清單) 到 PotPlayer"
+   },
+   "extName": {
+      "description": "# - Extension name",
+      "message": "PotPlayer YouTube Shortcut, 打開連結"
+   },
+   "kpop": {
+      "description": "Extension preferences",
+      "message": "kpop_banner_black_text.png"
+   },
+   "leftClick": {
+      "description": "#15 - Extension preferences",
+      "message": "左鍵"
+   },
+   "linkAdd": {
+      "description": "#25- Add link to PotPlayer (Context Menu for a link)",
+      "message": "新增連結到 PotPlayer"
+   },
+   "linkOpen": {
+      "description": "#24 - Open link in PotPlayer (Context Menu for a link)",
+      "message": "使用 PotPlayer 開啟連結播放"
+   },
+   "linkOpenN": {
+      "description": "#17 - Extension preferences",
+      "message": "«用 PotPlayer 開啟連結»"
+   },
+   "linkYouTube": {
+      "description": "#18 - Extension preferences",
+      "message": "YouTube 連結"
+   },
+   "lplayer": {
+      "description": "Extension preferences",
+      "message": "lplayer_banner.png"
+   },
+   "mdclickLink": {
+      "description": "#1 - Extension preferences",
+      "message": "在 YouTube 影片連結按下滑鼠中鍵"
+   },
+   "mdclickPage": {
+      "description": "#11 - Extension preferences",
+      "message": "在「youtube.com/watch*, twitch.tv/*」頁面使用滑鼠中鍵播放影片"
+   },
+   "mouseClick": {
+      "description": "Extension preferences",
+      "message": "點擊 YouTube 影片連結"
+   },
+   "mouseLeft": {
+      "description": "Extension preferences",
+      "message": "滑鼠左鍵"
+   },
+   "mouseMiddle": {
+      "description": "Extension preferences",
+      "message": "滑鼠中鍵"
+   },
+   "mouseRight": {
+      "description": "Extension preferences",
+      "message": "滑鼠右鍵"
+   },
+   "pageUrlPlay": {
+      "description": "#23 - Play current video with PotPlayer (Context Menu for a page)",
+      "message": "使用 PotPlayer 播放目前影片"
+   },
+   "pageYoutube": {
+      "description": "Extension preferences",
+      "message": "將當前視頻新增到播放器"
+   },
+   "pageYoutubeAdd": {
+      "description": "Extension preferences",
+      "message": "將當前的 YouTube 視頻新增到播放器"
+   },
+   "pauseAndPlay": {
+      "description": "#10 - Extension preferences",
+      "message": "當 PotPlayer 啟動時暫停 YouTube 畫面"
+   },
+   "pauseVideo": {
+      "description": "#9 - Extension preferences",
+      "message": "自動暫停 YouTube 影片"
+   },
+   "playVideo": {
+      "description": "#4 - Extension preferences",
+      "message": "直接播放影片連結"
+   },
+   "playlistUrlPlay": {
+      "description": "# - Play current playlist with PotPlayer (Context Menu for a page)",
+      "message": "使用 PotPlayer 播放當前播放清單"
+   },
+   "protocolIssueLatestVersion": {
+      "description": "無法使用？",
+      "message": "\u003Cp>\u003Cb>無法使用？\u003C/b> 請安裝最新版本的 PotPlayer：\u003C/br>\u003Ca href='https://t1.daumcdn.net/potplayer/PotPlayer/Version/Latest/PotPlayerSetup64.exe'>下載 PotPlayer\u003C/a>。\u003C/br>同時請確保您的網頁瀏覽器也更新至最新版本。\u003C/p>\u003C/br>"
+   },
+   "qualityNone": {
+      "description": "Extension preferences",
+      "message": "預設"
+   },
+   "qualityOption": {
+      "description": "Extension preferences",
+      "message": "首選畫質"
+   },
+   "rightClick": {
+      "description": "#14 - Extension preferences",
+      "message": "右鍵"
+   },
+   "supportDonation": {
+      "description": "Extension development support",
+      "message": "\u003Cp class='option'>\u003Cb>擴充功能開發支援（捐款）:\u003C/b>\u003C/p>\u003Cbr>\u003Cbr>\u003Ca href='https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN' style='padding-right:20px;'>\u003Cimg src='paypal.png'/>\u003C/a>\u003Ca href='https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN'>\u003Cimg src='paypal_donation_btn.gif'/>\u003C/a>\u003Cbr>\u003Cbr>\u003Cp class='option'>或 PayPal 捐款連結 - \u003Ca href='https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN'>https://www.paypal.com/donate/?hosted_button_id=QVERH59BKAQCN\u003C/a>\u003C/p>"
+   },
+   "timeSync": {
+      "description": "#29 - Extension preferences",
+      "message": "同步目前影片播放時間到 PotPlayer"
+   },
+   "translator": {
+      "description": "#28 - Extension preferences",
+      "message": "\u003Cp style='margin:5px 0 0 0;text-align:center;'>翻譯: GT Wang, \u003Ca href='https://mkvq.blogspot.com/' target='_blank'>mkvq.blogspot.com\u003C/a>\u003C/p>"
+   },
+   "twitch_requirements": {
+      "description": "Twitch PotPlayer requirements",
+      "message": "\u003Cp class='option'>\u003Cb>Twitch PotPlayer 需求\u003C/b>: \u003Ca href='https://github.com/23rd/TwitchPotPlayer'>https://github.com/23rd/TwitchPotPlayer\u003C/a>\u003C/p>"
+   },
+   "videoClick": {
+      "description": "#12 - Extension preferences",
+      "message": "在 YouTube 畫面按下 X 直接播放"
+   }
+}

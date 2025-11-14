@@ -3,7 +3,6 @@ import { theme } from 'ant-design-vue';
 import Activity from './components/activity.vue'
 import MActivity from './components/m-activity.vue';
 import ConsolePanel from './components/console-panel.vue'
-import TranscodeConfig from './components/transcode-config.vue'
 </script>
 
 <template>
@@ -14,9 +13,6 @@ import TranscodeConfig from './components/transcode-config.vue'
 			</a-tab-pane>
 			<a-tab-pane key="month" tab="月度转发">
 				<MActivity></MActivity>
-			</a-tab-pane>
-			<a-tab-pane key="transcode" tab="转码配置">
-				<TranscodeConfig />
 			</a-tab-pane>
 			<a-tab-pane key="logs" tab="后端日志">
 				<ConsolePanel />
