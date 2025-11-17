@@ -1,6 +1,6 @@
 import { app, session, BrowserWindow, ipcMain } from 'electron';
-import path from 'path';
-import fs from 'fs';
+import * as path from 'path';
+import * as fs from 'fs';
 import { browserAutomation } from './services/browserAutomation';
 import { logCollector } from './log/log-collector';
 import { createWindow } from './ui/window';
