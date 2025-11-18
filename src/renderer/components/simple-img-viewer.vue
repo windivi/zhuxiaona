@@ -66,6 +66,12 @@ function next() {
 }
 function onKeydown(e: KeyboardEvent) {
 	if (!visible.value) return
+
+	if (e.key === ' ' || e.key === 'Enter') {
+		e.preventDefault()
+		e.stopPropagation()
+	}
+
 	switch (e.key) {
 		case 'ArrowLeft':
 			prev();
@@ -81,7 +87,7 @@ function onKeydown(e: KeyboardEvent) {
 			break;
 		case 'Enter':
 			// emit (imgUrl, record)
-			emit('enter', currentImage.value, currentData.value, current.value)
+			emit('enter', currentImage.value, currentData.value, current.value, currentImage.value.scriptId)
 			break;
 		case ' ':
 			emit('space', currentImage.value, currentData.value, current.value)

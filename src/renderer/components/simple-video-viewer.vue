@@ -66,6 +66,13 @@ function next() {
 }
 function onKeydown(e: KeyboardEvent) {
 	if (!visible.value) return
+
+	// 阻止空格和回车键的默认行为，防止触发页面上的按钮点击
+	if (e.key === ' ' || e.key === 'Enter') {
+		e.preventDefault()
+		e.stopPropagation()
+	}
+
 	switch (e.key) {
 		case 'ArrowLeft':
 			prev();
@@ -80,8 +87,7 @@ function onKeydown(e: KeyboardEvent) {
 			emit('down')
 			break;
 		case 'Enter':
-			// emit (mediaUrl, record)
-			emit('enter', currentMedia.value, currentData.value, current.value)
+			emit('enter', currentMedia.value, currentData.value, current.value, currentMedia.value.scriptId)
 			break;
 		case ' ':
 			emit('space', currentMedia.value, currentData.value, current.value)

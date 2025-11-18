@@ -1,43 +1,25 @@
 <template>
-  <ActivityReviewList
-	:formState="formState"
-	:activityList="activityList"
-	:tableData="tableData"
-	:loading="loading"
-	:total="total"
-	:scriptOptions="scriptOptions"
-	:auditStatuses="auditStatuses"
-	:showViewImage="showViewImage"
-	:showViewVideo="showViewVideo"
-	:currentIndex="currentIndex"
-	:startReviewImg="startReviewImg"
-	:startReviewVideo="startReviewVideo"
-	:handleEnter="handleEnter"
-	:handleSpace="handleSpace"
-	:handleUp="handleUp"
-	:handleDown="handleDown"
-	:handlePageChange="handlePageChange"
-	:getList="getList"
-	:rowClassName="rowClassName"
-  >
-	<template #extra-filters>
-	  <a-input style="width: 200px;" v-model:value="formState.phone" placeholder="手机号"></a-input>
-	</template>
-  </ActivityReviewList>
+	<ActivityReviewList :formState="formState" :activityList="activityList" :tableData="tableData" :loading="loading"
+		:total="total" :scriptOptions="scriptOptions" :auditStatuses="auditStatuses" :showViewImage="showViewImage"
+		:showViewVideo="showViewVideo" :startReviewImg="startReviewImg" :startReviewVideo="startReviewVideo"
+		:handleEnter="handleEnter" :handleSpace="handleSpace" :handleUp="handleUp" :handleDown="handleDown"
+		:handlePageChange="handlePageChange" :getList="getList" :rowClassName="rowClassName"
+		:selectedRowRecord="selectedRowRecord" @update:showViewImage="showViewImage = $event"
+		@update:showViewVideo="showViewVideo = $event">
+		<template #extra-filters>
+			<a-input style="width: 200px;" v-model:value="formState.phone" placeholder="手机号"></a-input>
+		</template>
+	</ActivityReviewList>
 </template>
 
 <script setup lang="ts">
-function rowClassName(record: ReviewItem) {
-	if (record._success === 2) return 'row-success';
-	if (record._success === 1) return 'row-fail';
-	return '';
-}
-import { ref, computed, onMounted } from 'vue'
-import ActivityReviewList from './ActivityReviewList.vue'
-import { message } from 'ant-design-vue'
-import { ReviewItem, ActivityItem, ParsedImage, ScriptOptions } from '../services';
-import useActivityReview from '../hooks/useActivityReview'
-import parseTemplateData from '../services/m-activity-parse'
+
+import { message } from 'ant-design-vue';
+import { computed, onMounted } from 'vue';
+import useActivityReview from '../hooks/useActivityReview';
+import { ParsedImage, ReviewItem } from '../services';
+import parseTemplateData from '../services/m-activity-parse';
+import ActivityReviewList from './ActivityReviewList.vue';
 
 const apis = {
 	list: 'https://sxzy.chasinggroup.com/admin/marketing/pxhd/audit',
@@ -50,31 +32,29 @@ const {
 	tableData,
 	total,
 	activityList,
-	scriptOptions,
 	token,
+	selectedRowRecord,
+	scriptOptions,
 	auditStatuses,
 	getList,
 	startReviewImg,
 	startReviewVideo,
 	showViewImage,
 	showViewVideo,
-	currentIndex,
 	handleEnter: genericHandleEnter,
 	handleSpace: genericHandleSpace,
+	rowClassName,
 	handleUp,
 	handleDown,
 	handlePageChange
 } = useActivityReview({
+	cacheKey: 'm-activity-review-list',
 	apis,
 	parseListHtml: (html: string) => {
-		const { token: _token, user, filterOptions, auditData } = parseTemplateData(html)
-		const { activities, items, auditStatuses, scriptOptions: _scriptOptions } = filterOptions
-		return { tableData: auditData.records, total: auditData.total, activityList: activities, scriptOptions: _scriptOptions, token: _token, auditStatuses }
+		const { token, user, filterOptions, auditData } = parseTemplateData(html)
+		const { activities, items, auditStatuses, scriptOptions } = filterOptions
+		return { tableData: auditData.records, total: auditData.total, activityList: activities, scriptOptions, token: token, auditStatuses }
 	}
-})
-
-const selectedRowRecord = computed(() => {
-	return tableData.value[currentIndex.value] || {}
 })
 
 async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, imageIndex: number | string) {

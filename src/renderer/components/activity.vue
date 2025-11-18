@@ -1,39 +1,20 @@
 <template>
-  <ActivityReviewList
-	:formState="formState"
-	:activityList="activityList"
-	:tableData="tableData"
-	:loading="loading"
-	:total="total"
-	:scriptOptions="scriptOptions"
-	:auditStatuses="auditStatuses"
-	:showViewImage="showViewImage"
-	:showViewVideo="showViewVideo"
-	:currentIndex="currentIndex"
-	:startReviewImg="startReviewImg"
-	:startReviewVideo="startReviewVideo"
-	:handleEnter="handleEnter"
-	:handleSpace="handleSpace"
-	:handleUp="handleUp"
-	:handleDown="handleDown"
-	:handlePageChange="handlePageChange"
-	:getList="getList"
-  />
+	<ActivityReviewList :formState="formState" :activityList="activityList" :tableData="tableData" :loading="loading"
+		:total="total" :scriptOptions="scriptOptions" :auditStatuses="auditStatuses" :showViewImage="showViewImage"
+		:showViewVideo="showViewVideo" :startReviewImg="startReviewImg" :startReviewVideo="startReviewVideo"
+		:handleEnter="handleEnter" :handleSpace="handleSpace" :handleUp="handleUp" :handleDown="handleDown"
+		:handlePageChange="handlePageChange" :getList="getList" :rowClassName="rowClassName"
+		:selectedRowRecord="selectedRowRecord" @update:showViewImage="showViewImage = $event"
+		@update:showViewVideo="showViewVideo = $event" />
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import ActivityReviewList from './ActivityReviewList.vue'
-import * as activityParser from '../services/activity-parse'
-import { ActivityItem, ParsedImage, ReviewItem, ScriptOptions } from '../services';
-import { message } from 'ant-design-vue'
-import useActivityReview from '../hooks/useActivityReview'
-
-function rowClassName(record: ReviewItem) {
-	if (record._success === 2) return 'row-success';
-	if (record._success === 1) return 'row-fail';
-	return '';
-}
+import { message } from 'ant-design-vue';
+import { onMounted } from 'vue';
+import useActivityReview from '../hooks/useActivityReview';
+import { ParsedImage, ReviewItem } from '../services';
+import * as activityParser from '../services/activity-parse';
+import ActivityReviewList from './ActivityReviewList.vue';
 
 const apis = {
 	list: 'https://sxzy.chasinggroup.com/admin/marketing/display/audit',
@@ -49,18 +30,20 @@ const {
 	scriptOptions,
 	token,
 	auditStatuses,
+	selectedRowRecord,
 	getList,
 	startReviewImg,
 	startReviewVideo,
+	rowClassName,
 	showViewImage,
 	showViewVideo,
-	currentIndex,
 	handleEnter: genericHandleEnter,
 	handleSpace: genericHandleSpace,
 	handleUp,
 	handleDown,
 	handlePageChange
 } = useActivityReview({
+	cacheKey: 'activity-review-list',
 	apis,
 	parseListHtml: (html: string) => {
 		const { list, total: resTotal } = activityParser.parseReviewListFromHtml(html)
@@ -71,9 +54,8 @@ const {
 	}
 })
 
-const selectedRowRecord = computed(() => tableData.value[currentIndex.value] || {})
 
-async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, scriptId?: string) {
+async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, index?: any, scriptId?: string) {
 	const params = new FormData()
 	params.append('token', token.value || '')
 	params.append('script_id', scriptId || '')
