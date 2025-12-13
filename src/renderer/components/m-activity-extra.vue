@@ -8,6 +8,7 @@
 		@update:showViewVideo="showViewVideo = $event">
 		<template #extra-filters>
 			<a-input style="width: 200px;" v-model:value="formState.phone" placeholder="手机号"></a-input>
+			<a-switch v-model:checked="isUniqMode"></a-switch>
 		</template>
 	</ActivityReviewList>
 </template>
@@ -15,7 +16,7 @@
 <script setup lang="ts">
 
 import { message } from 'ant-design-vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import useActivityReview from '../hooks/useActivityReview';
 import { ParsedImage, ReviewItem } from '../services';
 import parseTemplateData from '../services/m-activity-parse';
@@ -25,7 +26,7 @@ const apis = {
 	list: 'https://sxzy.chasinggroup.com/admin/marketing/pxhd/audit',
 	set: 'https://sxzy.chasinggroup.com/admin/marketing/pxhd/auditset',
 }
-
+const isUniqMode = ref(false)
 const {
 	formState,
 	loading,
@@ -54,7 +55,7 @@ const {
 		const { token, user, filterOptions, auditData } = parseTemplateData(html)
 		const uniqedRecords = uniqBy(auditData.records, (item: any) => item.phone)
 		const { activities, items, auditStatuses, scriptOptions } = filterOptions
-		return { tableData: uniqedRecords, total: auditData.total, activityList: activities, scriptOptions, token: token, auditStatuses }
+		return { tableData: isUniqMode.value ? uniqedRecords : auditData.records, total: auditData.total, activityList: activities, scriptOptions, token: token, auditStatuses }
 	}
 })
 
@@ -64,7 +65,7 @@ async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, imageIn
 	record.images.forEach((img: any, idx: number) => {
 		params.append(`ids[${idx}][script_id]`, img.scriptId || '0')
 		params.append(`ids[${idx}][id]`, img.uploadId || '')
-		params.append(`ids[${idx}][state]`, img.scriptId && img.scriptId != 0 ? '1' : '2')
+		params.append(`ids[${idx}][state]`, img.scriptId != 0 ? '2' : '1')
 	})
 	params.append('created_by', '贺小娜')
 	message.loading('审批中')
@@ -92,7 +93,7 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem, imageIn
 	record.images.forEach((img: any, idx: number) => {
 		params.append(`ids[${idx}][script_id]`, img.scriptId || '0')
 		params.append(`ids[${idx}][id]`, img.uploadId || '')
-		params.append(`ids[${idx}][state]`, img.scriptId && img.scriptId != 0 ? '1' : '2')
+		params.append(`ids[${idx}][state]`, img.scriptId != 0 ? '2' : '1')
 	})
 	params.append('created_by', '贺小娜')
 	message.destroy()
