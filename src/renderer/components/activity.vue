@@ -64,7 +64,7 @@ async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, index?:
 	params.append('audit_status', '2')
 	message.loading('审批中')
 	try {
-		const res = await genericHandleEnter(params, 2)
+		const res = await genericHandleEnter(params)
 		if (res?.status) {
 			message.destroy()
 			message.success('审批不通过')

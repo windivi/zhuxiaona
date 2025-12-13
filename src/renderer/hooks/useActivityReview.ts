@@ -100,7 +100,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 		}
 	}
 
-	async function handleEnter(formData: FormData, successValue: number, failValue = 1) {
+	async function handleEnter(formData: FormData) {
 		try {
 			const res = await httpClient.post(options.apis.set, formData)
 			return res
@@ -110,7 +110,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 	}
 
 	async function handleSpace(formData: FormData) {
-		return handleEnter(formData, 3, 1)
+		return handleEnter(formData)
 	}
 
 	function handlePageChange(page: number, size: number) {

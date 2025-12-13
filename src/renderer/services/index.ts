@@ -62,16 +62,16 @@ export type ParsedImage = {
 	url: string;
 	itemTitle: string;
 	scriptId?: string;
-	auditStatus: 0 | 1 | 2;
-	auditStatusName: string;
+	auditStatus?: 0 | 1 | 2;
+	auditStatusName?: string;
 	uploadId?: string;
 }
 export type ParsedMedia = {
 	url: string;
 	itemTitle: string;
 	scriptId?: string;
-	auditStatus: 0 | 1 | 2;
-	auditStatusName: string;
+	auditStatus?: 0 | 1 | 2;
+	auditStatusName?: string;
 	uploadId?: string;
 }
 

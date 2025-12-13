@@ -38,7 +38,7 @@ const currentMedia = computed(() => {
 })
 const getMediaStatusColor = computed(() => {
 	if (!currentMedia.value) return 'default'
-	if (['未审核', '未通过', '不通过'].includes(currentMedia.value.auditStatusName)) return 'blue'
+	if (['未审核', '未通过', '不通过'].includes(currentMedia.value?.auditStatusName!)) return 'blue'
 	if (currentMedia.value.auditStatusName === '通过') return 'green'
 	return 'blue'
 })
@@ -57,11 +57,15 @@ function close() {
 function prev() {
 	if (current.value > 0) {
 		current.value -= 1
+	} else {
+		current.value = medias.value.length - 1
 	}
 }
 function next() {
 	if (current.value < medias.value?.length - 1) {
 		current.value += 1
+	} else {
+		current.value = 0
 	}
 }
 function onKeydown(e: KeyboardEvent) {

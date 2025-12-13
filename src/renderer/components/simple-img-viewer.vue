@@ -7,7 +7,8 @@
 				<!-- <span>活动名称{{ data.activityTitle }}</span> -->
 				<span class="fs-16">第 {{ current + 1 }}/{{ data.images.length }} 张</span>
 				<span class="fs-16">{{ currentImage?.itemTitle }}</span>
-				<a-tag class="large-tag" :color="getImageStatusColor">{{ currentImage.auditStatusName }}</a-tag>
+				<a-tag class="large-tag" :color="getImageStatusColor">{{ currentImage.auditStatusName
+				}}</a-tag>
 			</div>
 			<div class="img-viewer-toolbar">
 				<a-form-item label="不通过原因">
@@ -38,7 +39,7 @@ const currentImage = computed(() => {
 })
 const getImageStatusColor = computed(() => {
 	if (!currentImage.value) return 'default'
-	if (['未审核', '未通过', '不通过'].includes(currentImage.value.auditStatusName)) return 'blue'
+	if (['未审核', '未通过', '不通过'].includes(currentImage.value?.auditStatusName!)) return 'blue'
 	if (currentImage.value.auditStatusName === '通过') return 'green'
 	return 'blue'
 })
@@ -57,11 +58,15 @@ function close() {
 function prev() {
 	if (current.value > 0) {
 		current.value -= 1
+	} else {
+		current.value = images.value.length - 1
 	}
 }
 function next() {
 	if (current.value < images.value?.length - 1) {
 		current.value += 1
+	} else {
+		current.value = 0
 	}
 }
 function onKeydown(e: KeyboardEvent) {

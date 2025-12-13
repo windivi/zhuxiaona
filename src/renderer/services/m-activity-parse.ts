@@ -151,44 +151,25 @@ export function parseReviewItemsFromHtml(html: string): {
 				// 从 modal 内解析 itemTitle（优先 td[width="180"]）
 				const modalItemTitle = modal.find('td[width="180"]').first().text().replace(/\s+/g, ' ').trim() || record.itemTitle || '';
 
-				const rowAuditText = record.auditResult || '';
-				const rowAuditStatus = auditNameToStatus(rowAuditText);
-
 				const seen = new Set<string>();
 
-				// 图片：为每张图片单独解析对应的 scriptId 与 uploadId
 				modal.find('img.user_upload_img').each((_, img) => {
 					const src = $(img).attr('src');
 					if (!src || seen.has(src)) return;
 					seen.add(src);
 
 					const imgId = $(img).attr('id') || $(img).attr('data-id') || '';
-					let scriptId: string | undefined = undefined;
-
-					if (imgId) {
-						let sSelect = modal.find(`select[data-id="${imgId}"][class*="script_id"]`).first();
-						if (!sSelect || sSelect.length === 0) {
-							sSelect = modal.find(`select[class*="script_id"][class*="${imgId}"]`).first();
-						}
-						if (sSelect && sSelect.length > 0) {
-							const sInfo = getSelectValueAndName(sSelect);
-							scriptId = sInfo.value;
-						}
-					}
-
-					if (!scriptId) {
-						const sSelect = modal.find("select[class*='script_id']").first();
-						if (sSelect && sSelect.length > 0) {
-							const sInfo = getSelectValueAndName(sSelect);
-							scriptId = sInfo.value;
-						}
-					}
-
+					const sSelect = modal.find(`select[data-id="${imgId}"][class*="script_id"]`).first();
+					const aSelect = modal.find(`select[data-id="${imgId}"][class*="audit_sta"]`).first();
+					const sInfo = getSelectValueAndName(sSelect);
+					const scriptId: string | undefined = sInfo.value;
+					const auditInfo = getSelectValueAndName(aSelect);
+					const auditStatusName: string | undefined = auditInfo.name || '';
+					const auditStatus = auditNameToStatus(auditStatusName);
 					if (!record.images) record.images = [];
-					record.images.push({ url: src, itemTitle: modalItemTitle, auditStatus: rowAuditStatus, auditStatusName: rowAuditText, scriptId: scriptId, uploadId: imgId || undefined });
+					record.images.push({ url: src, itemTitle: modalItemTitle, auditStatus, auditStatusName, scriptId: scriptId, uploadId: imgId || undefined });
 				});
 
-				// 从图片 id 属性提取记录 id（继续保留该行为以兼容现有使用）
 				const firstImg = modal.find('img.user_upload_img').first();
 				if (firstImg.length > 0) {
 					const imgId = firstImg.attr('id');
@@ -204,29 +185,15 @@ export function parseReviewItemsFromHtml(html: string): {
 					seen.add(src);
 
 					const vId = $(video).attr('id') || $(video).attr('data-id') || '';
-					let vScriptId: string | undefined = undefined;
-
-					if (vId) {
-						let sSelect = modal.find(`select[data-id="${vId}"][class*="script_id"]`).first();
-						if (!sSelect || sSelect.length === 0) {
-							sSelect = modal.find(`select[class*="script_id"][class*="${vId}"]`).first();
-						}
-						if (sSelect && sSelect.length > 0) {
-							const sInfo = getSelectValueAndName(sSelect);
-							vScriptId = sInfo.value;
-						}
-					}
-
-					if (!vScriptId) {
-						const sSelect = modal.find("select[class*='script_id']").first();
-						if (sSelect && sSelect.length > 0) {
-							const sInfo = getSelectValueAndName(sSelect);
-							vScriptId = sInfo.value;
-						}
-					}
-
+					const sSelect = modal.find(`select[data-id="${vId}"][class*="script_id"]`).first();
+					const aSelect = modal.find(`select[data-id="${vId}"][class*="audit_sta"]`).first();
+					const sInfo = getSelectValueAndName(sSelect);
+					const vScriptId: string | undefined = sInfo.value;
+					const auditInfo = getSelectValueAndName(aSelect);
+					const auditStatusName: string | undefined = auditInfo.name || '';
+					const auditStatus = auditNameToStatus(auditStatusName);
 					if (!record.medias) record.medias = [];
-					const parsedMedia: ParsedMedia = { url: src, itemTitle: modalItemTitle, scriptId: vScriptId, auditStatus: rowAuditStatus, auditStatusName: rowAuditText, uploadId: vId || undefined };
+					const parsedMedia: ParsedMedia = { url: src, itemTitle: modalItemTitle, scriptId: vScriptId, auditStatus, auditStatusName, uploadId: vId || undefined };
 					record.medias.push(parsedMedia);
 				});
 			}
@@ -337,7 +304,7 @@ export function parseParsedImagesFromHtml(html: string): ParsedImage[] {
 				if (imgId) {
 					// 根据图片的 id/data-id 查找对应的 select[data-id="{imgId}"]
 					scriptSelect = modal.find(`select[data-id="${imgId}"][class*="script_id"]`).first();
-					
+
 					if (!scriptSelect || scriptSelect.length === 0) {
 						// 如果没找到，尝试查找 class 包含该 id 的 select
 						scriptSelect = modal.find(`select[class*="script_id"][class*="${imgId}"]`).first();
@@ -354,7 +321,7 @@ export function parseParsedImagesFromHtml(html: string): ParsedImage[] {
 					scriptId = scriptInfo.value;
 				}
 
-				out.push({ url: src, itemTitle, auditStatus, auditStatusName, scriptId, uploadId: imgId});
+				out.push({ url: src, itemTitle, auditStatus, auditStatusName, scriptId, uploadId: imgId });
 			});
 
 			// 若存在 video/source，也尝试收集 source src
@@ -372,7 +339,7 @@ export function parseParsedImagesFromHtml(html: string): ParsedImage[] {
 				if (videoId) {
 					// 根据视频的 id/data-id 查找对应的 select[data-id="{videoId}"]
 					scriptSelect = modal.find(`select[data-id="${videoId}"][class*="script_id"]`).first();
-					
+
 					if (!scriptSelect || scriptSelect.length === 0) {
 						scriptSelect = modal.find(`select[class*="script_id"][class*="${videoId}"]`).first();
 					}
@@ -388,7 +355,7 @@ export function parseParsedImagesFromHtml(html: string): ParsedImage[] {
 					scriptId = scriptInfo.value;
 				}
 
-				out.push({ url: src, itemTitle, auditStatus, auditStatusName, scriptId, uploadId: videoId});
+				out.push({ url: src, itemTitle, auditStatus, auditStatusName, scriptId, uploadId: videoId });
 			});
 		});
 	});

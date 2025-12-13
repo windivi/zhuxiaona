@@ -1,47 +1,46 @@
 {
-    "appId": "com.electron.app",
-    "directories": {
-        "output": "dist",
-        "buildResources": "static"
-    },
-    "electronDownload": {
-        "mirror": "https://registry.npmmirror.com/-/raw/electron/"
-    },
-    "extraMetadata": {
-        "main": "main/main.js"
-    },
-    "nsis": {
-        "oneClick": false,
-        "perMachine": false,
-        "allowToChangeInstallationDirectory": true,
-        "shortcutName": "Electron App"
-    },
-    "win": {
-        "target": [
-            {
-                "target": "zip",
-                "arch": [
-                    "x64"
-                ]
-            }
-        ]
-    },
-    "linux": {
-        "target": ["snap"]
-    },
-    "files": [
-        "package.json",
-        {
-            "from": "build/main",
-            "to": "main"
-        },
-        {
-            "from": "build/renderer",
-            "to": "renderer"
-        },
-        {
-            "from": "src/main/static",
-            "to": "static"
-        }
-    ]
+	"appId": "com.electron.app",
+	"directories": {
+		"output": "dist",
+		"buildResources": "static"
+	},
+	"extraMetadata": {
+		"main": "main/main.js"
+	},
+	"nsis": {
+		"oneClick": false,
+		"perMachine": false,
+		"allowToChangeInstallationDirectory": true,
+		"shortcutName": "Electron App"
+	},
+	"win": {
+		"target": [
+			{
+				"target": "zip",
+				"arch": [
+					"x64"
+				]
+			}
+		]
+	},
+	"linux": {
+		"target": [
+			"snap"
+		]
+	},
+	"files": [
+		"package.json",
+		{
+			"from": "build/main",
+			"to": "main"
+		},
+		{
+			"from": "build/renderer",
+			"to": "renderer"
+		},
+		{
+			"from": "src/main/static",
+			"to": "static"
+		}
+	]
 }
