@@ -15,7 +15,7 @@
 <script setup lang="ts">
 
 import { message } from 'ant-design-vue';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import useActivityReview from '../hooks/useActivityReview';
 import { ParsedImage, ReviewItem } from '../services';
 import parseTemplateData from '../services/m-activity-parse';
@@ -48,7 +48,7 @@ const {
 	handleDown,
 	handlePageChange
 } = useActivityReview({
-	cacheKey: 'm-activity-review-list',
+	cacheKey: 'm-activity-extra-review-list',
 	apis,
 	parseListHtml: (html: string) => {
 		const { token, user, filterOptions, auditData } = parseTemplateData(html)

@@ -19,6 +19,7 @@
     "url": "https://github.com/windivi"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
     "@vitejs/plugin-vue": "^4.4.1",
     "archiver": "^7.0.1",
     "chalk": "^4.1.2",
