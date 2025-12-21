@@ -48,25 +48,45 @@ const medias = computed(() => {
 })
 watch(() => props.modelValue, v => visible.value = v)
 watch(currentData, (newData) => {
-	current.value = newData.medias.length - 1
+	// 默认尝试从'未审核','待审核'的第一条数据开始
+	const list = medias.value || []
+	if (!list.length) {
+		current.value = 0
+		return
+	}
+	
+	const targetStatuses = ['未审核', '待审核']
+	let idx = list.findIndex((it: any) => targetStatuses.includes(it?.auditStatusName))
+	current.value = idx >= 0 ? idx : 0
 }, { immediate: true })
 function close() {
 	visible.value = false
 	emit('update:modelValue', false)
 }
-function prev() {
-	if (current.value > 0) {
-		current.value -= 1
-	} else {
-		current.value = medias.value.length - 1
-	}
+function prev(skipApprovedNow = false) {
+	if (!medias.value || !medias.value.length) return
+	current.value = findNextIndex(-1, skipApprovedNow)
 }
-function next() {
-	if (current.value < medias.value?.length - 1) {
-		current.value += 1
-	} else {
-		current.value = 0
+function next(skipApprovedNow = false) {
+	if (!medias.value || !medias.value.length) return
+	current.value = findNextIndex(1, skipApprovedNow)
+}
+function findNextIndex(direction: 1 | -1, skipApproved: boolean) {
+	const list = medias.value || []
+	if (!list.length) return 0
+
+	if (!skipApproved) {
+		if (direction === 1) return (current.value + 1) % list.length
+		return (current.value - 1 + list.length) % list.length
 	}
+
+	const isApproved = (it: any) => !['未审核', '待审核'].includes(it?.auditStatusName)
+	let idx = current.value
+	for (let i = 0; i < list.length; i++) {
+		idx = (idx + direction + list.length) % list.length
+		if (!isApproved(list[idx])) return idx
+	}
+	return current.value
 }
 function onKeydown(e: KeyboardEvent) {
 	if (!visible.value) return
@@ -79,10 +99,10 @@ function onKeydown(e: KeyboardEvent) {
 
 	switch (e.key) {
 		case 'ArrowLeft':
-			prev();
+			prev(!Boolean(e.ctrlKey || e.metaKey))
 			break;
 		case 'ArrowRight':
-			next()
+			next(!Boolean(e.ctrlKey || e.metaKey))
 			break;
 		case 'ArrowUp':
 			emit('up')

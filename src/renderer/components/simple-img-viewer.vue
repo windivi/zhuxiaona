@@ -44,31 +44,52 @@ const getImageStatusColor = computed(() => {
 	return 'blue'
 })
 const images = computed(() => {
-	// 支持两种数据结构：旧的 item.image (string) 或新的 item.images: ParsedImage[]
 	return props.data.images
 })
 watch(() => props.modelValue, v => visible.value = v)
 watch(currentData, (newData) => {
-	current.value = newData.images.length - 1
+	// 默认尝试从'未审核','待审核'的第一条数据开始
+	const list = images.value || []
+	if (!list.length) {
+		current.value = 0
+		return
+	}
+	
+	const targetStatuses = ['未审核', '待审核']
+	let idx = list.findIndex((it: any) => targetStatuses.includes(it?.auditStatusName))
+	current.value = idx >= 0 ? idx : 0
 }, { immediate: true })
+
+function findNextIndex(direction: 1 | -1, skipApproved: boolean) {
+	const list = images.value || []
+	if (!list.length) return 0
+
+	if (!skipApproved) {
+		if (direction === 1) return (current.value + 1) % list.length
+		return (current.value - 1 + list.length) % list.length
+	}
+
+	const isApproved = (it: any) => !['未审核', '待审核'].includes(it?.auditStatusName)
+	let idx = current.value
+	for (let i = 0; i < list.length; i++) {
+		idx = (idx + direction + list.length) % list.length
+		if (!isApproved(list[idx])) return idx
+	}
+	return current.value
+}
 function close() {
 	visible.value = false
 	emit('update:modelValue', false)
 }
-function prev() {
-	if (current.value > 0) {
-		current.value -= 1
-	} else {
-		current.value = images.value.length - 1
-	}
+function prev(skipApprovedNow = false) {
+	if (!images.value || !images.value.length) return
+	current.value = findNextIndex(-1, skipApprovedNow)
 }
-function next() {
-	if (current.value < images.value?.length - 1) {
-		current.value += 1
-	} else {
-		current.value = 0
-	}
+function next(skipApprovedNow = false) {
+	if (!images.value || !images.value.length) return
+	current.value = findNextIndex(1, skipApprovedNow)
 }
+
 function onKeydown(e: KeyboardEvent) {
 	if (!visible.value) return
 
@@ -79,10 +100,10 @@ function onKeydown(e: KeyboardEvent) {
 
 	switch (e.key) {
 		case 'ArrowLeft':
-			prev();
+			prev(!Boolean(e.ctrlKey || e.metaKey))
 			break;
 		case 'ArrowRight':
-			next()
+			next(!Boolean(e.ctrlKey || e.metaKey))
 			break;
 		case 'ArrowUp':
 			emit('up')
@@ -91,7 +112,6 @@ function onKeydown(e: KeyboardEvent) {
 			emit('down')
 			break;
 		case 'Enter':
-			// emit (imgUrl, record)
 			emit('enter', currentImage.value, currentData.value, current.value, currentImage.value.scriptId)
 			break;
 		case ' ':

@@ -8,7 +8,9 @@
 		@update:showViewVideo="showViewVideo = $event">
 		<template #extra-filters>
 			<a-input style="width: 200px;" v-model:value="formState.phone" placeholder="手机号"></a-input>
-			<a-switch v-model:checked="isUniqMode"></a-switch>
+			<a-form-item label="去重模式">
+				<a-switch v-model:checked="isUniqMode"></a-switch>
+			</a-form-item>
 		</template>
 	</ActivityReviewList>
 </template>
@@ -63,9 +65,10 @@ async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, imageIn
 	const params = new FormData()
 	params.append('_token', token.value || '')
 	record.images.forEach((img: any, idx: number) => {
-		params.append(`ids[${idx}][script_id]`, img.scriptId || '0')
+		const scriptIdNum = Number(img.scriptId) || 0
+		params.append(`ids[${idx}][script_id]`, String(scriptIdNum))
 		params.append(`ids[${idx}][id]`, img.uploadId || '')
-		params.append(`ids[${idx}][state]`, img.scriptId != 0 ? '2' : '1')
+		params.append(`ids[${idx}][state]`, scriptIdNum !== 0 ? '2' : '1')
 	})
 	params.append('created_by', '贺小娜')
 	message.loading('审批中')
@@ -91,9 +94,10 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem, imageIn
 	const params = new FormData()
 	params.append('_token', token.value || '')
 	record.images.forEach((img: any, idx: number) => {
-		params.append(`ids[${idx}][script_id]`, img.scriptId || '0')
+		const scriptIdNum = Number(img.scriptId) || 0
+		params.append(`ids[${idx}][script_id]`, String(scriptIdNum))
 		params.append(`ids[${idx}][id]`, img.uploadId || '')
-		params.append(`ids[${idx}][state]`, img.scriptId != 0 ? '2' : '1')
+		params.append(`ids[${idx}][state]`, scriptIdNum !== 0 ? '2' : '1')
 	})
 	params.append('created_by', '贺小娜')
 	message.destroy()
