@@ -1,9 +1,9 @@
 <template>
 	<ActivityReviewList :formState="formState" :activityList="activityList" :tableData="tableData" :loading="loading"
 		:total="total" :scriptOptions="scriptOptions" :auditStatuses="auditStatuses" :showViewImage="showViewImage"
-		:showViewVideo="showViewVideo" :startReviewImg="startReviewImg" :startReviewVideo="startReviewVideo"
-		:handleEnter="handleEnter" :handleSpace="handleSpace" :handleUp="handleUp" :handleDown="handleDown"
-		:handlePageChange="handlePageChange" :getList="getList" :rowClassName="rowClassName"
+		:evaluateOptions="evaluateOptions" :showViewVideo="showViewVideo" :startReviewImg="startReviewImg"
+		:startReviewVideo="startReviewVideo" :handleEnter="handleEnter" :handleSpace="handleSpace" :handleUp="handleUp"
+		:handleDown="handleDown" :handlePageChange="handlePageChange" :getList="getList" :rowClassName="rowClassName"
 		:selectedRowRecord="selectedRowRecord" @update:showViewImage="showViewImage = $event"
 		@update:showViewVideo="showViewVideo = $event" />
 </template>
@@ -28,6 +28,7 @@ const {
 	total,
 	activityList,
 	scriptOptions,
+	evaluateOptions,
 	token,
 	auditStatuses,
 	selectedRowRecord,
@@ -50,15 +51,15 @@ const {
 		const tokenValue = activityParser.extractTokenFromLoginHtml(html)
 		const activityParse = activityParser.parseActivityListFromHtml(html)
 		const auditStatuses = (activityParse as any).filterOptions?.auditStatuses || (activityParse as any).auditStatuses || []
-		return { tableData: list, total: resTotal, activityList: activityParse.activities, scriptOptions: activityParse.scriptOptions, token: tokenValue, auditStatuses }
+		return { tableData: list, total: resTotal, activityList: activityParse.activities, scriptOptions: activityParse.scriptOptions, evaluateOptions: activityParse.evaluateOptions, token: tokenValue, auditStatuses }
 	}
 })
 
 
-async function handleEnter(parsedImage: ParsedImage, record: ReviewItem, index?: any, scriptId?: string) {
+async function handleEnter(parsedImage: ParsedImage, record: ReviewItem) {
 	const params = new FormData()
 	params.append('token', token.value || '')
-	params.append('script_id', scriptId || '')
+	params.append('script_id', parsedImage.scriptId || '')
 	params.append('upload_id', record.id)
 	params.append('created_by', '贺小娜')
 	params.append('audit_status', '2')
@@ -88,6 +89,7 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem) {
 	params.append('upload_id', record.id)
 	params.append('created_by', '贺小娜')
 	params.append('audit_status', '3')
+	params.append('evaluate_id', parsedImage.evaluateId || '')
 	message.loading('审批中')
 	try {
 		const res = await genericHandleSpace(params)

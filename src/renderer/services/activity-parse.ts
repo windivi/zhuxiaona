@@ -1,7 +1,7 @@
 
 import * as cheerio from 'cheerio';
 import { ActivityItem, ActivityDetailItem, PlatformItem, ReviewItem, ScriptOptions, ParsedImage, ParsedMedia } from '.';
-import { parseScriptOptionsFromHtml } from './m-activity-parse';
+import { parseEvaluateOptionsFromHtml, parseScriptOptionsFromHtml } from './m-activity-parse';
 export function extractTokenFromLoginHtml(html: string): string {
 	const jsMatch = html.match(/Dcat\.token\s*=\s*["']([^"']+)["']/);
 	if (jsMatch) return jsMatch[1];
@@ -16,6 +16,8 @@ export function parseActivityListFromHtml(html: string) {
 	const details: ActivityDetailItem[] = [];
 	const platforms: PlatformItem[] = [];
 	const scriptOptions: ScriptOptions[] = parseScriptOptionsFromHtml(html);
+	const evaluateOptions: ScriptOptions[] = parseEvaluateOptionsFromHtml(html);
+	
 	// 活动
 	$('select.activity_id option').each((_, el) => {
 		const id = $(el).attr('value') || '';
@@ -37,7 +39,7 @@ export function parseActivityListFromHtml(html: string) {
 		if (id) platforms.push({ id, title });
 	});
 
-	return { activities, details, platforms, scriptOptions };
+	return { activities, details, platforms, scriptOptions, evaluateOptions };
 }
 
 export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; total: number } {
@@ -59,15 +61,15 @@ export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; tot
 			platformName: getText(3),
 			groupName: getText(4),
 			nickname: getText(5),
-			uid: getText(6),
-			phone: getText(7),
-			logDetailHtml: getHtml(8),
-			uploadTime: getText(9),
-			votes: getText(10),
-			auditor: getText(11),
-			auditTime: getText(12),
-			auditActionHtml: getHtml(13),
-			auditResult: getText(14),
+			uid: getText(7),
+			phone: getText(8),
+			logDetailHtml: getHtml(9),
+			uploadTime: getText(10),
+			votes: getText(11),
+			auditor: getText(12),
+			auditTime: getText(13),
+			auditActionHtml: getHtml(14),
+			auditResult: getText(15),
 			images: [],
 			medias: [],
 		};

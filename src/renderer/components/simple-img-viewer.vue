@@ -16,6 +16,12 @@
 						v-model:value="currentImage.scriptId"
 						:options="options.map(o => ({ label: o.title, value: o.id }))" />
 				</a-form-item>
+				<a-form-item v-if="evaluateOptions?.length" label="评价">
+					<a-select style="width: 120px;" placeholder="评价" :dropdownMatchSelectWidth="false" allowClear
+						v-model:value="currentImage.evaluateId"
+						:options="evaluateOptions?.map(o => ({ label: o.title, value: o.id }))" />
+					<a-button style="margin-left: 8px" @click="setDefaultEvaluateId">设为默认值</a-button>
+				</a-form-item>
 			</div>
 		</div>
 	</div>
@@ -25,16 +31,22 @@
 
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import { ReviewItem, ScriptOptions } from '../services';
+import { useStorage } from '@vueuse/core';
 
-const props = defineProps<{ modelValue?: boolean, data: ReviewItem, options: ScriptOptions[] }>()
+const props = defineProps<{ modelValue?: boolean, data: ReviewItem, options: ScriptOptions[], evaluateOptions?: ScriptOptions[] }>()
 const emit = defineEmits(['update:modelValue', 'enter', 'space', 'up', 'down'])
 
 const current = ref(0)
 const visible = ref(props.modelValue ?? true)
+const cachedDefaultEvaluateId = useStorage<number | null>('default-evaluate-id', null)
 const currentData = computed(() => {
 	return props.data
 })
 const currentImage = computed(() => {
+	const currentImage = images.value[current.value]
+	if (currentImage && cachedDefaultEvaluateId.value && !currentImage.evaluateId) {
+		currentImage.evaluateId = String(cachedDefaultEvaluateId.value)
+	}
 	return images.value[current.value]
 })
 const getImageStatusColor = computed(() => {
@@ -54,7 +66,7 @@ watch(currentData, (newData) => {
 		current.value = 0
 		return
 	}
-	
+
 	const targetStatuses = ['未审核', '待审核']
 	let idx = list.findIndex((it: any) => targetStatuses.includes(it?.auditStatusName))
 	current.value = idx >= 0 ? idx : 0
@@ -89,7 +101,11 @@ function next(skipApprovedNow = false) {
 	if (!images.value || !images.value.length) return
 	current.value = findNextIndex(1, skipApprovedNow)
 }
-
+function setDefaultEvaluateId() {
+	if (currentImage.value && currentImage.value.evaluateId) {
+		cachedDefaultEvaluateId.value = Number(currentImage.value.evaluateId)
+	}
+}
 function onKeydown(e: KeyboardEvent) {
 	if (!visible.value) return
 
@@ -112,7 +128,7 @@ function onKeydown(e: KeyboardEvent) {
 			emit('down')
 			break;
 		case 'Enter':
-			emit('enter', currentImage.value, currentData.value, current.value, currentImage.value.scriptId)
+			emit('enter', currentImage.value, currentData.value, current.value)
 			break;
 		case ' ':
 			emit('space', currentImage.value, currentData.value, current.value)

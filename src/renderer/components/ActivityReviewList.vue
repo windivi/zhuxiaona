@@ -56,16 +56,18 @@
 
 		<SimpleImgViewer v-if="showViewImage" ref="viewerRef" :modelValue="showViewImage"
 			@update:modelValue="emit('update:showViewImage', $event)" :data="selectedRowRecord"
-			:options="(scriptOptions || [])" @enter="onEnter" @space="onSpace" @up="handleUp" @down="handleDown" />
+			:options="(scriptOptions || [])" :evaluateOptions="evaluateOptions" @enter="onEnter" @space="onSpace"
+			@up="handleUp" @down="handleDown" />
 		<SimpleVideoViewer v-if="showViewVideo" ref="playerRef" :modelValue="showViewVideo"
 			@update:modelValue="emit('update:showViewVideo', $event)" :data="selectedRowRecord"
-			:options="(scriptOptions || [])" @enter="onEnter" @space="onSpace" @up="handleUp" @down="handleDown" />
+			:evaluateOptions="evaluateOptions" :options="(scriptOptions || [])" @enter="onEnter" @space="onSpace"
+			@up="handleUp" @down="handleDown" />
 
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { computed, onMounted, PropType, watch } from 'vue'
 import SimpleImgViewer from './simple-img-viewer.vue'
 import SimpleVideoViewer from './simple-video-viewer.vue'
 
@@ -78,6 +80,7 @@ const props = defineProps({
 	loading: { type: Boolean, required: true },
 	total: { type: [Number] as PropType<number>, required: true },
 	scriptOptions: { type: Array as PropType<any[]>, required: false },
+	evaluateOptions: { type: Array as PropType<any[]>, required: false },
 	auditStatuses: { type: Array as PropType<any[]>, required: false },
 	showViewImage: { type: Boolean, required: true },
 	showViewVideo: { type: Boolean, required: true },
@@ -101,13 +104,17 @@ const emit = defineEmits<{
 // pageSize computed and cast to `number` to satisfy template prop typing
 const pageSize = computed(() => Number(props.formState?.per_page || 0))
 
-function onEnter(parsed: any, record: any, index?: any, scriptId?: string) {
-	props.handleEnter(parsed, record, index, scriptId)
+function onEnter(parsed: any, record: any, index?: any) {
+	props.handleEnter(parsed, record, index)
 }
 
 function onSpace(parsed: any, record: any, index: any) {
 	props.handleSpace(parsed, record, index)
 }
+watch(() => props.evaluateOptions, (newVal) => {
+	console.log('evaluateOptions changed:', newVal);
+})
+
 </script>
 
 <style scoped>

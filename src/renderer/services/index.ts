@@ -62,6 +62,7 @@ export type ParsedImage = {
 	url: string;
 	itemTitle: string;
 	scriptId?: string;
+	evaluateId?: string;
 	auditStatus?: 0 | 1 | 2;
 	auditStatusName?: string;
 	uploadId?: string;

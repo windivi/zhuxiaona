@@ -268,6 +268,27 @@ export function parseScriptOptionsFromHtml(html: string): ScriptOptions[] {
 	return out;
 }
 
+export function parseEvaluateOptionsFromHtml(html: string): ScriptOptions[] {
+	const $ = cheerio.load(html || '');
+	const map = new Map<string, string>();
+
+	// 查找 class 属性包含 script_id 的 select（如 script_id68...）
+	$('select').each((_, el) => {
+		const cls = $(el).attr('class') || '';
+		if (cls.indexOf('evaluate_id') === -1) return;
+
+		$(el).find('option').each((_, opt) => {
+			const id = $(opt).attr('value') || '';
+			const title = $(opt).text().trim();
+			if (id) map.set(id, title);
+		});
+	});
+
+	const out: ScriptOptions[] = [];
+	map.forEach((title, id) => out.push({ id, title }));
+	return out;
+}
+
 /**
  * 解析页面中所有图片，并将图片与同一 modal 表格中前一列 width='180' 的文本配对，返回 ParsedImage[]
  */

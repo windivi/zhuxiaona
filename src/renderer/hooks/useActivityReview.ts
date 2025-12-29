@@ -8,6 +8,7 @@ export type ParseResult = {
 	total?: number
 	activityList?: any[]
 	scriptOptions?: any[]
+	evaluateOptions?: any[]
 	auditStatuses?: any[]
 	token?: string
 }
@@ -28,6 +29,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 	const total = ref<number>(0)
 	const activityList = ref<any[]>([])
 	const scriptOptions = ref<any[]>([])
+	const evaluateOptions = ref<any[]>([])
 	const token = ref<string>('')
 	const auditStatuses = ref<any[]>([])
 	const currentIndex = ref(0)
@@ -58,6 +60,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 				total.value = parsed.total || 0
 				activityList.value = (parsed.activityList || (parsed as any).activities || []).map((i: any) => ({ ...i, _success: 0 }))
 				scriptOptions.value = parsed.scriptOptions || []
+				evaluateOptions.value = parsed.evaluateOptions || []
 				token.value = parsed.token || ''
 				// 如果解析器提供了 auditStatuses（筛选项），一并暴露
 				if ((parsed as any).auditStatuses) {
@@ -126,6 +129,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 		total,
 		activityList,
 		scriptOptions,
+		evaluateOptions,
 		token,
 		auditStatuses,
 		selectedRowRecord,
