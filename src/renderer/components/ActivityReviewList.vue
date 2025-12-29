@@ -3,13 +3,14 @@
 		<div style="display:flex;gap:16px;">
 			<slot name="extra-filters"></slot>
 
-			<a-select :dropdownMatchSelectWidth="false" v-model:value="formState.activityId" @change="getList"
+			<a-select :dropdownMatchSelectWidth="false" v-model:value="formState.activityId" @change="onSearch"
 				placeholder="筛选活动">
 				<a-select-option value="">全部活动</a-select-option>
 				<a-select-option v-for="act in activityList" :key="act.id" :value="act.id">{{ act.title
 				}}</a-select-option>
 			</a-select>
-			<a-select style="width: 160px" v-model:value="formState.auditResult" @change="getList" placeholder="筛选审核结果">
+			<a-select style="width: 160px" v-model:value="formState.auditResult" @change="onSearch"
+				placeholder="筛选审核结果">
 				<a-select-option value="">全部</a-select-option>
 				<template v-if="(props as any).auditStatuses && (props as any).auditStatuses.length">
 					<a-select-option v-for="s in (props as any).auditStatuses" :key="s.id" :value="String(s.id)">{{
@@ -21,7 +22,7 @@
 					<a-select-option value="1">未审核</a-select-option>
 				</template>
 			</a-select>
-			<a-button type="primary" @click="getList">查询</a-button>
+			<a-button type="primary" @click="onSearch">查询</a-button>
 		</div>
 
 		<a-table :loading="loading" style="flex: 1; overflow: auto;" :dataSource="tableData" :pagination="false"
@@ -97,6 +98,7 @@ const props = defineProps({
 } as const)
 
 const emit = defineEmits<{
+	
 	'update:showViewImage': [value: boolean]
 	'update:showViewVideo': [value: boolean]
 }>()
@@ -107,7 +109,10 @@ const pageSize = computed(() => Number(props.formState?.per_page || 0))
 function onEnter(parsed: any, record: any, index?: any) {
 	props.handleEnter(parsed, record, index)
 }
-
+function onSearch() {
+	props.formState.page = 1
+	props.getList()
+}
 function onSpace(parsed: any, record: any, index: any) {
 	props.handleSpace(parsed, record, index)
 }
