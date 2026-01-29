@@ -42,6 +42,8 @@ export type ReviewItem = {
 	uid: string;
 	phone: string;
 	logDetailHtml?: string; // raw inner HTML for detail (may include modal links)
+	advise1?: string;
+	advise2?: string;
 	uploadTime: string;
 	votes?: string;
 	auditor: string;
@@ -63,6 +65,7 @@ export type ParsedImage = {
 	itemTitle: string;
 	scriptId?: string;
 	evaluateId?: string;
+	evaluate2?: string;
 	auditStatus?: 0 | 1 | 2;
 	auditStatusName?: string;
 	uploadId?: string;

@@ -63,6 +63,7 @@ async function handleEnter(parsedImage: ParsedImage, record: ReviewItem) {
 	params.append('upload_id', record.id)
 	params.append('created_by', '贺小娜')
 	params.append('audit_status', '2')
+	params.append('evaluate2', parsedImage.evaluate2 || '')
 	message.loading('审批中')
 	try {
 		const res = await genericHandleEnter(params)
@@ -90,6 +91,7 @@ async function handleSpace(parsedImage: ParsedImage, record: ReviewItem) {
 	params.append('created_by', '贺小娜')
 	params.append('audit_status', '3')
 	params.append('evaluate_id', parsedImage.evaluateId || '')
+	params.append('evaluate2', parsedImage.evaluate2 || '')
 	message.loading('审批中')
 	try {
 		const res = await genericHandleSpace(params)

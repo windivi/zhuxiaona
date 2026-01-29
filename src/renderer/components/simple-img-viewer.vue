@@ -22,6 +22,9 @@
 						:options="evaluateOptions?.map(o => ({ label: o.title, value: o.id }))" />
 					<a-button style="margin-left: 8px" @click="setDefaultEvaluateId">设为默认值</a-button>
 				</a-form-item>
+				<a-form-item label="评价2">
+					<a-input v-model:value="currentImage.evaluate2"></a-input>
+				</a-form-item>
 			</div>
 		</div>
 	</div>
