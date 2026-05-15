@@ -18,10 +18,40 @@ type ScribeInitOptions = {
 	ocrParams?: Record<string, unknown>;
 }
 
+type ScribeWorkerConfig = Record<string, string>
+
 type ScribeApi = {
 	init(options?: ScribeInitOptions): Promise<void>;
 	terminate(): Promise<void>;
 	extractText(images: ScribeInput[] | FileList, langs?: string[], outputFormat?: string, options?: Record<string, unknown>): Promise<string | ArrayBuffer>;
+}
+
+type ScribeModule = ScribeApi & {
+	opt: {
+		langPath: string | null;
+	};
+}
+
+type ScribeWorkerReinitializeParams = {
+	langs?: string[];
+	oem?: number;
+	vanillaMode?: boolean;
+	config?: ScribeWorkerConfig;
+	langPath?: string | null;
+}
+
+type ScribeGeneralWorker = {
+	reinitialize(params: ScribeWorkerReinitializeParams): Promise<void>;
+}
+
+type ScribeGeneralWorkerModule = {
+	gs: {
+		getGeneralScheduler(): Promise<void>;
+		schedulerInner: {
+			workers: ScribeGeneralWorker[];
+		} | null;
+		schedulerReadyTesseract: Promise<unknown> | null;
+	};
 }
 
 const props = defineProps<{
@@ -32,20 +62,20 @@ const emit = defineEmits<{
 	response: [response: ScribeRuntimeResponse];
 }>()
 
-const SCRIBE_INIT_OPTIONS: ScribeInitOptions = {
-	ocr: true,
+const SCRIBE_PRELOAD_OPTIONS: ScribeInitOptions = {
 	font: true,
-	ocrParams: {
-		lang: ['chi_sim', 'eng'],
-		config: {
-			user_defined_dpi: '300',
-		},
-	},
 }
 
+const SCRIBE_OCR_LANGS = ['chi_sim', 'eng']
+const SCRIBE_OCR_CONFIG: ScribeWorkerConfig = {
+	user_defined_dpi: '300',
+}
+const SCRIBE_LSTM_ONLY_OEM = 1
+
 let lastHandledRequestId = 0
-let scribeModulePromise: Promise<ScribeApi> | null = null
-let scribeReadyPromise: Promise<ScribeApi> | null = null
+let scribeModulePromise: Promise<ScribeModule> | null = null
+let scribeGeneralWorkerPromise: Promise<ScribeGeneralWorkerModule> | null = null
+let scribeReadyPromise: Promise<ScribeModule> | null = null
 let requestQueue: Promise<void> = Promise.resolve()
 let activeRequestId: number | null = null
 let runtimeRevision = 0
@@ -54,6 +84,10 @@ const canceledRequestIds = new Set<number>()
 
 function getScribeModuleUrl() {
 	return new URL('vendor/scribe.js-ocr/scribe.js', window.location.href).toString()
+}
+
+function getScribeGeneralWorkerModuleUrl() {
+	return new URL('vendor/scribe.js-ocr/js/generalWorkerMain.js', window.location.href).toString()
 }
 
 function queueTask(task: () => Promise<void>) {
@@ -73,7 +107,7 @@ async function loadScribeModule() {
 	if (!scribeModulePromise) {
 		const moduleUrl = getScribeModuleUrl()
 		scribeModulePromise = import(/* @vite-ignore */ moduleUrl)
-			.then(module => module.default as ScribeApi)
+			.then(module => module.default as ScribeModule)
 			.catch(error => {
 				scribeModulePromise = null
 				throw error
@@ -83,13 +117,53 @@ async function loadScribeModule() {
 	return scribeModulePromise
 }
 
+async function loadScribeGeneralWorkerModule() {
+	if (!scribeGeneralWorkerPromise) {
+		const moduleUrl = getScribeGeneralWorkerModuleUrl()
+		scribeGeneralWorkerPromise = import(/* @vite-ignore */ moduleUrl)
+			.then(module => module as ScribeGeneralWorkerModule)
+			.catch(error => {
+				scribeGeneralWorkerPromise = null
+				throw error
+			})
+	}
+
+	return scribeGeneralWorkerPromise
+}
+
+async function prepareTesseractWorkers() {
+	const [{ gs }, scribe] = await Promise.all([
+		loadScribeGeneralWorkerModule(),
+		loadScribeModule(),
+	])
+
+	await scribe.init(SCRIBE_PRELOAD_OPTIONS)
+	await gs.getGeneralScheduler()
+
+	const workers = gs.schedulerInner?.workers ?? []
+	if (!workers.length) {
+		throw new Error('Scribe OCR workers are not available.')
+	}
+
+	const reinitializeParams: ScribeWorkerReinitializeParams = {
+		langs: SCRIBE_OCR_LANGS,
+		oem: SCRIBE_LSTM_ONLY_OEM,
+		config: SCRIBE_OCR_CONFIG,
+	}
+
+	await workers[0].reinitialize(reinitializeParams)
+
+	if (workers.length > 1) {
+		await Promise.allSettled(workers.slice(1).map(worker => worker.reinitialize(reinitializeParams)))
+	}
+
+	gs.schedulerReadyTesseract = Promise.resolve(true)
+	return scribe
+}
+
 async function ensureScribeReady() {
 	if (!scribeReadyPromise) {
-		scribeReadyPromise = loadScribeModule()
-			.then(async scribe => {
-				await scribe.init(SCRIBE_INIT_OPTIONS)
-				return scribe
-			})
+		scribeReadyPromise = prepareTesseractWorkers()
 			.catch(error => {
 				scribeReadyPromise = null
 				throw error

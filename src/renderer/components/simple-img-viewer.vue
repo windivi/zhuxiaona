@@ -57,6 +57,7 @@ import ScissorOutlined from '@ant-design/icons-vue/ScissorOutlined';
 import PushpinOutlined from '@ant-design/icons-vue/PushpinOutlined';
 import { useStorage } from '@vueuse/core';
 // import { BrowserQRCodeReader } from '@zxing/browser';
+import GlobalOutlined from '@ant-design/icons-vue/GlobalOutlined';
 import { ReviewItem, ScriptOptions } from '../services';
 import { useScribeRuntime } from '../services/scribe-runtime';
 import type { ScribeRuntimeCallback, ScribeRuntimeResponse } from '../services/scribe-runtime';
@@ -144,6 +145,7 @@ function startParseSession() {
 	activeParseSessionId += 1
 	return activeParseSessionId
 }
+
 
 function isParseSessionActive(sessionId: number) {
 	return sessionId === activeParseSessionId
@@ -258,6 +260,15 @@ function setDefaultEvaluateId() {
 
 function onKeydown(event: KeyboardEvent) {
 	if (!visible.value) return
+	if (activeScreenshotRequestId !== null) {
+		if (event.key !== 'Escape') return
+
+		event.preventDefault()
+		event.stopPropagation()
+		cancelActiveParsing()
+		return
+	}
+
 	if (parsingScreenshot.value) {
 		if (event.key !== 'Escape') return
 
@@ -285,7 +296,10 @@ function onKeydown(event: KeyboardEvent) {
 		case 'ArrowDown':
 			emit('down')
 			break
-		case 'v':
+		case 'd':
+			if (!event.ctrlKey) {
+				return
+			}
 			parseFromScreenshot()
 			break
 		case 'Enter':
