@@ -1,5 +1,5 @@
 <template>
-	<ActivityReviewList :formState="formState" :activityList="activityList" :tableData="tableData" :loading="loading"
+	<ActivityReviewList :formState="formState" :activityList="activityList" :platformList="platformList" :tableData="tableData" :loading="loading"
 		:total="total" :scriptOptions="scriptOptions" :auditStatuses="auditStatuses" :showViewImage="showViewImage"
 		:evaluateOptions="evaluateOptions" :showViewVideo="showViewVideo" :startReviewImg="startReviewImg"
 		:startReviewVideo="startReviewVideo" :handleEnter="handleEnter" :handleSpace="handleSpace" :handleUp="handleUp"
@@ -27,6 +27,7 @@ const {
 	tableData,
 	total,
 	activityList,
+	platformList,
 	scriptOptions,
 	evaluateOptions,
 	token,
@@ -51,7 +52,7 @@ const {
 		const tokenValue = activityParser.extractTokenFromLoginHtml(html)
 		const activityParse = activityParser.parseActivityListFromHtml(html)
 		const auditStatuses = (activityParse as any).filterOptions?.auditStatuses || (activityParse as any).auditStatuses || []
-		return { tableData: list, total: resTotal, activityList: activityParse.activities, scriptOptions: activityParse.scriptOptions, evaluateOptions: activityParse.evaluateOptions, token: tokenValue, auditStatuses }
+		return { tableData: list, total: resTotal, activityList: activityParse.activities, platformList: activityParse.platforms, scriptOptions: activityParse.scriptOptions, evaluateOptions: activityParse.evaluateOptions, token: tokenValue, auditStatuses }
 	}
 })
 

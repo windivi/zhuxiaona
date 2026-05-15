@@ -8,6 +8,7 @@ const Chokidar = require('chokidar');
 const Electron = require('electron');
 const compileTs = require('./private/tsc');
 const FileSystem = require('fs');
+const syncScribeAssets = require('./private/sync-scribe-assets');
 const { EOL } = require('os');
 
 let viteServer = null;
@@ -97,6 +98,8 @@ async function start() {
     console.log(`${Chalk.greenBright('=======================================')}`);
     console.log(`${Chalk.greenBright('Starting Electron + Vite Dev Server...')}`);
     console.log(`${Chalk.greenBright('=======================================')}`);
+
+    syncScribeAssets();
 
     const devServer = await startRenderer();
     rendererPort = devServer.config.server.port;

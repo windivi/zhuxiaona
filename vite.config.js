@@ -9,25 +9,20 @@ const { defineConfig } = require('vite');
  */
 const config = defineConfig({
     root: Path.join(__dirname, 'src', 'renderer'),
-    publicDir: 'public',
+    publicDir: Path.join(__dirname, 'build', 'public'),
     server: {
         port: 8080,
     },
-    open: false,
+    optimizeDeps: {
+        esbuildOptions: {
+            target: 'esnext',
+        },
+    },
     build: {
+        target: 'esnext',
         outDir: Path.join(__dirname, 'build', 'renderer'),
         emptyOutDir: true,
         chunkSizeWarningLimit: 1024,
-        // minify: 'terser',
-        // terserOptions: {
-        //     compress: {
-        //         drop_console: true,
-        //         drop_debugger: true
-        //     },
-        //     format: {
-        //         comments: false
-        //     }
-        // },
         rollupOptions: {
             output: {
                 manualChunks(id) {

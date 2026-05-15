@@ -4,6 +4,7 @@
 		"output": "dist",
 		"buildResources": "static"
 	},
+	"electronDist": "node_modules/electron/dist",
 	"extraMetadata": {
 		"main": "main/main.js"
 	},
@@ -14,6 +15,7 @@
 		"shortcutName": "Electron App"
 	},
 	"win": {
+		"signAndEditExecutable": false,
 		"target": [
 			{
 				"target": "zip",

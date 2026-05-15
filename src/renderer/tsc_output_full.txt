@@ -1,0 +1,306 @@
+../../node_modules/@vueuse/core/index.d.mts(643,15): error TS2304: Cannot find name 'BluetoothLEScanFilter'.
+../../node_modules/@vueuse/core/index.d.mts(651,24): error TS2304: Cannot find name 'BluetoothServiceUUID'.
+../../node_modules/@vueuse/core/index.d.mts(674,24): error TS2304: Cannot find name 'BluetoothDevice'.
+../../node_modules/@vueuse/core/index.d.mts(676,24): error TS2304: Cannot find name 'BluetoothRemoteGATTServer'.
+../../node_modules/ant-design-vue/es/_util/cssinjs/index.d.ts(79,26): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/_util/cssinjs/index.d.ts(188,24): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/_util/cssinjs/StyleContext.d.ts(159,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/_util/cssinjs/StyleContext.d.ts(298,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/_util/cssinjs/StyleContext.d.ts(367,26): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/_util/cssinjs/StyleContext.d.ts(506,24): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/_util/type.d.ts(60,44): error TS2344: Type 'T' does not satisfy the constraint 'Record<string, any>'.
+../../node_modules/ant-design-vue/es/affix/index.d.ts(60,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/affix/index.d.ts(107,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/alert/index.d.ts(74,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/alert/index.d.ts(155,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/anchor/index.d.ts(46,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/anchor/index.d.ts(133,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/app/index.d.ts(28,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/app/index.d.ts(65,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/auto-complete/index.d.ts(367,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/auto-complete/index.d.ts(759,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/avatar/index.d.ts(38,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/avatar/index.d.ts(106,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/badge/index.d.ts(50,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/badge/index.d.ts(145,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/breadcrumb/index.d.ts(33,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/breadcrumb/index.d.ts(83,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/button/index.d.ts(68,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/button/index.d.ts(194,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/calendar/dayjs.d.ts(4,283): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/calendar/dayjs.d.ts(15,225): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/card/index.d.ts(62,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/card/index.d.ts(175,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/carousel/index.d.ts(276,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/carousel/index.d.ts(573,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/cascader/index.d.ts(360,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/cascader/index.d.ts(727,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/checkbox/index.d.ts(68,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/checkbox/index.d.ts(201,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/col/index.d.ts(42,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/col/index.d.ts(131,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/collapse/index.d.ts(132,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/collapse/index.d.ts(335,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/comment/index.d.ts(37,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/comment/index.d.ts(79,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/config-provider/index.d.ts(174,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/config-provider/index.d.ts(475,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/date-picker/dayjs.d.ts(2175,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/date-picker/dayjs.d.ts(2702,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/descriptions/index.d.ts(140,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/descriptions/index.d.ts(227,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/divider/index.d.ts(48,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/divider/index.d.ts(107,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/drawer/index.d.ts(243,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/drawer/index.d.ts(499,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/dropdown/index.d.ts(295,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/dropdown/index.d.ts(877,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/empty/index.d.ts(38,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/empty/index.d.ts(85,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/flex/index.d.ts(45,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/flex/index.d.ts(140,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/float-button/index.d.ts(36,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/float-button/index.d.ts(101,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/form/Form.d.ts(565,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/form/Form.d.ts(1204,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/form/index.d.ts(324,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/form/index.d.ts(961,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/image/index.d.ts(40,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/image/index.d.ts(115,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/input-number/index.d.ts(285,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/input-number/index.d.ts(605,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/input/index.d.ts(110,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/input/index.d.ts(323,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/layout/index.d.ts(139,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/layout/index.d.ts(168,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/list/index.d.ts(688,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/list/index.d.ts(1475,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/locale/index.d.ts(65,146): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/locale/index.d.ts(90,125): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/mentions/index.d.ts(174,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/mentions/index.d.ts(315,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/menu/index.d.ts(102,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/menu/index.d.ts(278,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/modal/index.d.ts(408,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/modal/index.d.ts(1221,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/page-header/index.d.ts(210,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/page-header/index.d.ts(453,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/pagination/index.d.ts(118,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/pagination/index.d.ts(357,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/popconfirm/index.d.ts(569,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/popconfirm/index.d.ts(1097,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/popover/index.d.ts(156,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/popover/index.d.ts(333,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/progress/index.d.ts(67,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/progress/index.d.ts(203,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/qrcode/index.d.ts(53,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/qrcode/index.d.ts(160,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/radio/index.d.ts(65,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/radio/index.d.ts(188,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/rate/index.d.ts(74,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/rate/index.d.ts(157,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/result/index.d.ts(50,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/result/index.d.ts(91,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/row/index.d.ts(68,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/row/index.d.ts(209,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/segmented/index.d.ts(45,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/segmented/index.d.ts(138,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/select/index.d.ts(393,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/select/index.d.ts(799,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/skeleton/index.d.ts(94,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/skeleton/index.d.ts(261,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/slider/index.d.ts(257,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/slider/index.d.ts(517,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/space/index.d.ts(42,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/space/index.d.ts(88,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/spin/index.d.ts(19,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/spin/index.d.ts(56,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/statistic/index.d.ts(53,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/statistic/index.d.ts(152,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/steps/index.d.ts(291,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/steps/index.d.ts(593,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/switch/index.d.ts(105,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/switch/index.d.ts(218,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/table/index.d.ts(22,296): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/table/index.d.ts(33,238): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/table/index.d.ts(519,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/table/index.d.ts(1446,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/table/index.d.ts(1455,300): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/table/index.d.ts(1466,242): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tabs/index.d.ts(122,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tabs/index.d.ts(358,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tag/index.d.ts(71,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tag/index.d.ts(148,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/time-picker/dayjs.d.ts(15,293): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/time-picker/dayjs.d.ts(26,235): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/timeline/index.d.ts(23,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/timeline/index.d.ts(60,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tooltip/index.d.ts(82,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tooltip/index.d.ts(244,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tour/index.d.ts(443,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tour/index.d.ts(1330,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/transfer/index.d.ts(366,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/transfer/index.d.ts(791,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tree-select/index.d.ts(521,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tree-select/index.d.ts(1062,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tree/index.d.ts(403,9): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/tree/index.d.ts(977,5): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/typography/index.d.ts(14,199): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/typography/index.d.ts(33,178): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/upload/index.d.ts(615,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/upload/index.d.ts(1064,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/vc-image/src/Image.d.ts(83,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/vc-image/src/Image.d.ts(164,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/watermark/index.d.ts(63,22): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/ant-design-vue/es/watermark/index.d.ts(130,20): error TS2344: Type 'GlobalComponents' does not satisfy the constraint 'Record<string, Component<any, any, any, ComputedOptions, MethodOptions, {}, any>>'.
+  Index signature for type 'string' is missing in type 'GlobalComponents'.
+../../node_modules/vue-web-screen-shot/dist/main.d.ts(2,32): error TS2307: Cannot find module '@/module/type/ComponentType' or its corresponding type declarations.

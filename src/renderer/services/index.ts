@@ -17,6 +17,18 @@ export type PlatformItem = {
 	id: string;
 	title: string;
 }
+
+const REMOTE_ASSET_ORIGIN = 'https://sxzy.chasinggroup.com';
+
+export function normalizeRemoteAssetUrl(url?: string | null): string {
+	if (!url) return '';
+	if (/^(https?:|data:|blob:|file:)/i.test(url)) return url;
+	if (url.startsWith(REMOTE_ASSET_ORIGIN)) return url;
+	if (url.startsWith('/uploads/')) return `${REMOTE_ASSET_ORIGIN}${url}`;
+	if (url.startsWith('uploads/')) return `${REMOTE_ASSET_ORIGIN}/${url}`;
+	return url;
+}
+
 export function extractTokenFromHtml(html: string): string {
 	// 优先从 Dcat 对象中获取
 	const dcatMatch = html.match(/var\s+Dcat\s*=\s*CreateDcat\s*\(\s*{[^}]*"token"\s*:\s*"([^"]+)"/);
@@ -63,6 +75,7 @@ export type ScriptOptions = {
 export type ParsedImage = {
 	url: string;
 	itemTitle: string;
+	workConcept?: string;
 	scriptId?: string;
 	evaluateId?: string;
 	evaluate2?: string;
@@ -73,6 +86,7 @@ export type ParsedImage = {
 export type ParsedMedia = {
 	url: string;
 	itemTitle: string;
+	workConcept?: string;
 	scriptId?: string;
 	auditStatus?: 0 | 1 | 2;
 	auditStatusName?: string;

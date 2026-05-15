@@ -19,6 +19,44 @@ async function doCreateWindow() {
 
 let mainWindow: BrowserWindow | null = null;
 
+const REMOTE_ORIGIN = 'https://sxzy.chasinggroup.com';
+const UPLOADS_PATH_PREFIX = '/uploads/';
+
+function getUploadsRemotePath(requestUrl: URL): string | null {
+	if (requestUrl.protocol === 'file:') {
+		const uploadsPathIndex = requestUrl.pathname.indexOf(UPLOADS_PATH_PREFIX);
+		if (uploadsPathIndex === -1) {
+			return null;
+		}
+
+		return requestUrl.pathname.slice(uploadsPathIndex);
+	}
+
+	const isLocalRendererRequest =
+		(requestUrl.protocol === 'http:' || requestUrl.protocol === 'https:') &&
+		['localhost', '127.0.0.1'].includes(requestUrl.hostname);
+
+	if (!isLocalRendererRequest || !requestUrl.pathname.startsWith(UPLOADS_PATH_PREFIX)) {
+		return null;
+	}
+
+	return requestUrl.pathname;
+}
+
+function resolveUploadsProxyUrl(rawUrl: string): string | null {
+	try {
+		const requestUrl = new URL(rawUrl);
+		const remotePath = getUploadsRemotePath(requestUrl);
+		if (!remotePath) {
+			return null;
+		}
+
+		return `${REMOTE_ORIGIN}${remotePath}${requestUrl.search}`;
+	} catch {
+		return null;
+	}
+}
+
 app.whenReady().then(async () => {
 	mainWindow = await doCreateWindow();
 
@@ -59,6 +97,12 @@ app.whenReady().then(async () => {
 
 	// 拦截 login 请求，执行自动登录
 	session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
+		const proxyUrl = resolveUploadsProxyUrl(details.url);
+		if (proxyUrl) {
+			console.log('[Main] Proxy upload asset:', details.url, '->', proxyUrl);
+			callback({ redirectURL: proxyUrl });
+			return;
+		}
 
 		if (details.url.includes('login') && !isAutoLoginInProgress) {
 			const now = Date.now();
@@ -170,11 +214,13 @@ app.whenReady().then(async () => {
 				...details.responseHeaders,
 				'Content-Security-Policy': [
 					"default-src 'self'; " +
-					"script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; " +
+					"script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https:; " +
 					"style-src 'self' 'unsafe-inline' https:; " +
 					"img-src 'self' data: https:; " +
 					"font-src 'self' data: https:; " +
 					"media-src 'self' blob: https: http:; " +
+					"worker-src 'self' blob: https: http:; " +
+					"child-src 'self' blob: https: http:; " +
 					"connect-src 'self' https: http: ws: wss:; " +
 					"frame-src 'self' https:; " +
 					"object-src 'none'; " +

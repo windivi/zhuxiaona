@@ -9,6 +9,13 @@
 				<a-select-option v-for="act in activityList" :key="act.id" :value="act.id">{{ act.title
 				}}</a-select-option>
 			</a-select>
+			<a-select :dropdownMatchSelectWidth="false" v-model:value="formState.routeId" @change="onSearch"
+				placeholder="平台标题">
+				<a-select-option value="">全部</a-select-option>
+				<a-select-option v-for="platform in platformList" :key="platform.id" :value="platform.id">{{
+					platform.title
+				}}</a-select-option>
+			</a-select>
 			<a-select style="width: 160px" v-model:value="formState.auditResult" @change="onSearch"
 				placeholder="筛选审核结果">
 				<a-select-option value="">全部</a-select-option>
@@ -22,6 +29,7 @@
 					<a-select-option value="1">未审核</a-select-option>
 				</template>
 			</a-select>
+
 			<a-button type="primary" @click="onSearch">查询</a-button>
 		</div>
 
@@ -77,6 +85,7 @@ type Row = any
 const props = defineProps({
 	formState: { type: Object as PropType<Record<string, any>>, required: true },
 	activityList: { type: Array as PropType<any[]>, required: true },
+	platformList: { type: Array as PropType<any[]>, required: false, default: () => [] },
 	tableData: { type: Array as PropType<any[]>, required: true },
 	loading: { type: Boolean, required: true },
 	total: { type: [Number] as PropType<number>, required: true },
@@ -98,7 +107,7 @@ const props = defineProps({
 } as const)
 
 const emit = defineEmits<{
-	
+
 	'update:showViewImage': [value: boolean]
 	'update:showViewVideo': [value: boolean]
 }>()

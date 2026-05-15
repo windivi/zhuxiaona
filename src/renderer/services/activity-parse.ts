@@ -17,7 +17,7 @@ export function parseActivityListFromHtml(html: string) {
 	const platforms: PlatformItem[] = [];
 	const scriptOptions: ScriptOptions[] = parseScriptOptionsFromHtml(html);
 	const evaluateOptions: ScriptOptions[] = parseEvaluateOptionsFromHtml(html);
-	
+
 	// 活动
 	$('select.activity_id option').each((_, el) => {
 		const id = $(el).attr('value') || '';
@@ -42,7 +42,7 @@ export function parseActivityListFromHtml(html: string) {
 	return { activities, details, platforms, scriptOptions, evaluateOptions };
 }
 
-export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; total: number } {
+export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; total: number; } {
 	const $ = cheerio.load(html || '');
 	const rows = $('#grid-table tbody tr');
 	const out: ReviewItem[] = [];
@@ -87,7 +87,7 @@ export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; tot
 				if (id) ids.push(id);
 			});
 			return ids;
-		}
+		};
 
 		const modalIds = [...collectModalIds(item.logDetailHtml || ''), ...collectModalIds(item.auditActionHtml)];
 		// derive audit status from the row's auditResult text (column 14)
@@ -158,12 +158,25 @@ export function parseReviewListFromHtml(html: string): { list: ReviewItem[]; tot
 				}
 			}
 
+			let workConcept: string | undefined = undefined;
+			modal.find('.item').each((_, itemEl) => {
+				const itemNode = $(itemEl);
+				const labelNode = itemNode.children('.slb').first();
+				const labelText = labelNode.text().replace(/\u00a0/g, ' ').replace(/\s+/g, '').trim();
+				if (labelText !== '作品理念：') return;
+
+				const conceptNode = labelNode.siblings().first();
+				const conceptText = conceptNode.text().replace(/\u00a0/g, ' ').trim();
+				workConcept = conceptText || undefined;
+				return false;
+			});
+
 			// 收集图片/媒体
 			modal.find('img').each((_, img) => {
 				const src = $(img).attr('src');
 				if (src && !seen.has(src)) {
 					seen.add(src);
-					const parsed: ParsedImage = { url: src, itemTitle: itemTitle || '', scriptId: scriptId || undefined, auditStatus, auditStatusName, uploadId, };
+					const parsed: ParsedImage = { url: src, itemTitle: itemTitle || '', scriptId: scriptId || undefined, auditStatus, auditStatusName, uploadId, workConcept };
 					item.images.push(parsed);
 				}
 			});

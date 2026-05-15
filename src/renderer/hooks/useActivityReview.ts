@@ -7,6 +7,7 @@ export type ParseResult = {
 	tableData: any[]
 	total?: number
 	activityList?: any[]
+	platformList?: any[]
 	scriptOptions?: any[]
 	evaluateOptions?: any[]
 	auditStatuses?: any[]
@@ -23,11 +24,12 @@ export type UseActivityReviewOptions = {
 }
 
 export function useActivityReview(options: UseActivityReviewOptions) {
-	const formState = useStorage(options.cacheKey || 'activity-review-form-state', { page: 1, per_page: 10, auditResult: '', activityId: '', phone: '' })
+	const formState = useStorage(options.cacheKey || 'activity-review-form-state', { page: 1, per_page: 10, auditResult: '', activityId: '', routeId: '', phone: '' })
 	const loading = ref(false)
 	const tableData = ref<any[]>([])
 	const total = ref<number>(0)
 	const activityList = ref<any[]>([])
+	const platformList = ref<any[]>([])
 	const scriptOptions = ref<any[]>([])
 	const evaluateOptions = ref<any[]>([])
 	const token = ref<string>('')
@@ -47,6 +49,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 			per_page: String((formState.value as any).per_page),
 			audit_status: (formState.value as any).auditResult || '',
 			activity_id: (formState.value as any).activityId || '',
+			route_id: (formState.value as any).routeId || '',
 			'user[phone]': (formState.value as any).phone || '',
 			_pjax: '#pjax-container'
 		})
@@ -59,6 +62,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 				tableData.value = parsed.tableData || []
 				total.value = parsed.total || 0
 				activityList.value = (parsed.activityList || (parsed as any).activities || []).map((i: any) => ({ ...i, _success: 0 }))
+				platformList.value = parsed.platformList || (parsed as any).platformList || []
 				scriptOptions.value = parsed.scriptOptions || []
 				evaluateOptions.value = parsed.evaluateOptions || []
 				token.value = parsed.token || ''
@@ -128,6 +132,7 @@ export function useActivityReview(options: UseActivityReviewOptions) {
 		tableData,
 		total,
 		activityList,
+		platformList,
 		scriptOptions,
 		evaluateOptions,
 		token,
