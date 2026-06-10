@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge">
+    
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title> Admin</title>
+
+            <meta name="referrer" content="no-referrer"/>
+    
+    
+    
+
+    <script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/vendors.min.js?v2.2.2-beta"></script><script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/js/dcat-app.js?v2.2.2-beta"></script>
+
+    <link rel="stylesheet" href="https://sxzy.chasinggroup.com/vendor/dcat-admin/adminlte/adminlte.css?v2.2.2-beta"><link rel="stylesheet" href="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/vendors.min.css?v2.2.2-beta"><link rel="stylesheet" href="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/extensions/toastr.css?v2.2.2-beta"><link rel="stylesheet" href="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/tables/datatable/datatables.min.css?v2.2.2-beta"><link rel="stylesheet" href="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/css/dcat-app.css?v2.2.2-beta"><link rel="stylesheet" href="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/css/nunito.css?v2.2.2-beta">
+</head>
+
+<body class="dcat-admin-body full-page ">
+
+<script>
+    var Dcat = CreateDcat({"pjax_container_selector":"#pjax-container","token":"vtdSFiuoM83vI4ZnvBSovi2BuGbahNOcNV1kO9ZO","lang":{"delete_confirm":"\u786e\u8ba4\u5220\u9664?","confirm":"\u786e\u8ba4","cancel":"\u53d6\u6d88","refresh_succeeded":"\u5237\u65b0\u6210\u529f !","submit":"\u63d0\u4ea4","close":"\u5173\u95ed","selected_options":"\u5df2\u9009\u4e2d:num\u4e2a\u9009\u9879","exceed_max_item":"\u5df2\u8d85\u51fa\u6700\u5927\u53ef\u9009\u6570\u91cf","no_preview":"\u9884\u89c8\u5931\u8d25","0":"\u7cfb\u7edf\u7e41\u5fd9\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\uff01","1":"\u5bf9\u4e0d\u8d77\uff0c\u60a8\u6ca1\u6709\u6743\u9650\u8bbf\u95ee\uff0c\u8bf7\u4e0e\u7ba1\u7406\u5458\u8054\u7cfb\u3002","2":"\u8bf7\u767b\u5f55\uff01","3":"\u5bf9\u4e0d\u8d77\uff0c\u5f53\u524d\u9875\u9762\u5df2\u5931\u6548\uff0c\u8bf7\u5237\u65b0\u6d4f\u89c8\u5668\u3002"},"colors":{"info":"#3085d6","success":"#21b978","danger":"#ea5455","warning":"#dda451","indigo":"#5c6bc6","blue":"#3085d6","red":"#ea5455","orange":"#dda451","green":"#21b978","cyan":"#7367f0","purple":"#5b69bc","custom":"#59a9f8","pink":"#ff8acc","dark":"#22292f","white":"#fff","white50":"hsla(0,0%,100%,.5)","blue1":"#007ee5","blue2":"#3d97dd","orange1":"#ffcc80","orange2":"#F99037","yellow":"#edc30e","indigo-darker":"#495abf","red-darker":"#bd4147","blue-darker":"#236bb0","cyan-darker":"#6355ee","gray":"#b9c3cd","light":"#f7f7f9","tear":"#01847f","tear1":"#00b5b5","dark20":"#f6fbff","dark30":"#f4f7fa","dark35":"#e7eef7","dark40":"#ebf0f3","dark50":"#d3dde5","dark60":"#bacad6","dark70":"#b3b9bf","dark80":"#7c858e","dark85":"#5c7089","dark90":"#252d37","font":"#414750","gray-bg":"#f1f1f1","border":"#ebeff2","input-border":"#d9d9d9","background":"#eff3f8","dark-mode-bg":"#2c2c43","dark-mode-color":"#222233","dark-mode-color2":"#1e1e2d","dark-mode-font":"##a8a9bb","primary":"#586cb1","primary-darker":"#4c60a3","link":"#4c60a3"},"dark_mode":false,"sidebar_dark":false,"sidebar_light_style":"sidebar-light-primary"});
+</script>
+
+
+
+
+<div class="app-content content">
+    <div class="wrapper" id="pjax-container">
+            <style>.table-wrap.table-main{overflow-y:hidden;}
+.table.custom-data-table.data-table tbody td,.complex-headers tbody tr td{
+    height: 40px!important;
+    padding: 0.3rem 0.5rem;
+}
+.navbar-fixed-top .content-wrapper{
+    padding-top:5.5rem;
+}
+.breadcrumbs-top{
+    margin-bottom:5px!important;
+}
+.content-body .table,.content-body .table-responsive .btn , .content-body table.table-bordered.data-table.complex-headers thead th{
+    font-size:12px !important;
+}
+.content-header h1{
+    font-size:22px !important;
+}
+.main-sidebar{
+    width:210px;
+}
+body:not(.sidebar-mini-md) .content-wrapper{
+    margin-left:210px;
+}
+.header-navbar.fixed-top{
+    left:210px;
+}
+.modal-dialog .modal-body .table tbody td {
+    font-size:12px !important;
+}
+.modal-dialog .modal-body .table thead th{
+    font-size:12px !important;
+}</style>
+
+    <div class="content-body" id="app">
+        
+        
+
+            <section class="content">
+                
+        <div class="row "><div class="col-md-12"><style>
+    body .content-body .login-page{
+        background-color: transparent !important;
+    }
+    .content-body{
+        background-image: url('/login-background.jpg');
+        background-repeat: repeat;
+        background-size: 100% 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+
+    /* ========== 浮动粒子动画 ========== */
+    .particle {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1;
+        animation: particleFloat 12s linear infinite;
+    }
+
+    /* 粒子浮动动画 - 从当前位置向上飘并消失，然后从底部重新开始 */
+    @keyframes particleFloat {
+        0% {
+            transform: translateY(0) translateX(0) scale(0.8);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.6;
+        }
+        20% {
+            transform: translateY(-20vh) translateX(20px) scale(1);
+        }
+        50% {
+            opacity: 0.4;
+            transform: translateY(-50vh) translateX(-15px) scale(0.9);
+        }
+        80% {
+            opacity: 0.2;
+            transform: translateY(-80vh) translateX(10px) scale(0.7);
+        }
+        100% {
+            transform: translateY(-110vh) translateX(0) scale(0.5);
+            opacity: 0;
+        }
+    }
+
+    body .box, body .card{
+        background-color: transparent !important;
+    }
+    body .content-body .login-card-body{
+        background-color: rgba(42, 29, 113, 0.7) !important;
+        position: relative;
+        z-index: 2;
+    }
+    .login-page, .register-page{
+        align-items: end;
+    }
+    .login-box {
+        margin-top: 0rem;
+        padding: 0px;
+    }
+    .login-card-body {
+        padding: 1.5rem 1.8rem 1.6rem;
+    }
+    .card, .card-body {
+        border-radius: .5rem;
+        border: 1px solid rgba(66, 51, 130,1);
+    }
+    body .login-box .form-control{
+        background-color: rgba(55, 39, 135, 0.7);
+        color: #a8a9bb !important;
+        border-color: #303247 !important;
+        transition: all 0.3s ease;
+    }
+
+    /* ========== 输入框聚焦动画 ========== */
+    body .login-box .form-control:focus {
+        border-color: #7367f0 !important;
+        box-shadow: 0 0 15px rgba(115, 103, 240, 0.3) !important;
+        transform: translateY(-2px);
+        background-color: rgba(55, 39, 135, 0.9);
+    }
+
+    body .login-box .form-control:focus + .form-control-position i {
+        animation: iconPulse 0.5s ease;
+        color: #7367f0 !important;
+    }
+
+    @keyframes iconPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    .form-label-group input:focus ~ label,
+    .form-label-group input:not(:placeholder-shown) ~ label {
+        color: #7367f0;
+        transform: translateY(-.2rem) scale(0.85);
+    }
+
+    .login-btn {
+        padding-left: 2rem!important;;
+        padding-right: 1.5rem!important;
+    }
+
+    /* ========== 按钮交互动画 ========== */
+    .btn-primary {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn-primary:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(115, 103, 240, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    .btn-primary.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .btn-primary.loading i {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .content {
+        overflow-x: hidden;
+    }
+    .form-group .control-label {
+        text-align: left;
+    }
+    body {
+        background-color: #2c2c43 !important;
+        color: #a8a9bb !important;
+    }
+
+    body input::-webkit-input-placeholder {
+        color: #9a9bb0!important
+    }
+
+    body input::-moz-placeholder {
+        color: #9a9bb0!important
+    }
+
+    body input:-ms-input-placeholder {
+        color: #9a9bb0!important
+    }
+
+    /* ========== 滑动验证组件样式 ========== */
+    .slider-captcha-wrapper {
+        margin-bottom: 1rem;
+    }
+
+    .slider-captcha {
+        background-color: rgba(55, 39, 135, 0.5);
+        border-radius: 0.5rem;
+        border: 1px solid #303247;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .slider-captcha.success {
+        border-color: #7367f0;
+        box-shadow: 0 0 10px rgba(115, 103, 240, 0.3);
+    }
+
+    .slider-captcha.fail {
+        border-color: #ea5455;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    .slider-track {
+        position: relative;
+        height: 38px;
+        background: rgba(42, 29, 113, 0.6);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slider-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, rgba(115, 103, 240, 0.3) 0%, rgba(115, 103, 240, 0.5) 100%);
+        z-index: 1;
+    }
+
+    .slider-thumb {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        width: 38px;
+        height: 38px;
+        background: linear-gradient(135deg, #7367f0 0%, #5b4fc4 100%);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: grab;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        z-index: 3;
+    }
+
+    .slider-thumb:hover {
+        transform: translateY(-50%) scale(1.05);
+        box-shadow: 0 4px 12px rgba(115, 103, 240, 0.4);
+    }
+
+    .slider-thumb:active {
+        cursor: grabbing;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .slider-thumb i {
+        color: #fff;
+        font-size: 16px;
+        transition: transform 0.3s ease;
+    }
+
+    .slider-captcha.success .slider-thumb {
+        background: linear-gradient(135deg, #7367f0 0%, #5b4fc4 100%);
+        cursor: default;
+    }
+
+    .slider-captcha.success .slider-thumb i::before {
+        content: "\e83f"; /* feather icon-check */
+    }
+
+    .slider-text {
+        color: #a8a9bb;
+        font-size: 12px;
+        z-index: 0;
+        transition: all 0.3s ease;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .slider-captcha.success .slider-text {
+        color: #7367f0;
+    }
+
+    /* ========== 登录反馈动画 ========== */
+    .login-success {
+        animation: successPulse 0.5s ease;
+    }
+
+    @keyframes successPulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .invalid-feedback {
+        animation: fadeInUp 0.3s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ========== 移动端适配 ========== */
+    @media (max-width: 768px) {
+        .login-box {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .slider-track {
+            height: 44px;
+        }
+
+        .slider-thumb {
+            width: 44px;
+            height: 44px;
+        }
+
+        .slider-text {
+            font-size: 13px;
+        }
+
+        body .login-box .form-control {
+            font-size: 16px; /* 防止 iOS 缩放 */
+        }
+
+        .btn-primary {
+            min-height: 44px; /* Apple 推荐触摸区域大小 */
+        }
+    }
+</style>
+
+<div class="login-page col-md-10">
+    <div class="login-box">
+
+        <div class="card">
+
+            <div class="card-body login-card-body shadow-100">
+
+                <div class="login-logo mb-2 mt-1" style="color: #fff;font-size:1.8rem;">
+                    陕西社群
+                </div>
+
+                
+
+                <form id="login-form" method="POST" action="https://sxzy.chasinggroup.com/admin/auth/login">
+
+                    <input type="hidden" name="_token" value="vtdSFiuoM83vI4ZnvBSovi2BuGbahNOcNV1kO9ZO"/>
+
+                    <fieldset class="form-label-group form-group position-relative has-icon-left">
+                        <input
+                                type="text"
+                                class="form-control "
+                                name="username"
+                                placeholder="用户名"
+                                value=""
+                                required
+                                autofocus
+                        >
+
+                        <div class="form-control-position">
+                            <i class="feather icon-user"></i>
+                        </div>
+
+                        <label for="email">用户名</label>
+
+                        <div class="help-block with-errors"></div>
+                                            </fieldset>
+
+                    <fieldset class="form-label-group form-group position-relative has-icon-left">
+                        <input
+                                minlength="5"
+                                maxlength="20"
+                                id="password"
+                                type="password"
+                                class="form-control "
+                                name="password"
+                                placeholder="密码"
+                                required
+                                autocomplete="current-password"
+                        >
+
+                        <div class="form-control-position">
+                            <i class="feather icon-lock"></i>
+                        </div>
+                        <label for="password">密码</label>
+
+                        <div class="help-block with-errors"></div>
+                        
+                    </fieldset>
+
+                                            
+                        <div class="form-group slider-captcha-wrapper">
+                            <div class="slider-captcha" id="slider-captcha">
+                                <div class="slider-track">
+                                    <div class="slider-fill"></div>
+                                    <div class="slider-thumb">
+                                        <i class="feather icon-arrow-right"></i>
+                                    </div>
+                                    <span class="slider-text">向右滑动完成验证</span>
+                                </div>
+                            </div>
+                            <input type="hidden" name="slider_verified" id="slider_verified" value="0">
+                            <input type="hidden" name="slider_data" id="slider_data" value="">
+
+                                                    </div>
+                    
+                    <div class="form-group d-flex justify-content-between align-items-center">
+                        <div class="text-left">
+                                                    </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary float-right login-btn" id="login-btn">
+
+                        登录
+                        &nbsp;
+                        <i class="feather icon-arrow-right"></i>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+Dcat.ready(function () {
+    // ========== 公共函数 ==========
+
+    // 显示错误提示
+    function showError(msg) {
+        $('.toast').hide();
+        Dcat.error(msg);
+    }
+
+    // 密码编码
+    function encodePassword(password) {
+        return btoa(encodeURIComponent(password));
+    }
+
+    // 重置登录按钮状态
+    function resetLoginButton() {
+        $('#login-btn').removeClass('loading').prop('disabled', false);
+        $('#login-btn i').removeClass('icon-loader').addClass('icon-arrow-right');
+    }
+
+    // 设置登录按钮加载状态
+    function setLoginButtonLoading() {
+        $('#login-btn').addClass('loading').prop('disabled', true);
+        $('#login-btn i').removeClass('icon-arrow-right').addClass('icon-loader');
+    }
+
+        // ========== 滑动验证模式 ==========
+
+    // 滑动解锁初始化
+    var sliderVerified = false;
+    var sliderData = [];
+    var sliderThumb = $('#slider-captcha .slider-thumb');
+    var sliderFill = $('#slider-captcha .slider-fill');
+    var sliderTrack = $('#slider-captcha .slider-track');
+    var trackWidth = sliderTrack.width() - sliderThumb.width();
+    var isDragging = false;
+    var startX = 0;
+    var currentX = 0;
+
+    // 鼠标/触摸开始
+    sliderThumb.on('mousedown touchstart', function(e) {
+        // 已验证完成后不允许再拖动
+        if (sliderVerified) {
+            e.preventDefault();
+            return false;
+        }
+
+        e.preventDefault();
+        isDragging = true;
+        startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+
+        // 动态重新计算 trackWidth（修复初始化为 0 的问题）
+        trackWidth = sliderTrack.width() - sliderThumb.width();
+
+        // 记录起始点
+        sliderData = [{
+            x: 0,
+            t: Date.now()
+        }];
+
+        // 添加拖动状态
+        $('#slider-captcha').removeClass('success fail');
+        $('.slider-text').text('向右滑动完成验证');
+    });
+
+    // 鼠标/触摸移动
+    $(document).on('mousemove touchmove', function(e) {
+        if (!isDragging || sliderVerified) return;
+
+        var clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+        var deltaX = clientX - startX;
+        currentX = Math.max(0, Math.min(deltaX, trackWidth));
+
+        // 更新滑块位置
+        sliderThumb[0].style.left = currentX + 'px';
+        sliderFill[0].style.width = (currentX + sliderThumb.width()) + 'px';
+
+        // 记录轨迹点
+        var lastPoint = sliderData[sliderData.length - 1];
+        if (Math.abs(currentX - lastPoint.x) >= 5 || sliderData.length === 1) {
+            sliderData.push({
+                x: currentX,
+                t: Date.now()
+            });
+        }
+
+        // 检查是否滑动到底
+        if (currentX >= trackWidth && !sliderVerified) {
+            sliderVerified = true;
+            $('#slider_verified').val('1');
+            $('#slider_data').val(btoa(JSON.stringify(sliderData)));
+
+            // 成功动画
+            $('#slider-captcha').addClass('success');
+            $('.slider-text').text('验证成功 ✓');
+
+            setTimeout(function() {
+                Dcat.success('验证成功');
+            }, 100);
+        }
+    });
+
+    // 鼠标/触摸结束
+    $(document).on('mouseup touchend', function() {
+        if (!isDragging) return;
+        isDragging = false;
+
+        if (!sliderVerified) {
+            // 未完成，回弹动画
+            sliderThumb.css({
+                'left': '0',
+                'transition': 'left 0.3s ease'
+            });
+            sliderFill.css({
+                'width': '0',
+                'transition': 'width 0.3s ease'
+            });
+
+            // 清除transition
+            setTimeout(function() {
+                sliderThumb.css('transition', '');
+                sliderFill.css('transition', '');
+            }, 300);
+
+            sliderData = [];
+        }
+    });
+
+    // 重置滑动组件
+    function resetSlider() {
+        sliderVerified = false;
+        sliderData = [];
+        $('#slider_verified').val('0');
+        $('#slider_data').val('');
+        $('#slider-captcha').removeClass('success');
+        $('.slider-text').text('向右滑动完成验证');
+        sliderThumb.css('left', '0');
+        sliderFill.css('width', '0');
+    }
+
+    // 拦截 Dcat 的 ajaxSubmit
+    var originalAjaxSubmit = $.fn.ajaxSubmit;
+    $.fn.ajaxSubmit = function(options) {
+        var username = $('input[name="username"]').val();
+        var password = $('input[name="password"]').val();
+
+        if (!username || !password) {
+            showError('请输入账号密码');
+            return this;
+        }
+        if (!sliderVerified) {
+            showError('请先完成滑动验证');
+            return this;
+        }
+
+        // 密码编码
+        var $passwordInput = $('input[name="password"]');
+        $passwordInput.val(encodePassword(password));
+
+        // 设置加载状态
+        setLoginButtonLoading();
+
+        var result = originalAjaxSubmit.call(this, options);
+
+        // 提交后恢复原密码（防止再次提交时重复加密）
+        var originalPassword = password;
+        setTimeout(function() {
+            $passwordInput.val(originalPassword);
+        }, 100);
+
+        return result;
+    };
+
+    // 初始化表单
+    $('#login-form').form({ validate: true });
+
+    // 登录失败重置滑动组件和按钮状态
+    $(document).ajaxComplete(function(e, xhr, settings) {
+        if (settings.url && settings.url.indexOf('/admin/auth/login') > -1) {
+            if (xhr.status === 422 || xhr.status === 401 || (xhr.responseJSON && !xhr.responseJSON.status)) {
+                resetSlider();
+                resetLoginButton();
+            }
+        }
+    });
+
+    
+    // ========== 创建背景粒子 ==========
+    function createParticles() {
+        var body = document.querySelector('.content-body');
+        if (!body) return;
+
+        for (var i = 0; i < 60; i++) {
+            var particle = document.createElement('div');
+            particle.className = 'particle';
+
+            // 随机水平位置
+            particle.style.left = Math.random() * 100 + '%';
+
+            // 随机垂直起始位置
+            particle.style.top = (Math.random() * 100) + '%';
+
+            // 动画延迟（0-5秒，让粒子陆续出现）
+            particle.style.animationDelay = (Math.random() * 5) + 's';
+
+            // 随机动画时长（8-16秒）
+            particle.style.animationDuration = (8 + Math.random() * 8) + 's';
+
+            // 随机大小
+            var size = (6 + Math.random() * 12);
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+
+            body.appendChild(particle);
+        }
+    }
+    createParticles();
+
+    // ========== 登录反馈动画 ==========
+    if (typeof Dcat !== 'undefined') {
+        // 登录成功动画
+        var originalSuccess = Dcat.success;
+        Dcat.success = function(message) {
+            $('.login-card-body').addClass('login-success');
+            setTimeout(function() {
+                $('.login-card-body').removeClass('login-success');
+            }, 500);
+            return originalSuccess.apply(this, arguments);
+        };
+
+        // 登录失败（不添加抖动动画）
+        var originalError = Dcat.error;
+        Dcat.error = function(message) {
+            return originalError.apply(this, arguments);
+        };
+    }
+
+    // ========== 记住用户名功能 ==========
+    // 恢复记住的用户名
+    var remembered = localStorage.getItem('remembered_username');
+    if (remembered) {
+        $('input[name="username"]').val(remembered);
+        $('#remember').prop('checked', true);
+    }
+
+    // 记住用户名
+    $('#remember').on('change', function() {
+        if ($(this).is(':checked')) {
+            localStorage.setItem('remembered_username', $('input[name="username"]').val());
+        } else {
+            localStorage.removeItem('remembered_username');
+        }
+    });
+
+    // 输入用户名时更新记忆
+    $('input[name="username"]').on('input', function() {
+        if ($('#remember').is(':checked')) {
+            localStorage.setItem('remembered_username', $(this).val());
+        }
+    });
+});
+</script>
+</div></div>
+
+            </section>
+
+        
+        
+    </div>
+
+    <script data-exec-on-popstate>
+(function () {
+    try {
+        
+    } catch (e) {
+        console.error(e)
+    }
+})();
+Dcat.ready(function () {
+    try {
+            $(function(){
+        $(".table-wrap.table-main").removeAttr("style");
+        $(".table-wrap.table-fixed-right").removeAttr("style");
+        $(".table-wrap.table-fixed-left").removeAttr("style");
+    });;
+Dcat.token = "vtdSFiuoM83vI4ZnvBSovi2BuGbahNOcNV1kO9ZO";
+    } catch (e) {
+        console.error(e)
+    }
+})
+</script>
+    <div class="extra-html"></div>
+    </div>
+</div>
+
+
+
+<script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/adminlte/adminlte.js?v2.2.2-beta"></script><script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/extensions/toastr.min.js?v2.2.2-beta"></script><script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/jquery-pjax/jquery.pjax.min.js?v2.2.2-beta"></script><script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/bootstrap-validator/validator.min.js?v2.2.2-beta"></script><script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/layer/layer.js?v2.2.2-beta"></script><script src="https://sxzy.chasinggroup.com/vendor/dcat-admin/dcat/plugins/jquery.initialize/jquery.initialize.min.js?v2.2.2-beta"></script>
+
+<script>Dcat.boot();</script>
+
+</body>
+</html>

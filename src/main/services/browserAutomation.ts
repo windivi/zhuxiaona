@@ -1,11 +1,8 @@
 import { launch, Browser, Page } from 'puppeteer-core';
-import { app } from 'electron';
-import * as path from 'path';
 
 interface LoginCredentials {
   username: string;
   password: string;
-  dynamicCode: string;
 }
 
 interface LoginResult {
@@ -74,29 +71,53 @@ export class BrowserAutomation {
     }
 
     try {
+      const loginUrl = 'https://sxzy.chasinggroup.com/admin/auth/login';
+
       this.page = await this.browser!.newPage();
       await this.page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
       console.log('正在访问登录页面...');
-      await this.page.goto('https://sxzy.chasinggroup.com/admin/auth/login', { waitUntil: 'networkidle2', timeout: 30000 });
+      await this.page.goto(loginUrl, { waitUntil: 'networkidle2', timeout: 30000 });
       await this.page.waitForSelector('#login-form', { timeout: 10000 });
       await this.page.type('input[name="username"]', credentials.username);
       await this.page.type('input[name="password"]', credentials.password);
-      await this.page.type('input[name="code"]', credentials.dynamicCode);
+      await this.completeSliderCaptcha();
+
       console.log('正在提交登录表单...');
-      await Promise.all([
-        this.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }),
-        this.page.click('button[type="submit"].login-btn')
-      ]);
+      const loginResponsePromise = this.page.waitForResponse(
+        (response) => response.url().includes('/admin/auth/login') && response.request().method() === 'POST',
+        { timeout: 30000 }
+      ).catch(() => null);
+      const navigationPromise = this.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 10000 }).catch(() => null);
+
+      await this.page.click('button[type="submit"].login-btn');
+
+      const [loginResponse] = await Promise.all([loginResponsePromise, navigationPromise]);
+      await this.page.waitForNetworkIdle({ idleTime: 500, timeout: 5000 }).catch(() => undefined);
+      await this.delay(1000);
 
       const currentUrl = this.page.url();
       console.log('登录后的URL:', currentUrl);
 
       if (currentUrl.includes('/admin/auth/login')) {
-        const errorElement = await this.page.$('.alert-danger, .help-block.with-errors');
-        let errorMessage = '登录失败，请检查凭据';
-        if (errorElement) {
-          errorMessage = await this.page.evaluate(el => el.textContent, errorElement) || errorMessage;
+        await this.page.waitForSelector('#login-form', { timeout: 5000 }).catch(() => null);
+
+        let errorMessage = loginResponse ? `登录失败，请检查凭据 (HTTP ${loginResponse.status()})` : '登录失败，请检查凭据';
+
+        try {
+          const messages = await this.page.$$eval(
+            '.alert-danger, .help-block.with-errors',
+            (nodes) => nodes
+              .map((node) => node.textContent?.trim() || '')
+              .filter((text) => text.length > 0)
+          );
+
+          if (messages.length > 0) {
+            errorMessage = messages[0];
+          }
+        } catch (error) {
+          console.warn('读取登录失败提示时发生错误:', error);
         }
+
         return { success: false, cookies: '', csrfToken: '', error: errorMessage };
       }
 
@@ -167,6 +188,72 @@ export class BrowserAutomation {
     } finally {
       await browserAutomation.closeBrowser()
     }
+  }
+
+  private async completeSliderCaptcha(): Promise<void> {
+    if (!this.page) {
+      throw new Error('登录页面未初始化');
+    }
+
+    const sliderThumb = await this.page.waitForSelector('#slider-captcha .slider-thumb', { timeout: 10000 });
+    const sliderTrack = await this.page.waitForSelector('#slider-captcha .slider-track', { timeout: 10000 });
+    if (!sliderThumb || !sliderTrack) {
+      throw new Error('未找到滑块验证组件');
+    }
+
+    const thumbBox = await sliderThumb.boundingBox();
+    const trackBox = await sliderTrack.boundingBox();
+
+    if (!thumbBox || !trackBox) {
+      throw new Error('无法定位滑块验证组件');
+    }
+
+    const startX = thumbBox.x + thumbBox.width / 2;
+    const startY = thumbBox.y + thumbBox.height / 2;
+    const thresholdX = trackBox.x + trackBox.width - thumbBox.width / 2;
+    const endX = thresholdX + 6;
+    const distance = endX - startX;
+    const steps = 24;
+
+    console.log('正在完成滑块验证...');
+    await this.page.mouse.move(startX, startY);
+    await this.page.mouse.down();
+
+    for (let step = 1; step <= steps; step++) {
+      const progress = step / steps;
+      const easedProgress = 1 - Math.pow(1 - progress, 2);
+      const currentX = startX + distance * easedProgress;
+      const currentY = startY + (step % 2 === 0 ? 1 : -1);
+
+      await this.page.mouse.move(currentX, currentY);
+      await this.delay(16 + Math.floor(Math.random() * 12));
+    }
+
+    await this.delay(120);
+
+    const sliderVerified = await this.page.evaluate(() => {
+      const sliderInput = document.querySelector('#slider_verified') as HTMLInputElement | null;
+      return sliderInput?.value === '1';
+    });
+
+    if (!sliderVerified) {
+      await this.page.mouse.move(endX + 8, startY);
+      await this.delay(120);
+    }
+
+    await this.page.mouse.up();
+    await this.page.waitForFunction(
+      () => {
+        const sliderVerified = document.querySelector('#slider_verified') as HTMLInputElement | null;
+        const sliderText = document.querySelector('.slider-text')?.textContent || '';
+        return sliderVerified?.value === '1' || sliderText.includes('验证成功');
+      },
+      { timeout: 5000 }
+    );
+  }
+
+  private async delay(ms: number): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async closeBrowser(): Promise<void> {

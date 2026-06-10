@@ -127,7 +127,7 @@ app.whenReady().then(async () => {
 
 			// 异步执行自动登录
 			browserAutomation
-				.autoLogin({ username: '13272009478', password: '13272009478@Hxn', dynamicCode: '666666' })
+				.autoLogin({ username: '13272009478', password: '13272009478@Hxn' })
 				.then((result: any) => {
 					if (result.success) {
 						console.log('[Main] 自动登录成功，保存 cookies');
